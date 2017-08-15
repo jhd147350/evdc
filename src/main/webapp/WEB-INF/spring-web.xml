@@ -15,4 +15,7 @@
 		<property name="prefix" value="/WEB-INF/pages/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
+	
+	<!--  静态资源 -->
+	<mvc:resources mapping="/layui/**" location="/layui/" />
 </beans>
