@@ -23,16 +23,16 @@
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url"
-			value="jdbc:mysql://localhost:3306/springmvc-demo?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8" />
+			value="jdbc:mysql://124.251.110.251:3306/evdc_ss?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8" />
 		<!-- ?useUnicode=true&amp;characterEncoding=utf8 -->
 		<property name="username" value="root" />
-		<property name="password" value="123456" />
+		<property name="password" value="21Vianet.com" />
 		<property name="maxActive" value="50" />
 	</bean>
 
 	<!-- 自动扫描该包下的所有接口，并生成bean，最好该包下不要有其他没用的接口 命名空间xmlns:mybatis="http://mybatis.org/schema/mybatis-spring" 
 		xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd" -->
-	<mybatis:scan base-package="jhd.sign.mapper" />
+	<mybatis:scan base-package="evdc.vianet.auth.mapper" />
 
 
 	<!-- sessionFactory -->

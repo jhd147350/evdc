@@ -1,7 +1,7 @@
 package evdc.vianet.auth.entity;
 
 public class User {
-	public static final String TABLE_NANE = "tier_user";
+	public static final String TABLE_NAME = "tier_user";
 	private int id;
 	private String name;
 	private String role;
@@ -64,10 +64,6 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public static String getTableNane() {
-		return TABLE_NANE;
 	}
 
 	@Override

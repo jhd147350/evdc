@@ -4,9 +4,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>EvDC</title>
+<title>EvDc</title>
 </head>
 <body>
+
 	欢迎您${email} 登录EvDC工单系统
 	<!-- 你的HTML代码 -->
 	<script src="<%=request.getContextPath()%>/layui/layui.js"></script>
@@ -17,5 +18,6 @@
 			layer.msg('Hello ${email}');
 		});
 	</script>
+
 </body>
 </html>
