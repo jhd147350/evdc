@@ -2,19 +2,22 @@ package evdc.vianet.auth.entity;
 
 public class User {
 	public static final String TABLE_NAME = "tier_user";
-	private int id;
+	public enum Role{
+		ADMIN,ADMIN_T
+	}
+	private long id;
 	private String name;
 	private String role;
-	private int teamId;
+	private long teamId;
 	private String phone;
 	private String email;
 	private String password;
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -34,11 +37,11 @@ public class User {
 		this.role = role;
 	}
 
-	public int getTeamId() {
+	public long getTeamId() {
 		return teamId;
 	}
 
-	public void setTeamId(int teamId) {
+	public void setTeamId(long teamId) {
 		this.teamId = teamId;
 	}
 

@@ -33,6 +33,7 @@
 	<!-- 自动扫描该包下的所有接口，并生成bean，最好该包下不要有其他没用的接口 命名空间xmlns:mybatis="http://mybatis.org/schema/mybatis-spring" 
 		xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd" -->
 	<mybatis:scan base-package="evdc.vianet.auth.mapper" />
+	<mybatis:scan base-package="evdc.vianet.ticket.mapper" />
 
 
 	<!-- sessionFactory -->

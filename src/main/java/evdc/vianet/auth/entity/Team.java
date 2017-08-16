@@ -2,18 +2,18 @@ package evdc.vianet.auth.entity;
 
 public class Team {
 	public static final String TABLE_NAME = "tier_user";
-	private int id;
+	private long id;
 	private String name;
 	private boolean isClient;
 	private String companyName;
 	private String code;
 	private String description;
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

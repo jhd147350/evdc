@@ -1,5 +1,6 @@
-package evdc.vianet.auth.controler;
+package evdc.vianet.auth.controller;
 
+import javax.jws.soap.SOAPBinding.Use;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import evdc.vianet.auth.service.UserService;
 
 @Controller
 @RequestMapping("/user")
-public class UserControler {
+public class UserController {
 
 	@Autowired
 	@Qualifier("userService")
@@ -34,10 +35,12 @@ public class UserControler {
 		User login = service.login(u);
 		if (login != null) {
 			request.getSession().setAttribute("user", login);
-
+			if (login.getRole().equals(User.Role.ADMIN.toString())) {
+				return "admin/admin";
+			}
 			return "console/main";
 		}
-		return "redirect:/sign/login";
+		return "redirect:/user/login";
 	}
 
 }
