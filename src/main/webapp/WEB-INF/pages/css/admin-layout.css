@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+.admin-header {
+	position: absolute;
+	height: 60px;
+	width: 100%;
+	background-color: blue;
+	left: 0;
+	top: 0;
+}
+
+.admin-menu {
+	position: absolute;
+	top: 60px;
+	left: 0;
+	bottom: 0;
+	width: 200px;
+	background-color: red;
+}
+
+.admin-content {
+	position: absolute;
+	top: 60px;
+	left: 200px;
+	right: 0;
+	background-color: green;
+	bottom: 0;
+	/* “bottom:0 与 overflow” 结合使用的效果：当内容超出显示器时，自动添加本区域的滚动条，其他区域保持不变*/
+	overflow: auto;
+	/*除了上面的方式，还有一种是不定义bottom，也不用overflow，这样内容是多少，中间内容区的行高就是多少，自适应，但是菜单和标题栏就会随着滚轮而动*/
+}
