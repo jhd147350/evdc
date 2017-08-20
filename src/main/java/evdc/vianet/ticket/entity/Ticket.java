@@ -1,21 +1,22 @@
 package evdc.vianet.ticket.entity;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Ticket {
 	public static final String TABLE_NAME="ticket";
 	/**
-	 * 工单来源
-	 * 
+	 * Client 表示来源是客户<br>
+	 * Support 是支持人员自己创建的<br>
+	 * Email 表示是根据指定邮箱中的指定客户邮件自动生成的<br>
 	 * @author jhd147350
-	 *
 	 */
 	public enum Source {
 		Client, Support, Email
 	}
 
 	/**
-	 * 严重等级
+	 * 4个严重等级<br>
+	 * Se1, Se2, Se3, Se4
 	 * 
 	 * @author jhd147350
 	 *
@@ -25,8 +26,8 @@ public class Ticket {
 	}
 
 	/**
-	 * 工单状态
-	 * 
+	 * 4个工单状态<br>
+	 * Assigned, In_Process, Resolved, Close;
 	 * @author jhd147350
 	 *
 	 */
@@ -41,7 +42,7 @@ public class Ticket {
 	private String severity;
 	private String status;
 	private String service;
-	private Date submitDate;
+	private Timestamp submitDate;
 	private long submitUserId;
 	private long assignUserId;
 	private long AssignTeamId;
@@ -88,10 +89,10 @@ public class Ticket {
 	public void setService(String service) {
 		this.service = service;
 	}
-	public Date getSubmitDate() {
+	public Timestamp getSubmitDate() {
 		return submitDate;
 	}
-	public void setSubmitDate(Date submitDate) {
+	public void setSubmitDate(Timestamp submitDate) {
 		this.submitDate = submitDate;
 	}
 	public long getSubmitUserId() {

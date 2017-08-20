@@ -1,5 +1,7 @@
 package evdc.vianet.auth.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,34 @@ public class UserServiceImp implements UserService {
 
 	@Override
 	public User login(User u) {
-
 		return userMapper.findUserByEmailAndPassword(u);
+	}
 
+	@Override
+	public int insertUser(User u) {
+		return userMapper.insertUser(u);
+	}
+
+	@Override
+	public int deleteUserById(int id) {
+		return userMapper.deleteUserById(id);
+	}
+
+	@Override
+	public List<User> findAll() {
+		return userMapper.findAllUsers();
+	}
+
+	@Override
+	public User findUserById(int id) {
+		// TODO
+		return null;
+	}
+
+	@Override
+	public int updateUserById(User u) {
+		userMapper.updateUser(u);
+		return 0;
 	}
 
 }

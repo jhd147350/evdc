@@ -34,6 +34,7 @@
 		xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd" -->
 	<mybatis:scan base-package="evdc.vianet.auth.mapper" />
 	<mybatis:scan base-package="evdc.vianet.ticket.mapper" />
+	<mybatis:scan base-package="evdc.vianet.admin.mapper" />
 
 
 	<!-- sessionFactory -->
