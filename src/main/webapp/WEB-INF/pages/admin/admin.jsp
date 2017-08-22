@@ -19,10 +19,10 @@
 						<a href="javascript:;">组织管理</a>
 						<dl class="layui-nav-child">
 							<dd>
-								<a href="../admin/team/add">添加团队</a>
+								<a href="<%=request.getContextPath()%>/admin/team/add">添加团队</a>
 							</dd>
 							<dd>
-								<a href="javascript:;">团队查询</a>
+								<a href="<%=request.getContextPath()%>/admin/team/search">团队查询</a>
 							</dd>
 							<dd>
 								<a href="javascript:;">添加用户</a>
@@ -55,18 +55,27 @@
 			</div>
 		</div>
 		<div class="layui-body">
-		<%
-		String path = request.getRequestURI(); 
-		System.out.println("jhd:"+path);
-		if(path.contains("team/add")){
+			<div>
+			<%
+			String action = (String)request.getAttribute("action"); 
+			if(action != null){
+			System.out.println("admin-action:"+action);
+			if(action.contains("addteam")){
+				%>
+				<%@ include file="admin-team-add.jsp"%>
+			<%
+			}
+			else if(action.contains("searchteam")){
+				%>
+				<%@ include file="admin-team-search.jsp"%>
+			<%
+			}
+			}
 			%>
-			<%@ include file="admin-team-add.jsp"%>
-		<%
-		}
-		%>
+			</div>
+			
+			<div class="layui-footer"></div>
 		</div>
-		</div>
-		<div class="layui-footer"></div>
 	</div>
 
 
@@ -77,8 +86,10 @@
 		!function() {
 			var element = layui.element;
 			var form = layui.form;
+			var table = layui.table;
 
 		}();
 	</script>
+	
 </body>
 </html>
