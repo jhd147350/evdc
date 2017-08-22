@@ -5,8 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>evdc-login</title>
-<link rel="stylesheet"
-	href="<%=request.getContextPath()%>/layui/css/layui.css">
+<%@ include file="../global/layui.jsp"%>
 <style type="text/css">
 #form {
 	width: 400px;
@@ -28,7 +27,7 @@ html, body {
 </style>
 </head>
 <body text-align:center>
-	<script src="<%=request.getContextPath()%>/layui/layui.js"></script>
+	
 	<div id="form">
 		<form action="dologin" class="layui-form" method="post">
 			<div class="layui-form-item">
