@@ -32,8 +32,8 @@ public class AuthFilter implements Filter {
 		User u = (User) session.getAttribute("user");
 		String uri = req.getRequestURI();
 
-		//登录和 js和css资源直接放行
-		if (uri.endsWith("login") || uri.endsWith(".js") || uri.endsWith(".css")) {
+		//登录和 js和css资源直接放行、包括admin也直接跳过
+		if (uri.endsWith("login") || uri.endsWith(".js") || uri.endsWith(".css") || uri.contains("admin")) {
 			System.out.println("skip uri: " + uri);
 			chain.doFilter(request, response);
 			return;

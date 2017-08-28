@@ -16,7 +16,7 @@ public class UserServiceImp implements UserService {
 
 	@Override
 	public User login(User u) {
-		return userMapper.findUserByEmailAndPassword(u);
+		return userMapper.findUserByUsernameAndPassword(u);
 	}
 
 	@Override
