@@ -12,8 +12,8 @@ import evdc.vianet.auth.entity.User;
 
 public interface UserMapper {
 
-	@Select("select * from " + User.TABLE_NAME + " where email=#{u.email} and password=#{u.password}")
-	User findUserByEmailAndPassword(@Param("u") User u);
+	@Select("select * from " + User.TABLE_NAME + " where email=#{u.username} and password=#{u.password}")
+	User findUserByUsernameAndPassword(@Param("u") User u);
 
 	@Select("select * from " + User.TABLE_NAME)
 	List<User> findAllUsers();

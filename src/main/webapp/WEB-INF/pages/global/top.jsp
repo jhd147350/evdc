@@ -14,6 +14,9 @@
 				<a href="javascript:;">个人信息</a>
 			</dd>
 			<dd>
+				<a href="javascript:;">管理页面</a>
+			</dd>
+			<dd>
 				<a href="javascript:;">退出</a>
 			</dd>
 		</dl>

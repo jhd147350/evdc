@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+	
+	@RequestMapping
+	public String admin() {
+		return "admin/admin";
+	}
 
 	@RequestMapping("/login")
 	public String login() {
@@ -33,6 +38,6 @@ public class AdminController {
 	@RequestMapping(value = "/test", produces = "application/json; charset=utf-8")
 	public String test(HttpServletResponse response) {
 		response.setCharacterEncoding("utf-8");
-		return "{\"code\":0,\"msg\":\"\",\"count\":1000,\"data\":[{\"id\":10000,\"username\":\"user-0\",\"sex\":\"Å®\",\"city\":\"³ÇÊÐ-0\",\"sign\":\"Ç©Ãû-0\",\"experience\":255,\"logins\":24,\"wealth\":82830700,\"classify\":\"×÷¼Ò\",\"score\":57},{\"id\":10001,\"username\":\"user-1\",\"sex\":\"ÄÐ\",\"city\":\"³ÇÊÐ-1\",\"sign\":\"Ç©Ãû-1\",\"experience\":884,\"logins\":58,\"wealth\":64928690,\"classify\":\"´ÊÈË\",\"score\":27}]}";
+		return "{\"code\":0,\"msg\":\"\",\"count\":1000,\"data\":[{\"id\":10000,\"username\":\"user-0\",\"sex\":\"Å®\",\"city\":\"ï¿½ï¿½ï¿½ï¿½-0\",\"sign\":\"Ç©ï¿½ï¿½-0\",\"experience\":255,\"logins\":24,\"wealth\":82830700,\"classify\":\"ï¿½ï¿½ï¿½ï¿½\",\"score\":57},{\"id\":10001,\"username\":\"user-1\",\"sex\":\"ï¿½ï¿½\",\"city\":\"ï¿½ï¿½ï¿½ï¿½-1\",\"sign\":\"Ç©ï¿½ï¿½-1\",\"experience\":884,\"logins\":58,\"wealth\":64928690,\"classify\":\"ï¿½ï¿½ï¿½ï¿½\",\"score\":27}]}";
 	}
 }
