@@ -19,7 +19,7 @@
 
 	</div>
 </form>
-<table class="layui-table" lay-data="{height:400, url:'<%=request.getContextPath()%>/admin/test', page:true, id:'test'}" lay-filter="test">
+<table class="layui-table" lay-data="{height:400, url:'<%=request.getContextPath()%>/admin/test', page:true, id:'test', limits:[10,15,20,40], limit:15}" lay-filter="test">
     <thead>
     <tr>
         <th lay-data="{field:'id', width:80, sort: true, checkbox:true}">ID</th>
