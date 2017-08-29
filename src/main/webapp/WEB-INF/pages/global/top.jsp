@@ -6,7 +6,7 @@
 	<li class="layui-nav-item">
 		<a href="javascript:;">
 			<img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-			jhd
+			nickname
 		</a>
 		<dl class="layui-nav-child">
 			<!-- 二级菜单 -->
@@ -14,10 +14,13 @@
 				<a href="javascript:;">个人信息</a>
 			</dd>
 			<dd>
+				<a href="javascript:;">网站首页</a>
+			</dd>
+			<dd>
 				<a href="javascript:;">管理页面</a>
 			</dd>
 			<dd>
-				<a href="javascript:;">退出</a>
+				<a href="javascript:;">注销</a>
 			</dd>
 		</dl>
 		

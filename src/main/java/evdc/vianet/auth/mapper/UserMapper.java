@@ -12,8 +12,8 @@ import evdc.vianet.auth.entity.User;
 
 public interface UserMapper {
 
-	@Select("select * from " + User.TABLE_NAME + " where email=#{u.username} and password=#{u.password}")
-	User findUserByUsernameAndPassword(@Param("u") User u);
+	@Select("select * from " + User.TABLE_NAME + " where loginId=#{u.loginId} and password=#{u.password}")
+	User findUserByLoginIdAndPassword(@Param("u") User u);
 
 	@Select("select * from " + User.TABLE_NAME)
 	List<User> findAllUsers();
@@ -26,5 +26,5 @@ public interface UserMapper {
 	void updateUser(User u);
 
 	@Delete("delete from" + User.TABLE_NAME + " where id=#{id}")
-	int deleteUserById(int id);
+	int deleteUserById(long id);
 }

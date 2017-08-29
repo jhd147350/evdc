@@ -5,16 +5,18 @@ import java.util.List;
 import evdc.vianet.auth.entity.User;
 
 public interface UserService {
-	
-	User login(User u);
+
+	User login(String loginId, String password);
 
 	int insertUser(User u);
 
-	int deleteUserById(int id);
+	int deleteUserById(long id);
 
 	List<User> findAll();
 
-	User findUserById(int id);
+	User findUserById(long id);
 
 	int updateUserById(User u);
+
+	boolean isClient(long teamId);
 }

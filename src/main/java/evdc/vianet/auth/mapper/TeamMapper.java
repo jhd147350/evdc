@@ -9,14 +9,16 @@ import org.apache.ibatis.annotations.Update;
 
 import evdc.vianet.auth.entity.Team;
 
-public interface TeamMapper{
-	//@Select("select * from " + Team.TABLE_NAME + " where email=#{u.email} and password=#{u.password}")
-	//Team findUserByEmailAndPassword(@Param("u") User u);
+public interface TeamMapper {
+	// @Select("select * from " + Team.TABLE_NAME + " where email=#{u.email} and
+	// password=#{u.password}")
+	// Team findUserByEmailAndPassword(@Param("u") User u);
 
 	@Select("select * from " + Team.TABLE_NAME)
 	List<Team> findAllTeams();
 
-	@Insert("insert into " + Team.TABLE_NAME + " (name,isClient,companyName,code,description) values(#{name},#{isClient},#{companyName},#{code},#{description})")
+	@Insert("insert into " + Team.TABLE_NAME
+			+ " (name,isClient,companyName,code,description) values(#{name},#{isClient},#{companyName},#{code},#{description})")
 	int insertTeam(Team t);
 
 	@Update("update " + Team.TABLE_NAME
@@ -24,7 +26,9 @@ public interface TeamMapper{
 	void updateTeam(Team t);
 
 	@Delete("delete from" + Team.TABLE_NAME + " where id=#{id}")
-	int deleteTeamById(int id);
+	int deleteTeamById(long id);
 
-	
+	@Select("select * from " + Team.TABLE_NAME + " where id=#{id}")
+	Team findTeamById(long id);
+
 }

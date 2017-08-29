@@ -27,27 +27,27 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/dologin", method = RequestMethod.POST)
-	public String doLogin(String email, String password, Model m, HttpServletRequest request) {
+	public String doLogin(String loginId, String password, Model m, HttpServletRequest request) {
 
-		User u = new User();
-		u.setEmail(email);
-		u.setPassword(password);
-		m.addAttribute("email", email);
+		// m.addAttribute("email", email);
 
 		// -----拦截“jhd” “123”
-		if (email.equals("jhd") && password.equals("123")) {
-			request.getSession().setAttribute("user", u);
-			return "admin/admin";
-		}
-		User login = service.login(u);
+		/*
+		 * if (email.equals("jhd") && password.equals("123")) {
+		 * request.getSession().setAttribute("user", u); return "admin/admin"; }
+		 */
+		User login = service.login(loginId, password);
 		if (login != null) {
+			boolean client = service.isClient(login.getTeamId());
+			m.addAttribute("isClient", client);
+			m.addAttribute("isTeamAdmin", login.isTeamAdmin());
 			request.getSession().setAttribute("user", login);
-			if (login.getRole().equals(User.Role.ADMIN.toString())) {
-				return "admin/admin";
+			if (client) {
+				return "console/main";
+			} else {
+				return "console/main";
 			}
-			return "console/main";
 		}
 		return "redirect:/user/login";
 	}
-
 }

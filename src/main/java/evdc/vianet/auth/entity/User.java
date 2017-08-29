@@ -18,12 +18,13 @@ public class User {
 
 	private long id;
 	private String nickname;// 昵称
-	private String role;
+	private String role;// 暂时先不用
 	private long teamId;
 	private String phone;
 	private String email;
-	private String username;// 登录id，用户名
+	private String loginId;// 登录id，用户名
 	private String password;
+	private boolean teamAdmin;// 是否为管理员
 
 	public long getId() {
 		return id;
@@ -73,12 +74,12 @@ public class User {
 		this.email = email;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getLoginId() {
+		return loginId;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
 	}
 
 	public String getPassword() {
@@ -89,10 +90,19 @@ public class User {
 		this.password = password;
 	}
 
+	public boolean isTeamAdmin() {
+		return teamAdmin;
+	}
+
+	public void setTeamAdmin(boolean teamAdmin) {
+		this.teamAdmin = teamAdmin;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", nickname=" + nickname + ", role=" + role + ", teamId=" + teamId + ", phone="
-				+ phone + ", email=" + email + ", username=" + username + ", password=" + password + "]";
+				+ phone + ", email=" + email + ", loginId=" + loginId + ", password=" + password + ", teamAdmin="
+				+ teamAdmin + "]";
 	}
 
 }
