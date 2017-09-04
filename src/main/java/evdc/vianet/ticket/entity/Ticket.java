@@ -32,7 +32,7 @@ public class Ticket {
 	 *
 	 */
 	public enum Status {
-		Assigned, In_Process, Resolved, Close;
+		Assigned, In_Process, Resolved, Closed;
 	}
 
 	private long id;

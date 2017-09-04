@@ -23,10 +23,10 @@
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url"
-			value="jdbc:mysql://124.251.110.251:3306/evdc_ss?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8" />
+			value="jdbc:mysql://localhost:3306/evdc_ss?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8" />
 		<!-- ?useUnicode=true&amp;characterEncoding=utf8 -->
 		<property name="username" value="root" />
-		<property name="password" value="21Vianet.com" />
+		<property name="password" value="147350jhd" />
 		<property name="maxActive" value="50" />
 	</bean>
 
@@ -40,6 +40,7 @@
 	<!-- sessionFactory -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="/WEB-INF/mybatis.xml" />
 	</bean>
 
 	<bean id="txMgr"

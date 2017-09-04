@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<%@ include file="../global/layui.jsp"%>
+<%@ include file="../global/layui_css.jsp"%>
 </head>
 <body>
 
@@ -15,14 +15,14 @@
 		<div class="layui-side layui-bg-black">
 			<div class="layui-side-scroll">
 				<ul class="layui-nav layui-nav-tree">
-					<li class="layui-nav-item layui-nav-itemed">
-						<a href="javascript:;">组织管理</a>
+					<li class="layui-nav-item layui-nav-itemed"><a
+						href="javascript:;">组织管理</a>
 						<dl class="layui-nav-child">
 							<dd>
-								<a href="<%=request.getContextPath()%>/admin/team/add">添加团队</a>
+								<a href="${ctx}/admin/team/add">添加团队</a>
 							</dd>
 							<dd>
-								<a href="<%=request.getContextPath()%>/admin/team/search">团队查询</a>
+								<a href="${ctx}/admin/team/search">团队查询</a>
 							</dd>
 							<dd>
 								<a href="javascript:;">添加用户</a>
@@ -30,56 +30,51 @@
 							<dd>
 								<a href="javascript:;">用户查询</a>
 							</dd>
-						</dl>
-					</li>
-					<li class="layui-nav-item  layui-nav-itemed">
-						<a href="javascript:;">配置管理</a>
+						</dl></li>
+					<li class="layui-nav-item  layui-nav-itemed"><a
+						href="javascript:;">配置管理</a>
 						<dl class="layui-nav-child">
 							<dd>
 								<a href="javascript:;">服务管理</a>
 							</dd>
-						</dl>
-					</li>
-					<li class="layui-nav-item  layui-nav-itemed">
-						<a href="javascript:;">排班管理</a>
+						</dl></li>
+					<li class="layui-nav-item  layui-nav-itemed"><a
+						href="javascript:;">排班管理</a>
 						<dl class="layui-nav-child">
 							<dd>
-								<a href="javascript:;">排班规则</a>
+								<a href="${ctx}/admin/shift/edit">排班规则</a>
 							</dd>
 							<dd>
 								<a href="javascript:;">团队排班</a>
 							</dd>
-						</dl>
-					</li>
+						</dl></li>
 				</ul>
 			</div>
 		</div>
 		<div class="layui-body">
 			<div>
-			<%
-			String action = (String)request.getAttribute("action"); 
-			if(action != null){
-			System.out.println("admin-action:"+action);
-			if(action.contains("addteam")){
-				%>
-				<%@ include file="admin-team-add.jsp"%>
-			<%
-			}
-			else if(action.contains("searchteam")){
-				%>
-				<%@ include file="admin-team-search.jsp"%>
-			<%
-			}
-			}
-			%>
+				<c:choose>
+					<c:when test="${action=='addshift'}">
+						<%@ include file="../shift/add-shift.jsp"%>
+					</c:when>
+					<c:when test="${action=='addteam'}">
+						<%@ include file="admin-team-add.jsp"%>
+					</c:when>
+					<c:when test="${action=='searchteam'}">
+						<%@ include file="admin-team-search.jsp"%>
+					</c:when>
+					<c:otherwise>
+						<div>not found</div>
+					</c:otherwise>
+				</c:choose>
 			</div>
-			
+
 			<div class="layui-footer"></div>
 		</div>
 	</div>
 
 
-	<script src="<%=request.getContextPath()%>/static/layui/layui.all.js"></script>
+	<script src="${ctx}/static/layui/layui.all.js"></script>
 	<script>
 		//由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
 		;
@@ -90,6 +85,6 @@
 
 		}();
 	</script>
-	
+
 </body>
 </html>
