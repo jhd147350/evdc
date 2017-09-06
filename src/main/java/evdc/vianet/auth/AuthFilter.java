@@ -15,7 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-public class AuthFilter implements Filter {
+public abstract class AuthFilter implements Filter {
 
 	@Override
 	public void destroy() {
@@ -46,11 +46,16 @@ public class AuthFilter implements Filter {
 			resp.sendRedirect(req.getContextPath() + "/user/login");
 		} else {// 有用户
 			System.out.println("use has login: " + uri);
-			chain.doFilter(request, response);
+			if(haveAuth(request, response)) {
+				chain.doFilter(request, response);
+			}else {
+				request.getRequestDispatcher("/static/jsp/PermissionDenied.jsp").include(request, response); 
+				//resp.sendRedirect(req.getContextPath() + "/static/jsp/PermissionDenied.html");
+			}
 		}
 
 	}
-
+	protected abstract boolean haveAuth(ServletRequest request, ServletResponse response);
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 		// TODO Auto-generated method stub
