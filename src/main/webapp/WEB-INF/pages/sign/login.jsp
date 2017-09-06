@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>evdc-login</title>
-<%@ include file="../global/layui.jsp"%>
+<%@ include file="../global/layui_css.jsp"%>
 <style type="text/css">
 #form {
 	width: 400px;
@@ -33,7 +33,7 @@ html, body {
 			<div class="layui-form-item">
 				<label class="layui-form-label">账户</label>
 				<div class="layui-input-inline">
-					<input name="email" required lay-verify="required"
+					<input name="loginId" required lay-verify="required"
 						placeholder="请输入账户" autocomplete="off" class="layui-input">
 				</div>
 				<div class="layui-form-mid layui-word-aux">辅助文字</div>

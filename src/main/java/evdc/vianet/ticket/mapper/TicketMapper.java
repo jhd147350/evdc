@@ -14,6 +14,7 @@ public interface TicketMapper {
 			+ " values(#{source},#{title},#{description},#{severity},#{status},#{service},#{submitUserId},#{AssignUserId},#{AssignTeamId},#{satisfation})")
 	int insertTicket(Ticket t);
 	
-	@Select("select from "+Ticket.TABLE_NAME+" where assignTeamId=#{teamId} and status='assign'")
+	@Select("select from "+Ticket.TABLE_NAME+" where assignTeamId=#{teamId} and status！='Closed'")
 	List<Ticket> findAllOpenTicektsByAssignTeam(int teamId);
+	
 }

@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class AdminController {
 	
 	@RequestMapping
-	public String admin() {
+	public String admin(Model m) {
+		m.addAttribute("title", "EvDC工单系统后台管理");
 		return "admin/admin";
 	}
 

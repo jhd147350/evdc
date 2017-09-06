@@ -1,5 +1,8 @@
 package evdc.vianet.ticket.service;
 
-public class TicketService {
+import org.springframework.stereotype.Service;
+
+public interface TicketService {
+	public void createTicket();
 
 }

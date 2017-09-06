@@ -40,7 +40,9 @@ public class UserController {
 		if (login != null) {
 			boolean client = service.isClient(login.getTeamId());
 			m.addAttribute("isClient", client);
-			m.addAttribute("isTeamAdmin", login.isTeamAdmin());
+			System.out.println(login.getLoginId()+" : "+login.isTeamAdmin());
+			//m.addAttribute("isTeamAdmin", login.isTeamAdmin());
+			m.addAttribute("title", "EvDC工单系统");
 			request.getSession().setAttribute("user", login);
 			if (client) {
 				return "console/main";
