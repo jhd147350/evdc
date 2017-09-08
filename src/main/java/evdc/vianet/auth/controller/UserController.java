@@ -36,7 +36,7 @@ public class UserController {
 		 * if (email.equals("jhd") && password.equals("123")) {
 		 * request.getSession().setAttribute("user", u); return "admin/admin"; }
 		 */
-		User login = service.login(loginId, password);
+		/*User login = service.login(loginId, password);
 		if (login != null) {
 			boolean client = service.isClient(login.getTeamId());
 			m.addAttribute("isClient", client);
@@ -49,7 +49,7 @@ public class UserController {
 			} else {
 				return "console/main";
 			}
-		}
+		}*/
 		return "redirect:/user/login";
 	}
 }

@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
 
-<title>模板</title>
+<title>主页面</title>
 <link rel="stylesheet" href="../static/layui/css/layui.css">
 <link rel="stylesheet" href="../static/css/x-admin.css" media="all">
 </head>
@@ -62,8 +62,8 @@
         	<a href="javascript:;">系统管理</a>
         	<dl class="layui-nav-child">
             <dd><a href="javascript:;">公告管理</a></dd>
-            <dd><a href="javascript:;" _href="http://admin.erdangjiade.com/category.html">组织管理</a></dd>
-            <dd><a href="javascript:;" _href="http://localhost:8080/evdc/user/login">组织角色管理</a></dd>
+            <dd><a href="javascript:;" _href="../teamManagement/teamManagementPage">组织管理</a></dd>
+            <dd><a href="javascript:;" _href="../teamRoleManagement/teamRoleManagementPage">组织角色管理</a></dd>
           </dl>
         </li> 
   

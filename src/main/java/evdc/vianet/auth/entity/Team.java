@@ -4,10 +4,25 @@ public class Team {
 	public static final String TABLE_NAME = "tier_user";
 	private long id;
 	private String name;
-	private boolean isClient;
+	private long role;
 	private String companyName;
 	private String code;
 	private String description;
+
+	public Team() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Team(long id, String name, long role, String companyName, String code, String description) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.role = role;
+		this.companyName = companyName;
+		this.code = code;
+		this.description = description;
+	}
 
 	public long getId() {
 		return id;
@@ -25,12 +40,12 @@ public class Team {
 		this.name = name;
 	}
 
-	public boolean isClient() {
-		return isClient;
+	public long role() {
+		return role;
 	}
 
-	public void setClient(boolean isClient) {
-		this.isClient = isClient;
+	public void setRole(long role) {
+		this.role = role;
 	}
 
 	public String getCompanyName() {
@@ -59,7 +74,7 @@ public class Team {
 
 	@Override
 	public String toString() {
-		return "Team [id=" + id + ", name=" + name + ", isClient=" + isClient + ", companyName=" + companyName
+		return "Team [id=" + id + ", name=" + name + ", role=" + role + ", companyName=" + companyName
 				+ ", code=" + code + ", description=" + description + "]";
 	}
 

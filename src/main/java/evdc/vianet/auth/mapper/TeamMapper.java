@@ -18,7 +18,7 @@ public interface TeamMapper {
 	List<Team> findAllTeams();
 
 	@Insert("insert into " + Team.TABLE_NAME
-			+ " (name,isClient,companyName,code,description) values(#{name},#{isClient},#{companyName},#{code},#{description})")
+			+ " (name,isClient,companyName,code,description) values(#{name},#{role},#{companyName},#{code},#{description})")
 	int insertTeam(Team t);
 
 	@Update("update " + Team.TABLE_NAME

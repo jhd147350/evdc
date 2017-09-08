@@ -1,9 +1,10 @@
 package evdc.vianet.auth.entity;
 
+
 /**
  * @author jaden
  *
- * 2017年9月4日下午11:54:49
+ * 2017年9月8日上午9:33:28
  */
 public class Authority {
 	public static final String TABLE_NAME = "auth_authority";
@@ -11,16 +12,17 @@ public class Authority {
 	private String authName;
 	private String path;
 	private long authValue;
-	
+	private String describe;
 	public Authority() {
 		super();
 	}
-	public Authority(long id, String authName, String path, long authValue) {
+	public Authority(long id, String authName, String path, long authValue, String describe) {
 		super();
 		this.id = id;
 		this.authName = authName;
 		this.path = path;
 		this.authValue = authValue;
+		this.describe = describe;
 	}
 	public long getId() {
 		return id;
@@ -46,9 +48,16 @@ public class Authority {
 	public void setAuthValue(long authValue) {
 		this.authValue = authValue;
 	}
+	public String getDescribe() {
+		return describe;
+	}
+	public void setDescribe(String describe) {
+		this.describe = describe;
+	}
 	public static String getTableName() {
 		return TABLE_NAME;
 	}
+	
 	
 	
 }

@@ -1,28 +1,28 @@
 package evdc.vianet.auth.entity;
 
+
 /**
  * @author jaden
  *
- * 2017年9月5日上午12:00:42
+ * 2017年9月8日上午9:35:05
  */
 public class TeamRole {
 	public static final String TABLE_NAME = "auth_team_role";
 	private long id;
 	private String roleName;
-	private long teamId;
 	private long authValue;
 	private int delete;
-	
+	private String describe;
 	public TeamRole() {
 		super();
 	}
-	public TeamRole(long id, String roleName, long teamId, long authValue, int delete) {
+	public TeamRole(long id, String roleName, long authValue, int delete, String describe) {
 		super();
 		this.id = id;
 		this.roleName = roleName;
-		this.teamId = teamId;
 		this.authValue = authValue;
 		this.delete = delete;
+		this.describe = describe;
 	}
 	public long getId() {
 		return id;
@@ -36,12 +36,6 @@ public class TeamRole {
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
-	public long getTeamId() {
-		return teamId;
-	}
-	public void setTeamId(long teamId) {
-		this.teamId = teamId;
-	}
 	public long getAuthValue() {
 		return authValue;
 	}
@@ -53,6 +47,12 @@ public class TeamRole {
 	}
 	public void setDelete(int delete) {
 		this.delete = delete;
+	}
+	public String getDescribe() {
+		return describe;
+	}
+	public void setDescribe(String describe) {
+		this.describe = describe;
 	}
 	public static String getTableName() {
 		return TABLE_NAME;
