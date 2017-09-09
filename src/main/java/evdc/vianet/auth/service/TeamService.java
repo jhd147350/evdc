@@ -8,11 +8,11 @@ public interface TeamService {
 
 	int insertTeam(Team t);
 
-	int deleteTeamById(int id);
+	int deleteTeamById(long id);
 
-	List<Team> findAll();
+	List<Team> findAllTeams();
 
-	Team findTeamById(int id);
+	Team findTeamById(long id);
 
 	int updateTeamById(Team t);
 

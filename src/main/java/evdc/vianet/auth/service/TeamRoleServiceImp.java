@@ -46,7 +46,7 @@ public class TeamRoleServiceImp implements TeamRoleService {
 		// TODO Auto-generated method stub
 		TeamRole teamRole = teamRoleMapper.findTeamRoleById(id);
 		if(teamRole.getDelete()==1) {
-			return 1;
+			return 2;
 		}else {
 			return teamRoleMapper.deleteTeamRoleById(id);
 		}

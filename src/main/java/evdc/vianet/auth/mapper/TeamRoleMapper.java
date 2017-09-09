@@ -20,13 +20,17 @@ public interface TeamRoleMapper {
 	
 	@Select("select * from " + TeamRole.TABLE_NAME + " where id=#{id}")
 	TeamRole findTeamRoleById(@Param("id") long id);
+	
 	@Select("select * from " + TeamRole.TABLE_NAME)
 	List<TeamRole> findAllTeamRoles();
-	@Insert("insert into " + TeamRole.TABLE_NAME + " (id,roleName,authValue,delete,describe) values(#{roleName.id},#{roleName.roleName},#{roleName.authValue},#{roleName.delete},#{roleName.describe})")
+	
+	@Insert("insert into " + TeamRole.TABLE_NAME + " (`roleName`,`authValue`,`delete`,`describe`) values(#{teamRole.roleName},#{teamRole.authValue},#{teamRole.delete},#{teamRole.describe})")
 	int insertTeamRole(@Param("teamRole") TeamRole teamRole);
+	
 	@Update("update " + TeamRole.TABLE_NAME
-			+ " set roleName=#{teamRole.roleName}, authValue=#{teamRole.authValue}, delete=#{teamRole.delete}, describe=#{teamRole.describe} where id=#{teamRole.id}")
+			+ " set `roleName`=#{teamRole.roleName}, `authValue`=#{teamRole.authValue}, `delete`=#{teamRole.delete}, `describe`=#{teamRole.describe} where `id`=#{teamRole.id}")
 	void updateTeamRole(@Param("teamRole") TeamRole teamRole);
-	@Delete("delete from" + TeamRole.TABLE_NAME + " where id=#{id}")
+	
+	@Delete("delete from " + TeamRole.TABLE_NAME + " where id=#{id}")
 	int deleteTeamRoleById(@Param("id") long id);
 }

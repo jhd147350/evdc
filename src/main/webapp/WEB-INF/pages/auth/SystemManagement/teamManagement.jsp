@@ -7,7 +7,7 @@
     <head>
         <meta charset="utf-8">
         <title>
-            组织角色管理
+            组织管理
         </title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -22,14 +22,14 @@
             <span class="layui-breadcrumb">
               
               <a><cite>系统管理</cite></a>
-              <a><cite>组织角色管理</cite></a>
+              <a><cite>组织管理</cite></a>
             </span>
             <a id="refresh" class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
         </div>
         <div class="x-body">
             
             <xblock><!--<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button>-->
-            	<button class="layui-btn" onclick="role_add('添加组织角色','./teamRoleAddPage','900','500')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有角色：${fn:length(teamRoles)}条</span></xblock>
+            	<button class="layui-btn" onclick="role_add('添加组织','./teamAddPage','900','500')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有组织：${fn:length(teams)}条</span></xblock>
             <table class="layui-table">
                 <thead>
                 
@@ -38,13 +38,13 @@
                             ID
                         </th>
                         <th>
-                            角色名
+                            组织名
                         </th>
                         <th>
-                            拥有权限规则
+                           组织角色
                         </th>
                         <th>
-                            描述
+                            公司
                         </th>
                         <th>
                             操作
@@ -53,22 +53,22 @@
                 </thead>
                 <tbody>
                 
-                <c:if test="${teamRoles==null || fn:length(teamRoles) == 0}">  
+                <c:if test="${teams==null || fn:length(teams) == 0}">  
 					<tr>  
-					  <td colspan="4">组织角色为空</td>
+					  <td colspan="4">组织为空</td>
 					</tr>   
 				</c:if>  
-					<c:forEach items="${teamRoles}" var="item" varStatus="status">  
+					<c:forEach items="${teams}" var="item" varStatus="status">  
 					  <tr >  
 					    <td >${item.id}</td>  
-					    <td>${item.roleName}</td>  
-					    <td>${item.authValue}</td>  
-					    <td>${item.describe}</td> 
+					    <td>${item.name}</td>  
+					    <td>${item.role}</td>  
+					    <td>${item.companyName}</td> 
 					    
 					    <c:choose>
 							<c:when test="${item.delete==0}">
 								<td class="td-manage">
-	                            <a title="编辑" href="javascript:;" onclick="role_edit('编辑','./teamRoleEditPage?id=${item.id}','4','','510')"
+	                            <a title="编辑" href="javascript:;" onclick="role_edit('编辑','./teamEditPage?id=${item.id}','4','','510')"
 	                            class="ml-5" style="text-decoration:none">
 	                                <i class="layui-icon">&#xe642;</i>
 	                            </a>
@@ -127,7 +127,7 @@
                     //发异步删除数据
                     var tds = $(obj).parent("td").prevAll("td");
                     $.ajax({  
-                  	  url: './deleteTeamRole', 
+                  	  url: './deleteTeam', 
                       type: 'POST',  
                       dataType: 'json',
                       data: {

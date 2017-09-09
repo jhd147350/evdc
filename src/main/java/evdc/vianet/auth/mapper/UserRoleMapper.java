@@ -22,7 +22,7 @@ public interface UserRoleMapper {
 	UserRole findUserRoleById(@Param("id") long id);
 	@Select("select * from " + UserRole.TABLE_NAME)
 	List<UserRole> findAllUserRoles();
-	@Insert("insert into " + UserRole.TABLE_NAME + " (id,roleName,roleTeamId,authValue,delete,describe) values(#{userRole.id},#{userRole.roleName},#{userRole.roleTeamId},#{userRole.authValue},#{userRole.delete},#{userRole.describe})")
+	@Insert("insert into " + UserRole.TABLE_NAME + " (`roleName`,`roleTeamId`,`authValue`,`delete`,`describe`) values(#{userRole.roleName},#{userRole.roleTeamId},#{userRole.authValue},#{userRole.delete},#{userRole.describe})")
 	int insertUserRole(@Param("userRole") UserRole userRole);
 	@Update("update " + UserRole.TABLE_NAME
 			+ " set roleName=#{userRole.roleName}, roleTeamId=#{userRole.roleTeamId}, authValue=#{userRole.authValue}, delete=#{userRole.delete}, describe=#{userRole.describe} where id=#{userRole.id}")
