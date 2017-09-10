@@ -67,10 +67,10 @@
 						<%@ include file="../shift/query-shift.jsp"%>
 					</c:when>
 					<c:when test="${action=='addteam'}">
-						<%@ include file="admin-team-add.jsp"%>
+						<%@ include file="../shift/add-shift.jsp"%>
 					</c:when>
 					<c:when test="${action=='searchteam'}">
-						<%@ include file="admin-team-search.jsp"%>
+						<%@ include file="../shift/add-shift.jsp"%>
 					</c:when>
 					<c:otherwise>
 						<div>not found</div>

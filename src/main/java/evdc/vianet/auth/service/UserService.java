@@ -18,5 +18,4 @@ public interface UserService {
 
 	int updateUserById(User u);
 
-	boolean isClient(long teamId);
 }

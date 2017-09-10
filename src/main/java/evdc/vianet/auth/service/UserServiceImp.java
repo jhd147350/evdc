@@ -53,10 +53,6 @@ public class UserServiceImp implements UserService {
 		return 0;
 	}
 
-	@Override
-	public boolean isClient(long teamId) {
-		Team t = teamMapper.findTeamById(teamId);
-		return t.isClient();
-	}
+
 
 }

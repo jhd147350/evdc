@@ -1,31 +1,24 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>layout 后台大布局 - Layui</title>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+
+<title>主页面</title>
 <link rel="stylesheet" href="../static/layui/css/layui.css">
+<link rel="stylesheet" href="../static/css/x-admin.css" media="all">
 </head>
 <body>
 <div class="layui-layout layui-layout-admin">
   <div class="layui-header">
     <div class="layui-logo">EVDC</div>
-    <!-- 头部区域（可配合layui已有的水平导航） -->
-    <!--<ul class="layui-nav layui-layout-left">
-      <li class="layui-nav-item"><a href="">控制台</a></li>
-      <li class="layui-nav-item"><a href="">商品管理</a></li>
-      <li class="layui-nav-item"><a href="">用户</a></li>
-      <li class="layui-nav-item">
-        <a href="javascript:;">其它系统</a>
-        <dl class="layui-nav-child">
-          <dd><a href="">邮件管理</a></dd>
-          <dd><a href="">消息管理</a></dd>
-          <dd><a href="">授权管理</a></dd>
-        </dl>
-      </li>
-    </ul>-->
     <ul class="layui-nav layui-layout-right">
       <li class="layui-nav-item">
         <a href="javascript:;">
@@ -69,17 +62,19 @@
         	<a href="javascript:;">系统管理</a>
         	<dl class="layui-nav-child">
             <dd><a href="javascript:;">公告管理</a></dd>
-            <dd><a href="javascript:;">组织管理</a></dd>
-            <dd><a href="javascript:;">组织角色管理</a></dd>
+            <dd><a href="javascript:;" _href="../teamManagement/teamManagementPage">组织管理</a></dd>
+            <dd><a href="javascript:;" _href="../teamRoleManagement/teamRoleManagementPage">组织角色管理</a></dd>
           </dl>
         </li> 
+  
       </ul>
     </div>
   </div>
   
-  <div class="layui-body">
-    <!-- 内容主体区域 -->
-    <div style="padding: 15px;">内容主体区域</div>
+  
+    <div class="layui-body">
+    <iframe frameborder="0" src="" class="x-iframe" width="100%" height="100%"></iframe>
+    <!--<div style="padding: 15px;">内容主体区域</div>-->
   </div>
   
   <div class="layui-footer">
@@ -90,10 +85,18 @@
 <script src="../static/layui/layui.js"></script>
 <script>
 //JavaScript代码区域
+
 layui.use('element', function(){
   var element = layui.element;
+	element.on('nav(test)', function(elem){
+	url = elem.find('a').attr('_href');
+  var ifram = document.getElementsByClassName('x-iframe');
+  ifram.item(0).setAttribute('src',url);	
+  });
+  
   
 });
+
 </script>
 </body>
 </html>

@@ -18,13 +18,32 @@ public class User {
 
 	private long id;
 	private String nickname;// 昵称
-	private String role;// 暂时先不用
+	private long role;
 	private long teamId;
 	private String phone;
 	private String email;
 	private String loginId;// 登录id，用户名
 	private String password;
 	private boolean teamAdmin;// 是否为管理员
+	
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public User(long id, String nickname, long role, long teamId, String phone, String email, String loginId,
+			String password, boolean teamAdmin) {
+		super();
+		this.id = id;
+		this.nickname = nickname;
+		this.role = role;
+		this.teamId = teamId;
+		this.phone = phone;
+		this.email = email;
+		this.loginId = loginId;
+		this.password = password;
+		this.teamAdmin = teamAdmin;
+	}
 
 	public long getId() {
 		return id;
@@ -42,11 +61,11 @@ public class User {
 		this.nickname = nickname;
 	}
 
-	public String getRole() {
+	public long getRole() {
 		return role;
 	}
 
-	public void setRole(String role) {
+	public void setRole(long role) {
 		this.role = role;
 	}
 
