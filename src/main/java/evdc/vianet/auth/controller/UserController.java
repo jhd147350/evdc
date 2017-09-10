@@ -47,9 +47,13 @@ public class UserController {
 		
 		return "auth/login";
 		
+	}
+	@RequestMapping("/permissionDenied")
+	public String permissionDenied() {
+		
+		return "auth/PermissionDenied";
 		
 	}
-	
 	@RequestMapping(value = "/dologin", method = RequestMethod.POST)
 	public String doLogin(String loginId, String password, Model m, HttpSession httpSession) {
 		User u = userService.login(loginId, password);

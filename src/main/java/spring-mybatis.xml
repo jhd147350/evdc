@@ -23,10 +23,15 @@
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url"
+
 			value="jdbc:mysql://124.251.110.252:7066/evdc_ss?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8" />
+
+
 		<!-- ?useUnicode=true&amp;characterEncoding=utf8 -->
+
 		<property name="username" value="EvdcTs" />
 		<property name="password" value="qwer1234" />
+
 		<property name="maxActive" value="50" />
 		<property name="validationQuery" value="SELECT 1"/>
 		<property name="testWhileIdle" value="true"/>
@@ -40,11 +45,13 @@
 	<mybatis:scan base-package="evdc.vianet.auth.mapper" />
 	<mybatis:scan base-package="evdc.vianet.ticket.mapper" />
 	<mybatis:scan base-package="evdc.vianet.admin.mapper" />
+	<mybatis:scan base-package="evdc.vianet.shift.mapper" />
 
 
 	<!-- sessionFactory -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="/WEB-INF/mybatis.xml" />
 	</bean>
 
 	<bean id="txMgr"

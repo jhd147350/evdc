@@ -33,7 +33,7 @@ public abstract class AuthFilter implements Filter {
 		String uri = req.getRequestURI();
 
 		//登录和 js和css资源直接放行、包括admin也直接跳过
-		if (uri.endsWith("login") || uri.endsWith(".js") || uri.endsWith(".css") || uri.contains("admin")) {
+		if (uri.endsWith("login") || uri.endsWith(".js") || uri.endsWith(".css") ) {
 			System.out.println("skip uri: " + uri);
 			chain.doFilter(request, response);
 			return;
@@ -46,16 +46,20 @@ public abstract class AuthFilter implements Filter {
 			resp.sendRedirect(req.getContextPath() + "/user/login");
 		} else {// 有用户
 			System.out.println("use has login: " + uri);
-			if(haveAuth(request, response)) {
+			int auth = haveAuth(u, req, resp);
+			if(auth==0) {
 				chain.doFilter(request, response);
-			}else {
-				request.getRequestDispatcher("/static/jsp/PermissionDenied.jsp").include(request, response); 
+			}else if(auth==2) {
+				request.getRequestDispatcher("/user/permissionDenied").include(request, response); 
 				//resp.sendRedirect(req.getContextPath() + "/static/jsp/PermissionDenied.html");
+			}else{
+				
 			}
 		}
 
 	}
-	protected abstract boolean haveAuth(ServletRequest request, ServletResponse response);
+	
+	protected abstract int haveAuth(User u, HttpServletRequest request, HttpServletResponse response);
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 		// TODO Auto-generated method stub

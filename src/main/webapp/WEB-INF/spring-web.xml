@@ -12,12 +12,12 @@
 	<context:component-scan base-package="evdc.vianet.test" />
 	<context:component-scan base-package="evdc.vianet.shift" />
 	<mvc:annotation-driven>
+	<!-- 序列化为json -->
 		<mvc:message-converters>  
             <bean class="org.springframework.http.converter.StringHttpMessageConverter" />  
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />  
         </mvc:message-converters> 
 	</mvc:annotation-driven>
-
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/pages/" />
