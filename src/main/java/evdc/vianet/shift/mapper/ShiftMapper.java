@@ -8,10 +8,11 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import evdc.vianet.shift.entity.Shift;
+import evdc.vianet.shift.entity.view.ViewShift;
 
 public interface ShiftMapper {
 	@Insert("insert into " + Shift.TABLE_NAME
-			+ " (name,ownerTeamId,createUserId) values(#{s.name},#{s.ownerTeamId},#{s.createUserId}))")
+			+ " (name,createUserId) values(#{name},#{createUserId})")
 	int insertShift(Shift s);
 
 	@Delete("delete from" + Shift.TABLE_NAME + " where id=#{id}")
@@ -24,6 +25,9 @@ public interface ShiftMapper {
 	@Select("select * from " + Shift.TABLE_NAME + " where teamId=#{teamId}")
 	List<Shift> selectShiftByTeamId(long teamId);
 
-	@Select("select * from " + Shift.TABLE_NAME)
-	List<Shift> selectAllShift();
+	@Select("select * from " + ViewShift.TABLE_NAME)
+	List<ViewShift> selectAllShift();
+	
+	@Select("select id from " + Shift.TABLE_NAME+" where name=#{name}")
+	Long selectShiftIdByName(String name);
 }

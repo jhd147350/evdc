@@ -1,6 +1,6 @@
 package evdc.vianet.shift.service;
 
-import evdc.vianet.shift.entity.Shift;
+
 
 /**
  * 所有排班相关业务<br>
@@ -11,15 +11,29 @@ import evdc.vianet.shift.entity.Shift;
  */
 public interface ShiftService {
 
-	void createShift(Shift s);
+	/**
+	 * 创建一个值班规则
+	 * @param json
+	 */
+	String createShift(String json);
 
-	void deleteShift(long id);
+	/**
+	 * 直接删除一个值班规则和所有关联的详细规则
+	 * @param json
+	 */
+	void deleteShift(String json);
+	
+	void deleteShiftRule(String json);
 
-	void updateShiftName(Shift s);
+	/**
+	 * edit更新或删除值班规则或详细规则
+	 * @param json
+	 */
+	void updateShift(String json);
 
 	void findShiftById(long id);
 	
-	void findAllShift();
+	String findAllShift();
 
 	void findShiftByTeamId(long teamId);
 

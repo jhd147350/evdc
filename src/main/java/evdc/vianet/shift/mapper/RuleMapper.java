@@ -11,7 +11,9 @@ import evdc.vianet.shift.entity.Rule;
 
 public interface RuleMapper {
 	
-	@Insert("")
+	//order是mysql系统关键字，所以要加上``否则会报错
+	@Insert("insert into " + Rule.TABLE_NAME
+			+ " (shiftId,info,`order`,startTime,endTime) values(#{shiftId},#{info},#{order},#{startTime},#{endTime})")
 	int insertRule(Rule rule);
 	
 	@Delete("")
