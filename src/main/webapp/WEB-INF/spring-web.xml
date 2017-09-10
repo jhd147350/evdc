@@ -11,7 +11,6 @@
 	<context:component-scan base-package="evdc.vianet.ticket" />
 	<context:component-scan base-package="evdc.vianet.test" />
 	<context:component-scan base-package="evdc.vianet.shift" />
-
 	<mvc:annotation-driven>
 		<mvc:message-converters>  
             <bean class="org.springframework.http.converter.StringHttpMessageConverter" />  

@@ -7,7 +7,7 @@
     <head>
         <meta charset="utf-8">
         <title>
-            组织管理
+            组织人员管理
         </title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -21,15 +21,15 @@
         <div class="x-nav">
             <span class="layui-breadcrumb">
               
-              <a><cite>系统管理</cite></a>
               <a><cite>组织管理</cite></a>
+              <a><cite>组织人员管理</cite></a>
             </span>
             <a id="refresh" class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
         </div>
         <div class="x-body">
             
             <xblock><!--<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button>-->
-            	<button class="layui-btn" onclick="role_add('添加组织','./teamAddPage','900','500')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有组织：${fn:length(teams)}条</span></xblock>
+            	<button class="layui-btn" onclick="role_add('添加组织人员','./teamUserAddPage','900','500')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有人员：${fn:length(teamUsers)}条</span></xblock>
             <table class="layui-table">
                 <thead>
                 
@@ -38,13 +38,13 @@
                             ID
                         </th>
                         <th>
-                            组织名
+                            姓名
                         </th>
                         <th>
-                           组织角色
+                           角色
                         </th>
                         <th>
-                            公司
+                            组织
                         </th>
                         <th>
                             操作
@@ -53,22 +53,20 @@
                 </thead>
                 <tbody>
                 
-                <c:if test="${teams==null || fn:length(teams) == 0}">  
+                <c:if test="${teamUsers==null || fn:length(teamUsers) == 0}">  
 					<tr>  
-					  <td colspan="4">组织为空</td>
+					  <td colspan="4">人员为空</td>
 					</tr>   
 				</c:if>  
-					<c:forEach items="${teams}" var="item" varStatus="status">  
+					<c:forEach items="${teamUsers}" var="item" varStatus="status">  
 					  <tr >  
 					    <td >${item.id}</td>  
 					    <td>${item.name}</td>  
 					    <td>${item.role}</td>  
-					    <td>${item.companyName}</td> 
+					    <td>${item.teamId}</td> 
 					    
-					    <c:choose>
-							<c:when test="${item.delete==0}">
 								<td class="td-manage">
-	                            <a title="编辑" href="javascript:;" onclick="role_edit('编辑','./teamEditPage?id=${item.id}','4','','510')"
+	                            <a title="编辑" href="javascript:;" onclick="role_edit('编辑','./teamUserEditPage?id=${item.id}','4','','510')"
 	                            class="ml-5" style="text-decoration:none">
 	                                <i class="layui-icon">&#xe642;</i>
 	                            </a>
@@ -76,14 +74,7 @@
 	                            style="text-decoration:none">
 	                                <i class="layui-icon">&#xe640;</i>
 	                            </a>
-	                            <a title="添加人员" href="javascript:;" onclick="teamUser_add('添加人员','../user/userAddPage?teamId=${item.id}','4','','510')" 
-	                            class="ml-5" style="text-decoration:none">
-	                                <i class="layui-icon">&#xe654;</i>
-	                            </a>
                         		</td> 
-						    </c:when>
-						    <c:otherwise><td></td></c:otherwise>
-						</c:choose>
 					    
 					  </tr>  
 					</c:forEach>
@@ -119,10 +110,7 @@
                 x_admin_show(title,url,w,h);
                 
             }
-          	//添加人员
-            function teamUser_add (title,url,id,w,h) {
-                x_admin_show(title,url,w,h);
-            }
+
              
             //编辑
             function role_edit (title,url,id,w,h) {
@@ -134,7 +122,7 @@
                     //发异步删除数据
                     var tds = $(obj).parent("td").prevAll("td");
                     $.ajax({  
-                  	  url: './deleteTeam', 
+                  	  url: './deleteTeamUser', 
                       type: 'POST',  
                       dataType: 'json',
                       data: {
@@ -154,17 +142,15 @@
                     
                 });
             }
-            
-          
             </script>
             <script>
-            var _hmt = _hmt || [];
-            (function() {
-              var hm = document.createElement("script");
-              hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-              var s = document.getElementsByTagName("script")[0]; 
-              s.parentNode.insertBefore(hm, s);
-            })();
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
         </script>
     </body>
 </html>

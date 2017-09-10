@@ -54,4 +54,12 @@ public class UserRoleServiceImp implements UserRoleService {
 		}
 	}
 
+	@Override
+	public List<UserRole> findAllUserRolesByTeamId(long roleTeamId) {
+		// TODO Auto-generated method stub
+		return userRoleMapper.findAllUserRolesByTeamId(roleTeamId);
+	}
+
+
+
 }

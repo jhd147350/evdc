@@ -17,32 +17,30 @@ public class User {
 	}
 
 	private long id;
-	private String nickname;// 昵称
+	private String name;// 用户名
 	private long role;
 	private long teamId;
 	private String phone;
 	private String email;
-	private String loginId;// 登录id，用户名
+	private String loginId;// 登录id
 	private String password;
-	private boolean teamAdmin;// 是否为管理员
 	
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public User(long id, String nickname, long role, long teamId, String phone, String email, String loginId,
-			String password, boolean teamAdmin) {
+	public User(long id, String name, long role, long teamId, String phone, String email, String loginId,
+			String password) {
 		super();
 		this.id = id;
-		this.nickname = nickname;
+		this.name = name;
 		this.role = role;
 		this.teamId = teamId;
 		this.phone = phone;
 		this.email = email;
 		this.loginId = loginId;
 		this.password = password;
-		this.teamAdmin = teamAdmin;
 	}
 
 	public long getId() {
@@ -53,12 +51,12 @@ public class User {
 		this.id = id;
 	}
 
-	public String getNickname() {
-		return nickname;
+	public String getName() {
+		return name;
 	}
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public long getRole() {
@@ -108,20 +106,11 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	public boolean isTeamAdmin() {
-		return teamAdmin;
-	}
-
-	public void setTeamAdmin(boolean teamAdmin) {
-		this.teamAdmin = teamAdmin;
-	}
-
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", nickname=" + nickname + ", role=" + role + ", teamId=" + teamId + ", phone="
+		return "User [id=" + id + ", nickname=" + name + ", role=" + role + ", teamId=" + teamId + ", phone="
 				+ phone + ", email=" + email + ", loginId=" + loginId + ", password=" + password + ", teamAdmin="
-				+ teamAdmin + "]";
+				 + "]";
 	}
 
 }

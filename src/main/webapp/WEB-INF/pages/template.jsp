@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>  
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +25,7 @@
       <li class="layui-nav-item">
         <a href="javascript:;">
           <!--<img src="photo.jpg" class="layui-nav-img">-->
-          客户1
+          ${user.name }
         </a>
         <dl class="layui-nav-child">
           <dd><a href="">个人配置</a></dd>
@@ -54,8 +56,8 @@
           <a href="javascript:;">组织管理</a>
           <dl class="layui-nav-child">
           	<dd><a href="javascript:;">组织信息</a></dd>
-            <dd><a href="javascript:;">组织人员管理</a></dd>
-            <dd><a href="javascript:;">人员角色管理</a></dd>
+            <dd><a href="javascript:;" _href="../teamUserManagement/teamUserManagementPage">组织人员管理</a></dd>
+            <dd><a href="javascript:;" _href="../userRoleManagement/userRoleManagementPage">人员角色管理</a></dd>
           </dl>
         </li>
         <li class="layui-nav-item">

@@ -10,7 +10,7 @@ public class UserRole {
 	public static final String TABLE_NAME = "auth_user_role";
 	private long id;
 	private String roleName;
-	private long userId;
+	private long roleTeamId;
 	private long authValue;
 	private int delete;
 	private String describe;
@@ -19,11 +19,11 @@ public class UserRole {
 		super();
 	}
 
-	public UserRole(long id, String roleName, long userId, long authValue, int delete, String describe) {
+	public UserRole(long id, String roleName, long roleTeamId, long authValue, int delete, String describe) {
 		super();
 		this.id = id;
 		this.roleName = roleName;
-		this.userId = userId;
+		this.roleTeamId = roleTeamId;
 		this.authValue = authValue;
 		this.delete = delete;
 		this.describe = describe;
@@ -45,13 +45,14 @@ public class UserRole {
 		this.roleName = roleName;
 	}
 
-	public long getUserId() {
-		return userId;
+	public long getRoleTeamId() {
+		return roleTeamId;
 	}
 
-	public void setUserId(long userId) {
-		this.userId = userId;
+	public void setRoleTeamId(long roleTeamId) {
+		this.roleTeamId = roleTeamId;
 	}
+
 
 	public long getAuthValue() {
 		return authValue;

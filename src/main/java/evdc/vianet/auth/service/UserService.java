@@ -12,10 +12,12 @@ public interface UserService {
 
 	int deleteUserById(long id);
 
-	List<User> findAll();
+	List<User> findAllUsers();
 
 	User findUserById(long id);
 
-	int updateUserById(User u);
+	List<User> findAllUsersByTeamId(long teamId);
+
+	void updateUserById(User u);
 
 }

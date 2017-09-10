@@ -12,6 +12,7 @@ import evdc.vianet.auth.entity.UserRole;
 public interface UserRoleService {
 	public List<UserRole> findAllUserRoles();
 	public UserRole findUserRoleById(long id);
+	public List<UserRole> findAllUserRolesByTeamId(long roleTeamId);
 	public int insertUserRole(UserRole userRole);
 	public void updateUserRole(UserRole userRole);
 	public int deleteUserRole(long id);

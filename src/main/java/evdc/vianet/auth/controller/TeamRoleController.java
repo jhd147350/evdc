@@ -30,7 +30,7 @@ public class TeamRoleController {
 	private AuthorityService authorityService;
 	
 	@RequestMapping("/teamRoleManagementPage")
-	public String teamManagementPage(Model m, HttpServletRequest request) {
+	public String teamRoleManagementPage(Model m, HttpServletRequest request) {
 		List<TeamRole> teamRoles = teamRoleService.findAllTeamRoles();
 		m.addAttribute("teamRoles", teamRoles);
 		System.out.println("请求路径"+request.getServletPath());
@@ -81,7 +81,7 @@ public class TeamRoleController {
 		teamRole.setDescribe(describe);
 		Status status = new Status();
 		teamRoleService.updateTeamRole(teamRole);
-		status.setStatus(0);
+		status.setStatus(1);
 		System.out.println(status.getStatus());
 		return status;
 	}
