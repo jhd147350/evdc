@@ -45,7 +45,10 @@
 								<a href="${ctx}/admin/shift/edit">排班规则</a>
 							</dd>
 							<dd>
-								<a href="javascript:;">团队排班</a>
+								<a href="${ctx}/admin/shift/generate">执行排班</a>
+							</dd>
+							<dd>
+								<a href="${ctx}/admin/shift/query">排班查询</a>
 							</dd>
 						</dl></li>
 				</ul>
@@ -54,8 +57,14 @@
 		<div class="layui-body">
 			<div>
 				<c:choose>
-					<c:when test="${action=='addshift'}">
-						<%@ include file="../shift/add-shift.jsp"%>
+					<c:when test="${action=='editshift'}">
+						<%@ include file="../shift/edit-shift.jsp"%>
+					</c:when>
+					<c:when test="${action=='generateshift'}">
+						<%@ include file="../shift/generate-shift.jsp"%>
+					</c:when>
+					<c:when test="${action=='queryshift'}">
+						<%@ include file="../shift/query-shift.jsp"%>
 					</c:when>
 					<c:when test="${action=='addteam'}">
 						<%@ include file="admin-team-add.jsp"%>
