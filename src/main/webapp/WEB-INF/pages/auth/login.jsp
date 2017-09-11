@@ -36,7 +36,7 @@
             </div>
             <div class="x-mid">
                 <div class="x-avtar">
-                    <img src="./images/logo.png" alt="">
+                    <img src="../static/images/logo.png" alt="">
                 </div>
                 <div class="input">
                     <form action="./dologin" class="layui-form" method="post">

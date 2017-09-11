@@ -60,12 +60,25 @@ public class UserController {
 		if(u!=null){
 			httpSession.setMaxInactiveInterval(30*60);
 			httpSession.setAttribute("user", u);
-			m.addAttribute("user",u);
-			return "template";
+			
+			return "redirect:/user/indexPage";
 		}
 		return "redirect:/user/login";
 	}
-	
+	@RequestMapping("/logout")
+	public String logout(HttpSession httpSession) {
+		httpSession.removeAttribute("user");
+		return "template";
+		
+	}
+	@RequestMapping("/indexPage")
+	public String indexPage(HttpSession httpSession, Model m) {
+		User u = (User) httpSession.getAttribute("user");
+		m.addAttribute("user",u);
+		
+		return "template";
+		
+	}
 	@RequestMapping("/userAddPage")
 	public String userAddPage(String teamId, Model m, HttpSession httpSession) {
 		

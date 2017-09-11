@@ -33,7 +33,7 @@
           <dd><a href="">组织信息</a></dd>
         </dl>
       </li>
-      <li class="layui-nav-item"><a href="">注销</a></li>
+      <li class="layui-nav-item"><a href="logout">注销</a></li>
     </ul>
   </div>
   
