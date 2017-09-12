@@ -14,7 +14,7 @@ public class SpringMybatisTest{
 	protected ApplicationContext aplcation = null; //注意引包
 	@Test
 	public void main() {
-		aplcation = new ClassPathXmlApplicationContext("spring-mybatis-test.xml");//初始化上下文；
+		aplcation = new ClassPathXmlApplicationContext("spring-mybatis.xml","mybatis.xml");//初始化上下文；
 		mapper = (UserMapper) aplcation.getBean("userMapper");
 		List<User> users = mapper.findAllUsers();
 		System.out.println("user size is "+users.size());

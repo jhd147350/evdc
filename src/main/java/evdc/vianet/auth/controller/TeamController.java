@@ -13,11 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import evdc.vianet.auth.entity.Authority;
 import evdc.vianet.auth.entity.Status;
 import evdc.vianet.auth.entity.Team;
 import evdc.vianet.auth.entity.TeamRole;
-import evdc.vianet.auth.service.AuthorityService;
 import evdc.vianet.auth.service.TeamRoleService;
 import evdc.vianet.auth.service.TeamService;
 

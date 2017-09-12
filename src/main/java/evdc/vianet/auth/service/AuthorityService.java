@@ -11,4 +11,6 @@ import evdc.vianet.auth.entity.Authority;
 public interface AuthorityService {
 	List<Authority> findAllAuthoritys();
 	List<Authority> findAuthoritysByPath(String path);
+	List<Authority> findAuthoritysByType(String type);
+	List<Authority> findAllMainAuthoritys();
 }

@@ -1,6 +1,6 @@
 package evdc.vianet.auth.controller;
 
-import java.io.IOException;
+
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +38,7 @@ public class TeamRoleController {
 	}
 	@RequestMapping("/teamRoleAddPage")
 	public String teamRoleAddPage(Model m) {
-		List<Authority> authoritys = authorityService.findAllAuthoritys();
+		List<Authority> authoritys = authorityService.findAllMainAuthoritys();
 		m.addAttribute("authoritys", authoritys);
 		return "auth/SystemManagement/teamRoleAdd";
 	}
@@ -65,7 +65,7 @@ public class TeamRoleController {
 	}
 	@RequestMapping("/teamRoleEditPage")
 	public String teamRoleEditPage(String id, Model m) {
-		List<Authority> authoritys = authorityService.findAllAuthoritys();
+		List<Authority> authoritys = authorityService.findAllMainAuthoritys();
 		m.addAttribute("authoritys", authoritys);
 		m.addAttribute("teamRole", teamRoleService.findTeamRoleById(Long.parseLong(id)));
 		return "auth/SystemManagement/teamRoleEdit";

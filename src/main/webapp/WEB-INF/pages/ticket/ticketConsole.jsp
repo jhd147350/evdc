@@ -13,7 +13,7 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="format-detection" content="telephone=no">
-        <link rel="stylesheet" href="./css/x-admin.css" media="all">
+        <link rel="stylesheet" href="../static/css/x-admin.css" media="all">
     </head>
     <body>
         <div class="x-nav">
@@ -25,7 +25,7 @@
             <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
         </div>
         <div class="x-body">
-            <form class="layui-form layui-form-pane">
+            <div class="layui-form layui-form-pane">
                 
                   <div class="layui-form-item">
 
@@ -42,7 +42,7 @@
                             <select id="serviceType" lay-verify="required" name="cid">
 									<option value=".*" >所有</option>
                                     <c:forEach items="${ticketServices}" var="item" varStatus="status">  
-										<option name="ticketService[]" value="${item.id }" > ${item.name }</option>
+										<option name="ticketService[]" value="^${item.id }$" > ${item.name}</option>
 									</c:forEach>
 
                             </select>
@@ -91,13 +91,13 @@
 
 					<div class="layui-inline">
                         <label class="layui-form-label">
-                            过滤
+                            查询方法
                         </label>
                    
                         <div class="layui-input-block">
                             <select id="findMethod" lay-verify="required" name="cid">
                                     <c:forEach items="${authoritys}" var="item" varStatus="status">  
-										<option name="findMethod[]" value="${item.path }" > ${item.name }</option>
+										<option name="findMethod[]" value="${item.path }" > ${item.authName }</option>
 									</c:forEach>
                             </select>
                         </div>
@@ -112,8 +112,8 @@
                     </div>
                   </div>
                 
-            </form>
-            <xblock><button class="layui-btn" onclick="ticket_cretae('创建工单','question-add.html','600','500')"><i class="layui-icon">&#xe608;</i>创建工单</button><span class="x-right" style="line-height:40px">共有工单：1 条</span></xblock>
+            </div>
+            <xblock><button class="layui-btn" onclick="ticket_create('创建工单','./ticketCreatePage','600','500')"><i class="layui-icon">&#xe608;</i>创建工单</button><span class="x-right" style="line-height:40px">共有工单：1 条</span></xblock>
             <table class="layui-table">
                 <thead>
                     <tr>
@@ -139,12 +139,16 @@
                         <th>
                             提交人
                         </th>
+                        <c:if test="${fn:length(authoritys) > 1}">  
+							<td>最后操作人</td>
+							<td>指派人</td>  
+						</c:if> 
                     </tr>
                 </thead>
                 <tbody id="ticketList">
                     <c:if test="${tickets==null || fn:length(tickets) == 0}">  
 					<tr>  
-					  <td colspan="4">查询结果为空</td>
+					  <td >查询结果为空</td>
 					</tr>   
 					</c:if>  
 					<c:forEach items="${tickets}" var="item" varStatus="status">  
@@ -157,7 +161,7 @@
 					    <td>${item.updateDate}</td>
 					    <td>${item.submitUser}</td>
 					    <c:if test="${fn:length(authoritys) > 1}">  
-							<td>${item.updater}</td>
+							<td>${item.updateUser}</td>
 							<td>${item.assignUser}</td>  
 						</c:if> 	
 					    
@@ -168,8 +172,8 @@
 
             <div id="page"></div>
         </div>
-        <script src="./lib/layui/layui.js" charset="utf-8"></script>
-        <script src="./js/x-layui.js" charset="utf-8"></script>
+        <script src="../static/layui/layui.js" charset="utf-8"></script>
+        <script src="../static/js/x-layui.js" charset="utf-8"></script>
         <script>
             layui.use(['laydate','element','layer','form'], function(){
                 $ = layui.jquery;//jquery
@@ -221,8 +225,8 @@
                   cache: false,     
                	}).done(function(data) { 
 
-               		$.each(data, function(tickets)){
-               			$.each(tickets, function(ticket)){
+               		$.each(data, function(tickets){
+               			$.each(tickets, function(ticket){
                				var $tr = $("<tr><")
                				var $td = $("<td>"+ticket.id+"</td>")
                				$tr.append($td);
@@ -240,14 +244,14 @@
                				$tr.append($td);
                				var finds = document.getElementsByName("findMethod[]");
                				if(finds.length>1){
-               					$td = $("<td>"+ticket.updater+"</td>")
+               					$td = $("<td>"+ticket.updateUser+"</td>")
                    				$tr.append($td);
                					$td = $("<td>"+ticket.assignUser+"</td>")
                    				$tr.append($td);
                				}
-               			}
+               			})
                			
-               		}
+               		})
                   }); 
             }
             
@@ -267,8 +271,8 @@
              function question_show (argument) {
                 layer.msg('可以跳到前台具体问题页面',{icon:1,time:1000});
              }
-             /*添加*/
-            function question_add(title,url,w,h){
+             /*创建工单*/
+            function ticket_create(title,url,w,h){
                 x_admin_show(title,url,w,h);
             }
             //编辑 

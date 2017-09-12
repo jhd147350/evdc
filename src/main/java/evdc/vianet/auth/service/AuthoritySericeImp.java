@@ -29,5 +29,15 @@ public class AuthoritySericeImp implements AuthorityService {
 		// TODO Auto-generated method stub
 		return authorityMapper.findAuthsByPath(path);
 	}
+	@Override
+	public List<Authority> findAuthoritysByType(String type) {
+		// TODO Auto-generated method stub
+		return authorityMapper.findAuthoritysByType(type);
+	}
+	@Override
+	public List<Authority> findAllMainAuthoritys() {
+		// TODO Auto-generated method stub
+		return authorityMapper.findAllMainAuthoritys();
+	}
 
 }

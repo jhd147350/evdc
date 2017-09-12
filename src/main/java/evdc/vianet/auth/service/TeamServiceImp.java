@@ -61,7 +61,7 @@ public class TeamServiceImp implements TeamService {
 		// TODO Auto-generated method stub
 		List<Authority> teamAuths = new ArrayList<Authority>();
 		long teamAuthValue = teamRoleService.findTeamRoleById(teamMapper.findTeamById(teamId).getRole()).getAuthValue();
-		List<Authority> allAuth = authorityService.findAllAuthoritys();
+		List<Authority> allAuth = authorityService.findAllMainAuthoritys();
 		
 		for (Authority authority : allAuth) {
 			if(teamAuthValue%authority.getAuthValue()==0){
