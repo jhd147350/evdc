@@ -95,6 +95,7 @@ public class ShiftController {
 		response.setCharacterEncoding("utf-8");
 		System.out.println("create:" + json);
 
+		//TODO iframe 和 父页面传值问题需要解决
 		return shiftService.createShift(json);
 		// return JsonResult.SUC.toString();
 	}
