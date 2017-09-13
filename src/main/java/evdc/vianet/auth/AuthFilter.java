@@ -32,8 +32,8 @@ public abstract class AuthFilter implements Filter {
 		User u = (User) session.getAttribute("user");
 		String uri = req.getRequestURI();
 
-		//登录和 js和css资源直接放行、包括admin也直接跳过
-		if (uri.endsWith("login") || uri.endsWith(".js") || uri.endsWith(".css") || uri.contains("admin")) {
+		//静态资源与登录页面
+		if (uri.endsWith("login") || uri.indexOf("evdc/static/")!=-1 ) {
 			System.out.println("skip uri: " + uri);
 			chain.doFilter(request, response);
 			return;
@@ -45,17 +45,30 @@ public abstract class AuthFilter implements Filter {
 			// chain.doFilter(request, response);
 			resp.sendRedirect(req.getContextPath() + "/user/login");
 		} else {// 有用户
+			
 			System.out.println("use has login: " + uri);
-			if(haveAuth(request, response)) {
-				chain.doFilter(request, response);
-			}else {
-				request.getRequestDispatcher("/static/jsp/PermissionDenied.jsp").include(request, response); 
-				//resp.sendRedirect(req.getContextPath() + "/static/jsp/PermissionDenied.html");
+			String requestURL = req.getRequestURL().toString();
+			System.out.println("当前用户的请求路径"+requestURL);
+			if(requestURL.endsWith("/evdc/")||requestURL.endsWith("evdc")){
+				resp.sendRedirect(req.getContextPath() + "/user/indexPage");
+			}else{
+				//权限判断
+				int auth = haveAuth(u, req, resp);
+				if(auth==0) {
+					chain.doFilter(request, response);
+				}else if(auth==2) {
+					request.getRequestDispatcher("/user/permissionDenied").include(request, response); 
+					//resp.sendRedirect(req.getContextPath() + "/static/jsp/PermissionDenied.html");
+				}else{
+					
+				}
 			}
+			
 		}
 
 	}
-	protected abstract boolean haveAuth(ServletRequest request, ServletResponse response);
+	
+	protected abstract int haveAuth(User u, HttpServletRequest request, HttpServletResponse response);
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 		// TODO Auto-generated method stub

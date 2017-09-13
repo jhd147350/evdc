@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>  
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +25,7 @@
       <li class="layui-nav-item">
         <a href="javascript:;">
           <!--<img src="photo.jpg" class="layui-nav-img">-->
-          客户1
+          ${user.name }
         </a>
         <dl class="layui-nav-child">
           <dd><a href="">个人配置</a></dd>
@@ -31,7 +33,7 @@
           <dd><a href="">组织信息</a></dd>
         </dl>
       </li>
-      <li class="layui-nav-item"><a href="">注销</a></li>
+      <li class="layui-nav-item"><a href="logout">注销</a></li>
     </ul>
   </div>
   
@@ -40,11 +42,12 @@
       <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
       <ul class="layui-nav layui-nav-tree"  lay-filter="test">
         <li class="layui-nav-item layui-nav-itemed">
-          <a class="" href="javascript:;">工单控制台</a>
+          <a class="" href="javascript:;" _href="../ticket/ticketConsole">工单控制台</a>
         </li>
         <li class="layui-nav-item">
+        <a href="javascript:;">值班管理</a>
         	<dl class="layui-nav-child">
-	          <a href="javascript:;">值班管理</a>
+	          
 	          <dd><a href="javascript:;">值班查询</a></dd>
 	          <dd><a href="javascript:;">批量排班</a></dd>
 	          <dd><a href="javascript:;">批量删除</a></dd>
@@ -54,8 +57,8 @@
           <a href="javascript:;">组织管理</a>
           <dl class="layui-nav-child">
           	<dd><a href="javascript:;">组织信息</a></dd>
-            <dd><a href="javascript:;">组织人员管理</a></dd>
-            <dd><a href="javascript:;">人员角色管理</a></dd>
+            <dd><a href="javascript:;" _href="../teamUserManagement/teamUserManagementPage">组织人员管理</a></dd>
+            <dd><a href="javascript:;" _href="../userRoleManagement/userRoleManagementPage">人员角色管理</a></dd>
           </dl>
         </li>
         <li class="layui-nav-item">

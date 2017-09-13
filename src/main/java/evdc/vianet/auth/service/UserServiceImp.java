@@ -1,14 +1,18 @@
 package evdc.vianet.auth.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import evdc.vianet.auth.entity.Authority;
 import evdc.vianet.auth.entity.Team;
 import evdc.vianet.auth.entity.User;
+import evdc.vianet.auth.mapper.AuthorityMapper;
 import evdc.vianet.auth.mapper.TeamMapper;
 import evdc.vianet.auth.mapper.UserMapper;
+import evdc.vianet.auth.mapper.UserRoleMapper;
 
 @Service("userService")
 public class UserServiceImp implements UserService {
@@ -17,7 +21,11 @@ public class UserServiceImp implements UserService {
 	private UserMapper userMapper;
 	@Autowired
 	private TeamMapper teamMapper;
-
+	@Autowired
+	private AuthorityMapper authorityMapper;
+	@Autowired
+	private UserRoleMapper userRoleMapper;
+	
 	@Override
 	public User login(String loginId, String password) {
 		User u = new User();
@@ -28,7 +36,13 @@ public class UserServiceImp implements UserService {
 
 	@Override
 	public int insertUser(User u) {
-		return userMapper.insertUser(u);
+		List<User> users = userMapper.findUsersByLoginId(u);
+		if(users.size()>=1){
+			return 2;
+		}else{
+			return userMapper.insertUser(u);
+		}
+		
 	}
 
 	@Override
@@ -37,22 +51,41 @@ public class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public List<User> findAll() {
+	public List<User> findAllUsers() {
 		return userMapper.findAllUsers();
 	}
 
 	@Override
 	public User findUserById(long id) {
 		// TODO
-		return null;
+		return userMapper.findUserById(id);
 	}
 
 	@Override
-	public int updateUserById(User u) {
+	public void updateUserById(User u) {
+		
 		userMapper.updateUser(u);
-		return 0;
 	}
 
+	@Override
+	public List<User> findAllUsersByTeamId(long teamId) {
+		// TODO Auto-generated method stub
+		return userMapper.findAllUsersByTeamId(teamId);
+	}
 
-
+	@Override
+	public List<Authority> getUserAuthsById(long userId) {
+		// TODO Auto-generated method stub
+	
+		List<Authority> userAuths = new ArrayList<Authority>();
+		long userAuthValue = userRoleMapper.findUserRoleById(userMapper.findUserById(userId).getRole()).getAuthValue();
+		List<Authority> allAuth = authorityMapper.findAllMainAuthoritys();
+		
+		for (Authority authority : allAuth) {
+			if(userAuthValue%authority.getAuthValue()==0){
+				userAuths.add(authority);
+			}
+		}
+		return null;
+	}
 }

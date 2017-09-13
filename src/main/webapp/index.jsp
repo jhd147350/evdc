@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Refresh" content="0; URL=./user/login">
 <meta name="renderer" content="webkit">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -17,87 +18,6 @@
 <link rel="stylesheet" href="./static/css/x-admin.css" media="all">
 </head>
 <body>
-<div class="layui-layout layui-layout-admin">
-  <div class="layui-header">
-    <div class="layui-logo">EVDC</div>
-    <ul class="layui-nav layui-layout-right">
-      <li class="layui-nav-item">
-        <a href="javascript:;">
-          <!--<img src="photo.jpg" class="layui-nav-img">-->
-          客户1
-        </a>
-        <dl class="layui-nav-child">
-          <dd><a href="">个人配置</a></dd>
-          <dd><a href="">修改密码</a></dd>
-          <dd><a href="">组织信息</a></dd>
-        </dl>
-      </li>
-      <li class="layui-nav-item"><a href="">注销</a></li>
-    </ul>
-  </div>
-  
-  <div class="layui-side layui-bg-black">
-    <div class="layui-side-scroll">
-      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
-        <li class="layui-nav-item layui-nav-itemed">
-          <a class="" href="javascript:;">工单控制台</a>
-        </li>
-        <li class="layui-nav-item">
-        	<dl class="layui-nav-child">
-	          <a href="javascript:;">值班管理</a>
-	          <dd><a href="javascript:;">值班查询</a></dd>
-	          <dd><a href="javascript:;">批量排班</a></dd>
-	          <dd><a href="javascript:;">批量删除</a></dd>
-	        </dl>
-        </li>
-        <li class="layui-nav-item">
-          <a href="javascript:;">组织管理</a>
-          <dl class="layui-nav-child">
-          	<dd><a href="javascript:;">组织信息</a></dd>
-            <dd><a href="javascript:;">组织人员管理</a></dd>
-            <dd><a href="javascript:;">人员角色管理</a></dd>
-          </dl>
-        </li>
-        <li class="layui-nav-item">
-        	<a href="javascript:;">系统管理</a>
-        	<dl class="layui-nav-child">
-            <dd><a href="javascript:;">公告管理</a></dd>
-            <dd><a href="javascript:;" _href="./SystemManagement/teamManagement.html">组织管理</a></dd>
-            <dd><a href="javascript:;" _href="./SystemManagement/teamRoleManagement.html">组织角色管理</a></dd>
-          </dl>
-        </li> 
-  
-      </ul>
-    </div>
-  </div>
-  
-  
-    <div class="layui-body">
-    <iframe frameborder="0" src="" class="x-iframe" width="100%" height="100%"></iframe>
-    <!--<div style="padding: 15px;">内容主体区域</div>-->
-  </div>
-  
-  <div class="layui-footer">
-    <!-- 底部固定区域 -->
-    ? layui.com - 底部固定区域
-  </div>
-</div>
-<script src="./static/layui/layui.js"></script>
-<script>
-//JavaScript代码区域
 
-layui.use('element', function(){
-  var element = layui.element;
-	element.on('nav(test)', function(elem){
-	url = elem.find('a').attr('_href');
-  var ifram = document.getElementsByClassName('x-iframe');
-  ifram.item(0).setAttribute('src',url);	
-  });
-  
-  
-});
-
-</script>
 </body>
 </html>

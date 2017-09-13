@@ -1,6 +1,6 @@
 package evdc.vianet.auth.controller;
 
-import java.io.IOException;
+
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +30,7 @@ public class TeamRoleController {
 	private AuthorityService authorityService;
 	
 	@RequestMapping("/teamRoleManagementPage")
-	public String teamManagementPage(Model m, HttpServletRequest request) {
+	public String teamRoleManagementPage(Model m, HttpServletRequest request) {
 		List<TeamRole> teamRoles = teamRoleService.findAllTeamRoles();
 		m.addAttribute("teamRoles", teamRoles);
 		System.out.println("请求路径"+request.getServletPath());
@@ -38,7 +38,7 @@ public class TeamRoleController {
 	}
 	@RequestMapping("/teamRoleAddPage")
 	public String teamRoleAddPage(Model m) {
-		List<Authority> authoritys = authorityService.findAllAuthoritys();
+		List<Authority> authoritys = authorityService.findAllMainAuthoritys();
 		m.addAttribute("authoritys", authoritys);
 		return "auth/SystemManagement/teamRoleAdd";
 	}
@@ -65,7 +65,7 @@ public class TeamRoleController {
 	}
 	@RequestMapping("/teamRoleEditPage")
 	public String teamRoleEditPage(String id, Model m) {
-		List<Authority> authoritys = authorityService.findAllAuthoritys();
+		List<Authority> authoritys = authorityService.findAllMainAuthoritys();
 		m.addAttribute("authoritys", authoritys);
 		m.addAttribute("teamRole", teamRoleService.findTeamRoleById(Long.parseLong(id)));
 		return "auth/SystemManagement/teamRoleEdit";
@@ -81,7 +81,7 @@ public class TeamRoleController {
 		teamRole.setDescribe(describe);
 		Status status = new Status();
 		teamRoleService.updateTeamRole(teamRole);
-		status.setStatus(0);
+		status.setStatus(1);
 		System.out.println(status.getStatus());
 		return status;
 	}

@@ -8,7 +8,7 @@
     <head>
         <meta charset="utf-8">
         <title>
-           组织角色编辑
+           人员角色编辑
         </title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -27,8 +27,8 @@
                         <span class="x-red">*</span>角色名
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="roleName" teamRoleId="${teamRole.id }" name="name" required="" lay-verify="required"
-                        autocomplete="off" class="layui-input" value="${teamRole.roleName}">
+                        <input type="text" id="roleName" userRoleId="${userRole.id }" name="name" required="" lay-verify="required"
+                        autocomplete="off" class="layui-input" value="${userRole.roleName}">
                     </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
@@ -50,7 +50,7 @@
 										<c:forEach items="${authoritys}" var="item" varStatus="status">  
 											
 											<c:choose>
-												<c:when test="${teamRole.authValue%item.authValue==0}">
+												<c:when test="${userRole.authValue%item.authValue==0}">
 													<input name="id[]" type="checkbox" value="2" authValue="${item.authValue }" checked="checked"> ${item.authName }	
 												</c:when>
 												<c:otherwise>
@@ -73,12 +73,12 @@
                         描述
                     </label>
                     <div class="layui-input-block">
-                        <textarea id="desc" name="desc" class="layui-textarea">${teamRole.describe }</textarea>
+                        <textarea id="desc" name="desc" class="layui-textarea">${userRole.describe }</textarea>
                     </div>
                 </div>
                 <div class="layui-form-item">
                 <!-- <button id="addTeamRole" class="layui-btn" lay-submit="" lay-filter="add">增加</button> -->
-                <input type="button" name="edit" id="editTeamRole" value="修改" class="layui-btn"/>
+                <input type="button" name="edit" id="editUserRole" value="修改" class="layui-btn"/>
               </div>
             </form>
         </div>
@@ -94,7 +94,7 @@
             	
             	
             	//监听提交
-    			var but = document.getElementById("editTeamRole");
+    			var but = document.getElementById("editUserRole");
     			but.addEventListener("click", function(){
             		 //发异步，把数据提交给php
                 	var inputs = document.getElementsByName("id[]");
@@ -109,13 +109,13 @@
                 	/*  if (navigator.userAgent.indexOf('Firefox') >= 0){
                 		evdc_sync = false;	 
                 	 } */
-                	var teamRoleId = roleName.getAttribute("teamRoleId");
+                	var userRoleId = roleName.getAttribute("userRoleId");
                 	$.ajax({  
-                    	url: './updateTeamRole', 
+                    	url: './updateUserRole', 
                         type: 'POST',  
                         dataType: 'json',
                         data: {
-                        	id: teamRoleId, "roleName": roleName.value, "authValue": authValue, "describe": describe.value
+                        	id: userRoleId, "roleName": roleName.value, "authValue": authValue, "describe": describe.value
                         },
                         timeout: 1000,  
                         cache: false,     

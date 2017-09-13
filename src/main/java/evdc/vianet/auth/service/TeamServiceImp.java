@@ -1,19 +1,29 @@
 package evdc.vianet.auth.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import evdc.vianet.auth.entity.Authority;
 import evdc.vianet.auth.entity.Team;
 import evdc.vianet.auth.entity.TeamRole;
 import evdc.vianet.auth.mapper.TeamMapper;
+import evdc.vianet.auth.mapper.TeamRoleMapper;
 
 @Service("teamService")
 public class TeamServiceImp implements TeamService {
 
 	@Autowired
 	private TeamMapper teamMapper;
+	@Autowired
+	@Qualifier("teamRoleService")
+	private TeamRoleService teamRoleService;
+	@Autowired
+	@Qualifier("authorityService")
+	private AuthorityService authorityService;
 
 	@Override
 	public int insertTeam(Team t) {
@@ -38,12 +48,27 @@ public class TeamServiceImp implements TeamService {
 	@Override
 	public Team findTeamById(long id) {
 		// TODO 
-		return null;
+		return teamMapper.findTeamById(id);
 	}
 
 	@Override
-	public int updateTeamById(Team t) {
-		return updateTeamById(t);
+	public void updateTeamById(Team t) {
+		teamMapper.updateTeam(t);
+	}
+
+	@Override
+	public List<Authority> getTeamAuthsById(long teamId) {
+		// TODO Auto-generated method stub
+		List<Authority> teamAuths = new ArrayList<Authority>();
+		long teamAuthValue = teamRoleService.findTeamRoleById(teamMapper.findTeamById(teamId).getRole()).getAuthValue();
+		List<Authority> allAuth = authorityService.findAllMainAuthoritys();
+		
+		for (Authority authority : allAuth) {
+			if(teamAuthValue%authority.getAuthValue()==0){
+				teamAuths.add(authority);
+			}
+		}
+		return teamAuths;
 	}
 
 }

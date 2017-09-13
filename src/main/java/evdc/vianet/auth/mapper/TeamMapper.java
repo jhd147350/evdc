@@ -34,6 +34,6 @@ public interface TeamMapper {
 			+ " set `name`=#{t.name}, `role`=#{t.role}, `companyName`=#{t.companyName}, `code`=#{t.code}, `delete`=#{t.delete}, `description`=#{t.description} where `id`=#{t.id}")
 	void updateTeam(@Param("t") Team t);
 
-	@Delete("delete from" + Team.TABLE_NAME + " where `id`=#{id}")
+	@Delete("delete from " + Team.TABLE_NAME + " where `id`=#{id}")
 	int deleteTeamById(@Param("id") long id);
 }

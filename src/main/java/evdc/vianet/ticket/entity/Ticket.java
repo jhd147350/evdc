@@ -32,7 +32,7 @@ public class Ticket {
 	 *
 	 */
 	public enum Status {
-		Assigned, In_Process, Resolved, Closed;
+		New, In_Process, Resolved, Closed;
 	}
 
 	private long id;
@@ -41,12 +41,16 @@ public class Ticket {
 	private String description;
 	private String severity;
 	private String status;
-	private String service;
+	private long serviceId;
 	private Timestamp submitDate;
 	private long submitUserId;
+	private long submitTeamId;
 	private long assignUserId;
-	private long AssignTeamId;
-	private int satisfation;
+	private long assignTeamId;
+	private long satisfation;
+	private long updateUserId;
+	private Timestamp updateDate;
+	
 	public long getId() {
 		return id;
 	}
@@ -83,11 +87,11 @@ public class Ticket {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public String getService() {
-		return service;
+	public long getServiceId() {
+		return serviceId;
 	}
-	public void setService(String service) {
-		this.service = service;
+	public void setService(long serviceId) {
+		this.serviceId = serviceId;
 	}
 	public Timestamp getSubmitDate() {
 		return submitDate;
@@ -108,23 +112,43 @@ public class Ticket {
 		this.assignUserId = assignUserId;
 	}
 	public long getAssignTeamId() {
-		return AssignTeamId;
+		return assignTeamId;
 	}
 	public void setAssignTeamId(long assignTeamId) {
-		AssignTeamId = assignTeamId;
+		assignTeamId = assignTeamId;
 	}
-	public int getSatisfation() {
+	public long getSatisfation() {
 		return satisfation;
 	}
-	public void setSatisfation(int satisfation) {
+	public void setSatisfation(long satisfation) {
 		this.satisfation = satisfation;
+	}
+	
+	
+	public long getSubmitTeamId() {
+		return submitTeamId;
+	}
+	public void setSubmitTeamId(long submitTeamId) {
+		this.submitTeamId = submitTeamId;
+	}
+	public long getUpdateUserId() {
+		return updateUserId;
+	}
+	public void setUpdateUserId(long updateUserId) {
+		this.updateUserId = updateUserId;
+	}
+	public Timestamp getUpdateDate() {
+		return updateDate;
+	}
+	public void setUpdateDate(Timestamp updateDate) {
+		this.updateDate = updateDate;
 	}
 	@Override
 	public String toString() {
 		return "Ticket [id=" + id + ", source=" + source + ", title=" + title + ", description=" + description
-				+ ", severity=" + severity + ", status=" + status + ", service=" + service + ", submitDate="
-				+ submitDate + ", submitUserId=" + submitUserId + ", assignUserId=" + assignUserId + ", AssignTeamId="
-				+ AssignTeamId + ", satisfation=" + satisfation + "]";
+				+ ", severity=" + severity + ", status=" + status + ", service=" + serviceId + ", submitDate="
+				+ submitDate + ", submitUserId=" + submitUserId + ", assignUserId=" + assignUserId + ", assignTeamId="
+				+ assignTeamId + ", satisfation=" + satisfation + "updateUserId=" + updateUserId + "updateDate=" + updateDate+"]";
 	}
 	
 

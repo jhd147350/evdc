@@ -2,6 +2,7 @@ package evdc.vianet.auth.service;
 
 import java.util.List;
 
+import evdc.vianet.auth.entity.Authority;
 import evdc.vianet.auth.entity.User;
 
 public interface UserService {
@@ -12,10 +13,13 @@ public interface UserService {
 
 	int deleteUserById(long id);
 
-	List<User> findAll();
+	List<User> findAllUsers();
 
 	User findUserById(long id);
 
-	int updateUserById(User u);
+	List<User> findAllUsersByTeamId(long teamId);
 
+	void updateUserById(User u);
+	
+	List<Authority> getUserAuthsById(long userId); 
 }

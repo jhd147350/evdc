@@ -2,6 +2,7 @@ package evdc.vianet.auth.service;
 
 import java.util.List;
 
+import evdc.vianet.auth.entity.Authority;
 import evdc.vianet.auth.entity.Team;
 
 public interface TeamService {
@@ -14,6 +15,8 @@ public interface TeamService {
 
 	Team findTeamById(long id);
 
-	int updateTeamById(Team t);
+	void updateTeamById(Team t);
+	
+	List<Authority> getTeamAuthsById(long teamId); 
 
 }
