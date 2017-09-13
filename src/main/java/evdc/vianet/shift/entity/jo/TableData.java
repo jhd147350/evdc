@@ -2,13 +2,11 @@ package evdc.vianet.shift.entity.jo;
 
 import java.util.List;
 
-import evdc.vianet.shift.entity.view.ViewShift;
-
-public class TableDataShift {
+public class TableData<T>{
 	private int code;
 	private String msg;
 	private int count;
-	private List<ViewShift> data;
+	private List<T> data;
 
 	public int getCode() {
 		return code;
@@ -34,11 +32,11 @@ public class TableDataShift {
 		this.count = count;
 	}
 
-	public List<ViewShift> getData() {
+	public List<T> getData() {
 		return data;
 	}
 
-	public void setData(List<ViewShift> data) {
+	public void setData(List<T> data) {
 		this.data = data;
 	}
 

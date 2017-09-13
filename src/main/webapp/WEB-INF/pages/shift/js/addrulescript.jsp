@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<script src="${ctx}/static/layui/layui.all.js"></script>
 <script>
 	;
 	!function() {
@@ -20,7 +21,7 @@
 		var $ = layui.jquery;
 		$("#add").click(
 				function() {
-					var name = $("#name").val();
+					var shiftname = $("#shiftname").val();
 					var starttime = $("#starttime").val();
 					var endtime = $("#endtime").val();
 					var list = [ name, starttime, endtime ];
@@ -28,7 +29,7 @@
 					 * for(var j=0;j<list.size();j++){ if(list[j]==null){
 					 * layer.msg(list[j]+"不能为空"); } }
 					 */
-					if (name.length === 0 || starttime.length === 0
+					if (shiftname.length === 0 || starttime.length === 0
 							|| endtime.length === 0) {
 
 						layer.msg("所有选项都为必填项");

@@ -1,5 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>排班表</title>
+<%@ include file="../../global/layui_css.jsp"%>
+</head>
+<body>
+
 <button class="layui-btn">上一周</button>
 <button class="layui-btn">下一周</button>
 <table class="layui-table">
@@ -66,8 +75,6 @@
 		</tr>
 	</tbody>
 </table>
-
-
 <script src="${ctx}/static/layui/layui.all.js"></script>
 <script>
 	//由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
@@ -108,3 +115,5 @@
 
 	}();
 </script>
+</body>
+</html>

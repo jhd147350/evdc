@@ -9,17 +9,20 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
+import evdc.vianet.auth.entity.User;
 import evdc.vianet.shift.entity.Rule;
 import evdc.vianet.shift.entity.Shift;
+import evdc.vianet.shift.entity.Staff;
 import evdc.vianet.shift.entity.jo.JsonResult;
-import evdc.vianet.shift.entity.jo.TableDataShift;
+import evdc.vianet.shift.entity.jo.TableData;
 import evdc.vianet.shift.entity.view.ViewShift;
 import evdc.vianet.shift.mapper.RuleMapper;
 import evdc.vianet.shift.mapper.ShiftMapper;
 
 @Service("shiftService")
-public class ShiftServiceImp implements ShiftService {
+public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 
 	@Autowired
 	ShiftMapper shiftMapper;
@@ -85,19 +88,13 @@ public class ShiftServiceImp implements ShiftService {
 
 	}
 
-	@Override
-	public void findShiftById(long id) {
-		// TODO Auto-generated method stub
-
-	}
-
 	/**
 	 * { code: 0, msg: "", count: 1000, data: [] }
 	 */
 	@Override
 	public String findAllShift() {
-		List<ViewShift> allShift = shiftMapper.selectAllShift();
-		TableDataShift dataShift = new TableDataShift();
+		List<ViewShift> allShift = shiftMapper.selectAllShiftView();
+		TableData<ViewShift> dataShift = new TableData<ViewShift>();
 		dataShift.setCode(200);
 		dataShift.setCount(100);
 		dataShift.setMsg("this is msg");
@@ -115,8 +112,11 @@ public class ShiftServiceImp implements ShiftService {
 	}
 
 	@Override
-	public void deleteShift(String json) {
-		// TODO Auto-generated method stub
+	public String deleteShift(long shiftid) {
+		int delete = shiftMapper.deleteShiftById(shiftid);
+		System.out.println("deleteShift:" + delete);
+
+		return delete == 1 ? JsonResult.SUC.toString() : JsonResult.FAILED.toString();
 
 	}
 
@@ -129,6 +129,38 @@ public class ShiftServiceImp implements ShiftService {
 	@Override
 	public void updateShift(String json) {
 		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void loadShiftAndRulesDataToModelByShiftId(long shiftId, Model m) {
+		m.addAttribute("shift", shiftMapper.selectShiftById(shiftId));
+		m.addAttribute("rules", ruleMapper.selectRuleByShiftId(shiftId));
+
+	}
+
+	@Override
+	public void getCreateSchedulePage(String json, Model m) {
+
+		// List<ViewShift> selectAllShift = shiftMapper.selectAllShift();
+		List<Shift> selectAllShift = shiftMapper.selectAllShift();
+
+		List<User> users = new ArrayList<>();
+		User u = new User();
+
+		u.setId(1);
+		u.setNickname("jhd1");
+		u.setTeamId(1);
+		User u2 = new User();
+
+		u2.setId(2);
+		u2.setNickname("jhd2");
+		u2.setTeamId(1);
+		
+		users.add(u);
+		users.add(u2);
+		m.addAttribute("users", users);
+		m.addAttribute("shifts", selectAllShift);
 
 	}
 

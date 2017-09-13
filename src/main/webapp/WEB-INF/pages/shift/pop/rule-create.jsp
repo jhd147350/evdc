@@ -6,14 +6,14 @@
 <meta charset="UTF-8">
 <title>创建排班规则</title>
 
-<%@ include file="../global/layui_css.jsp"%>
+<%@ include file="../../global/layui_css.jsp"%>
 </head>
 <body>
 	<form class="layui-form" action="">
 		<div class="layui-form-item">
 			<label class="layui-form-label">班次名称</label>
 			<div class="layui-input-block">
-				<input id="name" type="text" name="name" required
+				<input id="shiftname" type="text" name="name" required
 					lay-verify="required" placeholder="请输入班次名称" autocomplete="off"
 					class="layui-input">
 			</div>
@@ -61,11 +61,12 @@
 
 		</tbody>
 	</table>
-	<script src="${ctx}/static/layui/layui.all.js"></script>
+	<!--//TODO 重复使用会导致日期选择器出现闪现问题 <script src="${ctx}/static/layui/layui.all.js"></script>  -->
 	<!--  <script src="${ctx}/static/js/shift/addrule.js"></script> --> 
 
 
-	<%@ include file="./js/addrulescript.jsp"%>
+ 
+	<%@ include file="../js/addrulescript.jsp"%>
 
 
 

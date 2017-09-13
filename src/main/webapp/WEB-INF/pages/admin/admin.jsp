@@ -42,35 +42,24 @@
 						href="javascript:;">排班管理</a>
 						<dl class="layui-nav-child">
 							<dd>
-								<a href="${ctx}/admin/shift/edit">排班规则</a>
+								<a href="${ctx}/shift/rule">排班规则</a>
 							</dd>
 							<dd>
-								<a href="${ctx}/admin/shift/generate">执行排班</a>
-							</dd>
-							<dd>
-								<a href="${ctx}/admin/shift/query">排班查询</a>
+								<a href="${ctx}/shift/schedule">排班计划</a>
 							</dd>
 						</dl></li>
 				</ul>
 			</div>
 		</div>
 		<div class="layui-body">
+		
 			<div>
 				<c:choose>
-					<c:when test="${action=='editshift'}">
-						<%@ include file="../shift/edit-shift.jsp"%>
+					<c:when test="${action=='rule'}">
+						<%@ include file="../shift/rule.jsp"%>
 					</c:when>
-					<c:when test="${action=='generateshift'}">
-						<%@ include file="../shift/generate-shift.jsp"%>
-					</c:when>
-					<c:when test="${action=='queryshift'}">
-						<%@ include file="../shift/query-shift.jsp"%>
-					</c:when>
-					<c:when test="${action=='addteam'}">
-						<!-- <%@ include file="../shift/add-shift.jsp"%> -->
-					</c:when>
-					<c:when test="${action=='searchteam'}">
-					<!--	<%@ include file="../shift/add-shift.jsp"%> -->
+					<c:when test="${action=='schedule'}">
+						<%@ include file="../shift/schedule.jsp"%>
 					</c:when>
 					<c:otherwise>
 						<div>not found</div>
@@ -79,21 +68,22 @@
 			</div>
 
 			<div class="layui-footer"></div>
+			
 		</div>
 	</div>
 
 
-	<script src="${ctx}/static/layui/layui.all.js"></script>
+	
 	<script>
 		//由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
 		;
 		!function() {
 			var element = layui.element;
 			var form = layui.form;
-			var table = layui.table;
 
 		}();
 	</script>
+	<!--<script src="${ctx}/static/layui/layui.all.js"></script> --> 
 
 </body>
 </html>

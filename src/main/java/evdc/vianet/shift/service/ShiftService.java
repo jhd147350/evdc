@@ -1,14 +1,22 @@
 package evdc.vianet.shift.service;
 
+import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+
+import evdc.vianet.shift.entity.Rule;
+import evdc.vianet.shift.entity.Shift;
 
 /**
- * 所有排班相关业务<br>
+ * 所有排班相关页面<br>
  * 只有组或最大管理员可以创建，只有本组或最大管理员才可以删除修改本组的值班规则
  * 
  * @author jhd147350
  *
  */
+
+
 public interface ShiftService {
 
 	/**
@@ -16,12 +24,14 @@ public interface ShiftService {
 	 * @param json
 	 */
 	String createShift(String json);
+	
+	void getCreateSchedulePage(String json, Model m);
 
 	/**
 	 * 直接删除一个值班规则和所有关联的详细规则
 	 * @param json
 	 */
-	void deleteShift(String json);
+	String deleteShift(long shiftid);
 	
 	void deleteShiftRule(String json);
 
@@ -30,8 +40,8 @@ public interface ShiftService {
 	 * @param json
 	 */
 	void updateShift(String json);
-
-	void findShiftById(long id);
+	
+	void loadShiftAndRulesDataToModelByShiftId(long shiftId, Model m);
 	
 	String findAllShift();
 

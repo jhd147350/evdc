@@ -15,7 +15,7 @@ public interface ShiftMapper {
 			+ " (name,createUserId) values(#{name},#{createUserId})")
 	int insertShift(Shift s);
 
-	@Delete("delete from" + Shift.TABLE_NAME + " where id=#{id}")
+	@Delete("delete from " + Shift.TABLE_NAME + " where id=#{id}")
 	int deleteShiftById(long id);
 
 	@Update("update " + Shift.TABLE_NAME
@@ -26,8 +26,14 @@ public interface ShiftMapper {
 	List<Shift> selectShiftByTeamId(long teamId);
 
 	@Select("select * from " + ViewShift.TABLE_NAME)
-	List<ViewShift> selectAllShift();
+	List<ViewShift> selectAllShiftView();
+	
+	@Select("select * from " + Shift.TABLE_NAME)
+	List<Shift> selectAllShift();
 	
 	@Select("select id from " + Shift.TABLE_NAME+" where name=#{name}")
 	Long selectShiftIdByName(String name);
+	
+	@Select("select * from " + Shift.TABLE_NAME+" where id=#{id}")
+	Shift selectShiftById(long id);
 }

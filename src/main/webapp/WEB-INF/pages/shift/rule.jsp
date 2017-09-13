@@ -1,10 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-mini" lay-event="detail">查看</a>
-  	<a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
- 	<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
-</script>
 <form class="layui-form" action="">
 	<div class="layui-form-item">
 		<div class="layui-input-block">
@@ -16,7 +11,7 @@
 	<!--  -->
 	<table id="shifttable" class="layui-table"
 		lay-data="{height:400, url:'shiftdata',response : {statusCode : 200}, id:'table'}"
-		lay-filter="test">
+		lay-filter="shifttable">
 
 		<thead>
 			<tr>
@@ -25,16 +20,24 @@
 				<th lay-data="{field:'createUser', width:150, sort: true}">创建人</th>
 				<th lay-data="{field:'updateDate', width:177, sort:true}">修改时间</th>
 				<th
-					lay-data="{fixed: 'right', width:160, align:'center', toolbar: '#barDemo'}"></th>
+					lay-data="{fixed: 'right', width:160, align:'center', toolbar: '#toolbar'}"></th>
 			</tr>
 		</thead>
 
 	</table>
 </div>
 
-<script src="${ctx}/static/layui/layui.all.js"></script>
+
+<script type="text/html" id="toolbar">
+    <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">查看</a>
+  	<a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
+ 	<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
+</script>
+<!--  
+<script src="${ctx}/static/layui/layui.all.js"></script>-->
 <!-- <script src="${ctx}/static/js/shift/createshift.js"></script> -->
 <%@ include file="./js/createshift.jsp"%>
+
 <!--  
 <script>
 

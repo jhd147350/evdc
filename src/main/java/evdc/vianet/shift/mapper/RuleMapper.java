@@ -22,7 +22,7 @@ public interface RuleMapper {
 	@Update("")
 	int updateRule(Rule rule);
 	
-	@Select("")
+	@Select("select * from "+Rule.TABLE_NAME+" where shiftId=#{shiftId}")
 	List<Rule> selectRuleByShiftId(long shiftId);
 
 }

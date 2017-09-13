@@ -1,7 +1,12 @@
 package evdc.vianet.shift.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -11,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import evdc.vianet.auth.entity.Team;
+import evdc.vianet.shift.entity.Shift;
+import evdc.vianet.shift.entity.jo.TableData;
 import evdc.vianet.shift.service.ShiftService;
 
 /**
@@ -20,61 +28,65 @@ import evdc.vianet.shift.service.ShiftService;
  *
  */
 @Controller
-@RequestMapping("/admin/shift")
+@RequestMapping("/shift")
 public class ShiftController {
 
 	@Autowired
 	@Qualifier("shiftService")
 	private ShiftService shiftService;
 
-	@RequestMapping("/edit")
-	String editShift(Model m) {
-		m.addAttribute("action", "editshift");
+	@RequestMapping("/rule")
+	String rulePage(Model m) {
+		m.addAttribute("action", "rule");
 		return "admin/admin";
 	}
-
-	@RequestMapping("/test")
-	String shiftManagePage1(Model m) {
-		m.addAttribute("action", "add-shift");
-		m.addAttribute("name", "jhd");
-		return "shift/add-shift";
+	
+	@ResponseBody
+	@RequestMapping(value = "/rule/delete", method = RequestMethod.DELETE)
+	String deleteShift(Long shiftid) {
+		return shiftService.deleteShift(shiftid);
 	}
 
-	@RequestMapping("/generate")
-	String generateShift(Model m) {
-		m.addAttribute("action", "generateshift");
-		return "admin/admin";
+	@RequestMapping("/rule/create")
+	String createShiftRule() {
+		// m.addAttribute("action", "queryshift");
+		return "shift/pop/rule-create";
 	}
 
-	@RequestMapping("/query")
+	@RequestMapping("/rule/detail")
+	String detailShiftRule(Long shiftid, HttpServletRequest request, Model m) {
+		System.out.println(request.getRequestURI() + ":" + request.getQueryString());
+		System.out.println(shiftid);
+		shiftService.loadShiftAndRulesDataToModelByShiftId(shiftid, m);
+		return "shift/pop/rule-detail";
+	}
+	
+	@RequestMapping("/schedule")
 	String queryShift(Model m) {
-		m.addAttribute("action", "queryshift");
+		m.addAttribute("action", "schedule");
 		return "admin/admin";
 	}
 
-	@RequestMapping("/createshiftrule")
-	String createShiftRule(Model m) {
-		// m.addAttribute("action", "queryshift");
-		return "shift/create-shift-rule";
+	
+	@RequestMapping("/schedule/create")
+	String createSchedulePop(Long teamid, Model m) {
+		//m.addAttribute("action", "rule");
+		shiftService.getCreateSchedulePage("", m);
+		return "shift/pop/schedule-create";
 	}
 	
-
-	@RequestMapping("/viewshiftrule")
-	String viewShiftRule(Model m) {
-		// m.addAttribute("action", "queryshift");
-		return "shift/create-shift-rule";
+	@RequestMapping("/schedule/detail")
+	String detailSchedulePop(Long teamid, Model m) {
+		//m.addAttribute("action", "rule");
+		shiftService.getCreateSchedulePage("", m);
+		return "shift/pop/schedule-detail";
 	}
 	
-	@RequestMapping("/editshiftrule")
-	String editShiftRule(Model m) {
-		// m.addAttribute("action", "queryshift");
-		return "shift/create-shift-rule";
-	}
-	
-	@RequestMapping("/deleteshiftrule")
-	String deleteShiftRule(Model m) {
-		// m.addAttribute("action", "queryshift");
-		return "shift/create-shift-rule";
+	@RequestMapping("/schedule/edit")
+	String editSchedulePop(Long teamid, Model m) {
+		//m.addAttribute("action", "rule");
+		shiftService.getCreateSchedulePage("", m);
+		return "shift/pop/schedule-edit";
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
@@ -105,6 +117,41 @@ public class ShiftController {
 		// shiftService.createShift(json);
 
 		return "admin/admin";
+	}
+
+	@RequestMapping(value = "/teamschedule", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+	@ResponseBody
+	String getTeamSchedule(Boolean schedule, HttpServletResponse response) {
+		response.setCharacterEncoding("utf-8");
+
+		List<Team> teams1 = new ArrayList<>();
+		List<Team> teams2 = new ArrayList<>();
+
+		Team t1 = new Team();
+		t1.setId(1);
+		t1.setName("有排班");
+
+		Team t2 = new Team();
+		t2.setId(2);
+		t2.setName("无排班");
+
+		teams1.add(t1);
+		teams2.add(t2);
+		TableData<Team> data = new TableData<>();
+		data.setCode(200);
+		data.setCount(100);
+		if (schedule) {
+			data.setMsg("有排班");
+			data.setData(teams1);
+
+		} else {
+			data.setMsg("无排班");
+			data.setData(teams2);
+		}
+		return new JSONObject(data).toString();
+		// return
+		// "{\"code\":0,\"msg\":\"\",\"count\":1000,\"data\":[{\"id\":10000,\"name\":\"user-0\",\"createUserId\":\"Ů\",\"updateDate\":\"����-0\"}]}";
+
 	}
 
 }
