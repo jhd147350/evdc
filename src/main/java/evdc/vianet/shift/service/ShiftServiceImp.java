@@ -149,12 +149,12 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 		User u = new User();
 
 		u.setId(1);
-		u.setNickname("jhd1");
+		u.setName("jhd1");
 		u.setTeamId(1);
 		User u2 = new User();
 
 		u2.setId(2);
-		u2.setNickname("jhd2");
+		u2.setName("jhd2");
 		u2.setTeamId(1);
 		
 		users.add(u);

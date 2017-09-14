@@ -63,12 +63,13 @@
 	</table>
 	<!--//TODO 重复使用会导致日期选择器出现闪现问题 <script src="${ctx}/static/layui/layui.all.js"></script>  -->
 	<!--  <script src="${ctx}/static/js/shift/addrule.js"></script> --> 
+	
+	<a id="create" class="layui-btn">创建</a>
 
 
  
 	<%@ include file="../js/addrulescript.jsp"%>
-
-
+	
 
 </body>
 </html>

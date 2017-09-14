@@ -50,7 +50,7 @@
 	<select name="user" lay-verify="required">
 		<option value=""></option>
 		<c:forEach items="${users}" var="temp">
-			<option value="${temp.id}">${temp.nickname}</option>
+			<option value="${temp.id}">${temp.name}</option>
 		</c:forEach>
 	</select>
 </script>
