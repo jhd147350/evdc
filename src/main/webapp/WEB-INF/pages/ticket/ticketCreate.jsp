@@ -15,6 +15,14 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="format-detection" content="telephone=no">
         <link rel="stylesheet" href="../static/css/x-admin.css" media="all">
+        
+        
+       
+        
+        
+        
+        
+        
     </head>
     
     <body>
@@ -39,90 +47,77 @@
                         描述
                     </label>
                 </div>
-
-                <div class="layui-form-item">
-
-
-					<div class="layui-input-inline">
-                      <input type="text" id="keyword" name="keyword"  placeholder="ticketId/关键字" autocomplete="off" class="layui-input">
-                    </div>
-					<div class="layui-inline">
-                        <label class="layui-form-label">
-                            服务类型
-                        </label>
-                   
-                        <div class="layui-input-block">
-                            <select id="serviceType" lay-verify="required" name="cid">
-                                    <c:forEach items="${ticketServices}" var="item" varStatus="status">  
-										<option name="ticketService[]" value="^${item.id }$" > ${item.name}</option>
-									</c:forEach>
-
-                            </select>
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="layui-inline">
-                        <label class="layui-form-label">
-                            严重等级
-                        </label>
-                   
-                        <div class="layui-input-block">
-                            <select id="severity" lay-verify="required" name="cid">
- 
-                                    <option value="Sev1">1-严重</option>
-                                    <option value="Sev2">2-高级</option>
-                                    <option value="Sev3">3-一般</option>
-                                    <option value="Sev4">4-最低</option>
-
-                            </select>
-                        </div>
-                    </div>
-                 </div>
-                
-                 <!-- <div class="layui-form-item">
-	                <div class="layui-inline">
-	                        <button class="layui-btn" onclick="ticket_sreach(this,'1')"><i class="layui-icon">&#xe615;</i></button>
-	                </div>
-                 </div> -->
-                
-                
-                
-                
+               
             
                 <div class="layui-form-item">
-                    <button class="layui-btn" lay-filter="create" lay-submit>
-                        创建
+                    <button class="layui-btn" id="testListAction" lay-filter="add" lay-submit>
+                        立即发布
                     </button>
                 </div>
             </form>
+            
+                      <div class="layui-upload">
+  <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button> 
+  <div class="layui-upload-list">
+    <table class="layui-table">
+      <thead>
+        <th>文件名</th>
+        <th>大小</th>
+        <th>状态</th>
+        <th>操作</th>
+      </thead>
+      <tbody id="demoList"></tbody>
+    </table>
+  </div>
+  <button type="button" class="layui-btn" >开始上传</button>
+</div> 
+  </div>              
+                            	     	
         </div>
-        <script src="../static/layui/layui.js" charset="utf-8">
-        </script>
-        <script src="../static/js/x-layui.js" charset="utf-8">
-        </script>
+        <script src="../static/layui/layui.js" charset="utf-8"></script>
+        <script src="../static/js/x-layui.js" charset="utf-8"></script>
+        
+        
         <script>
-            layui.use(['form','layer','layedit'], function(){
+            layui.use(['form','layer','layedit','upload'], function(){
                 $ = layui.jquery;
               var form = layui.form
               ,layer = layui.layer
-              ,layedit = layui.layedit;
+              ,layedit = layui.layedit
+              ,upload = layui.upload;
 
 
-                layedit.set({
+                /*layedit.set({
                   uploadImage: {
                     url: "./upimg.json" //接口url
                     ,type: 'post' //默认post
                   }
-                })
+                })*/
   
             //创建一个编辑器
-            editIndex = layedit.build('L_content');
+            editIndex = layedit.build('L_content',{
+            	
+            	
+            	tool: [
+				  'strong' //加粗
+				  ,'italic' //斜体
+				  ,'underline' //下划线
+				  ,'del' //删除线
+				  
+				  ,'|' //分割线
+				  
+				  ,'left' //左对齐
+				  ,'center' //居中对齐
+				  ,'right' //右对齐
+				  ,'face' //表情
+				]
+            	
+            });
             
               
 
               //监听提交
-              form.on('submit(create)', function(data){
+              form.on('submit(add)', function(data){
                 console.log(data);
                 //发异步，把数据提交给php
                 layer.alert("增加成功", {icon: 6},function () {
@@ -135,7 +130,97 @@
               });
               
               
+              //upload 为对象o
+              
+              var demoListView = $('#demoList')
+		  ,uploadListIns = upload.render({
+		    elem: '#testList'
+		    ,url: '/upload/'
+		    ,accept: 'file'
+		    ,multiple: true
+		    ,auto: false
+		    ,bindAction: '#testListAction'
+		    ,choose: function(obj){ 
+		    	
+		    	console.log(document.getElementsByClassName("layui-upload-file")[0]);
+		    	console.log(upload);
+		    	console.log(uploadListIns);
+		    	console.log(obj);
+		      var files = obj.pushFile(); //将每次选择的文件追加到文件队列
+		      console.log(files)
+		      //delete files[0];
+		      console.log(files)
+		      console.log(obj)
+		      /*console.log("length"+files.length);
+		      console.log("sizie"+files.size());*/
+		      //读取本地文件
+		      obj.preview(function(index, file, result){
+		        var tr = $(['<tr id="upload-'+ index +'">'
+		          ,'<td>'+ file.name +'</td>'
+		          ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
+		          ,'<td>等待上传</td>'
+		          ,'<td>'
+		            ,'<button class="layui-btn layui-btn-mini demo-reload layui-hide">重传</button>'
+		            ,'<button class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>'
+		          ,'</td>'
+		        ,'</tr>'].join(''));
+		        
+        
+        
+        
+        
+        
+        /*//单个重传
+        tr.find('.demo-reload').on('click', function(){
+          obj.upload(index, file);
+        });
+        */
+       
+        //删除
+        tr.find('.demo-delete').on('click', function(){
+          //var a =files[index];
+          /*files.splice(index,1);*/
+          
+          
+          delete files[index];//删除对应的文件
+          console.log(uploadListIns.pddd);
+          
+          console.log(document.getElementsByClassName("layui-upload-file")[0]);
+          
+          console.log(obj.pushFile);         
+          console.log(files);
+          tr.remove();
+        });
+        
+        demoListView.append(tr);
+      });
+    }
+    ,done: function(res, index, upload){
+      if(res.code == 0){ //上传成功
+        var tr = demoListView.find('tr#upload-'+ index)
+        ,tds = tr.children();
+        tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+        tds.eq(3).html(''); //清空操作
+        delete files[index]; //删除文件队列已经上传成功的文件
+        return;
+      }
+      this.error(index, upload);
+    }
+    ,error: function(index, upload){
+      var tr = demoListView.find('tr#upload-'+ index)
+      ,tds = tr.children();
+      tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+      tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+    }
+  });
+               
+              
             });
+            
+            
+       
+            
+            
         </script>
         <script>
         var _hmt = _hmt || [];

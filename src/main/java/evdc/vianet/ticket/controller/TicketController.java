@@ -176,6 +176,13 @@ public class TicketController {
 		
 	}
 	
+	/*@RequestMapping(value="/createTicket",method=RequestMethod.GET)
+	public String createTicket(Model m, String title, ) {
+		m.addAttribute("ticketServices", ticketSerService.findAllTicketService());
+		return "ticket/ticketCreate";
+		
+	}*/
+	
 	class SearchTicket{
 		private long id;
 		private String title;
