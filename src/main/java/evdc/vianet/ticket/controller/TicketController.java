@@ -1,11 +1,19 @@
 package evdc.vianet.ticket.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.RequestContext;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -14,8 +22,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import evdc.vianet.auth.entity.Authority;
+import evdc.vianet.auth.entity.Status;
 import evdc.vianet.auth.entity.User;
 import evdc.vianet.auth.service.AuthorityService;
 import evdc.vianet.auth.service.UserRoleService;
@@ -170,12 +182,44 @@ public class TicketController {
 	}
 	
 	@RequestMapping(value="/ticketCreatePage",method=RequestMethod.GET)
+	
 	public String ticketCreatePage(Model m) {
 		m.addAttribute("ticketServices", ticketSerService.findAllTicketService());
 		return "ticket/ticketCreate";
 		
 	}
-	
+	@RequestMapping(value="/uploadTicketFile",method=RequestMethod.POST)
+	@ResponseBody
+	public FileUploadStatus uploadTicketFile(Model m,  MultipartHttpServletRequest request ) {
+		System.out.println("开始上传");
+		FileUploadStatus status = new FileUploadStatus();
+		try { 
+				String uploadPath = "E:\\temp"; // 上传文件的目录  
+				
+				CommonsMultipartFile multipartFile = null;
+				Iterator<String> itr =  request.getFileNames();
+				while(itr.hasNext()){
+			         String str = itr.next();
+			         multipartFile = (CommonsMultipartFile)request.getFile(str);
+			         String fileName = multipartFile.getOriginalFilename();   //原文件名
+			         MultipartFile mpf = request.getFile(str);
+			         File savedFile = new File(uploadPath, fileName);
+			         savedFile.createNewFile();
+			         mpf.transferTo(savedFile);
+			     }	     
+
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return status;
+		
+	}
 	/*@RequestMapping(value="/createTicket",method=RequestMethod.GET)
 	public String createTicket(Model m, String title, ) {
 		m.addAttribute("ticketServices", ticketSerService.findAllTicketService());
@@ -246,6 +290,27 @@ public class TicketController {
 		}
 		public void setUpdateDate(Timestamp updateDate) {
 			this.updateDate = updateDate;
+		}
+		
+	}
+	class FileUploadStatus{
+		private int status;
+		private String	ticketFilePath;
+		public FileUploadStatus() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
+		public int getStatus() {
+			return status;
+		}
+		public void setStatus(int i) {
+			this.status = i;
+		}
+		public String getTicketFilePath() {
+			return ticketFilePath;
+		}
+		public void setTicketFilePath(String ticketFilePath) {
+			this.ticketFilePath = ticketFilePath;
 		}
 		
 	}

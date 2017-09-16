@@ -48,44 +48,51 @@
                     </label>
                 </div>
                
+               
+               <div class="layui-upload">
+						  <button type="button" class="layui-btn layui-btn-normal" id="addFileList">选择多文件</button> 
+						  <div class="layui-upload-list">
+						    <table class="layui-table">
+						      <thead>
+						        <th>文件名</th>
+						        <th>大小</th>
+						        <th>状态</th>
+						        <th>操作</th>
+						      </thead>
+						      <tbody id="demoList"></tbody>
+						    </table>
+						  </div>
+						  <button type="button" class="layui-btn" id="uploadList" dis="">开始上传</button>
+					</div> 
+               
             
                 <div class="layui-form-item">
-                    <button class="layui-btn" id="testListAction" lay-filter="add" lay-submit>
-                        立即发布
+                    <button class="layui-btn" id="createTicketBut" lay-filter="add" lay-submit>
+                        提交
                     </button>
                 </div>
+                 
             </form>
             
-                      <div class="layui-upload">
-  <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button> 
-  <div class="layui-upload-list">
-    <table class="layui-table">
-      <thead>
-        <th>文件名</th>
-        <th>大小</th>
-        <th>状态</th>
-        <th>操作</th>
-      </thead>
-      <tbody id="demoList"></tbody>
-    </table>
-  </div>
-  <button type="button" class="layui-btn" >开始上传</button>
-</div> 
-  </div>              
-                            	     	
-        </div>
+                      
+               
+         </div>                   	     	
+        
         <script src="../static/layui/layui.js" charset="utf-8"></script>
         <script src="../static/js/x-layui.js" charset="utf-8"></script>
         
         
         <script>
+        	
             layui.use(['form','layer','layedit','upload'], function(){
                 $ = layui.jquery;
               var form = layui.form
               ,layer = layui.layer
               ,layedit = layui.layedit
               ,upload = layui.upload;
-
+			 	//隐藏上传按钮
+				var uploadList = document.getElementById("uploadList");
+				uploadList.style.display='none';
 
                 /*layedit.set({
                   uploadImage: {
@@ -134,12 +141,12 @@
               
               var demoListView = $('#demoList')
 		  ,uploadListIns = upload.render({
-		    elem: '#testList'
-		    ,url: '/upload/'
+		    elem: '#addFileList'
+		    ,url: './uploadTicketFile'
 		    ,accept: 'file'
 		    ,multiple: true
 		    ,auto: false
-		    ,bindAction: '#testListAction'
+		    ,bindAction: '#uploadList'
 		    ,choose: function(obj){ 
 		    	
 		    	console.log(document.getElementsByClassName("layui-upload-file")[0]);
@@ -154,22 +161,20 @@
 		      /*console.log("length"+files.length);
 		      console.log("sizie"+files.size());*/
 		      //读取本地文件
+		      
 		      obj.preview(function(index, file, result){
-		        var tr = $(['<tr id="upload-'+ index +'">'
+		        var tr = $(['<tr id="upload-'+ index +'" url="">'
 		          ,'<td>'+ file.name +'</td>'
 		          ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
-		          ,'<td>等待上传</td>'
+		          ,'<td id="uploadStatus">正在上传</td>'
 		          ,'<td>'
-		            ,'<button class="layui-btn layui-btn-mini demo-reload layui-hide">重传</button>'
+		          
 		            ,'<button class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>'
 		          ,'</td>'
 		        ,'</tr>'].join(''));
-		        
-        
-        
-        
-        
-        
+		    //添加完文件后直接上传 
+
+        	uploadList.click();       
         /*//单个重传
         tr.find('.demo-reload').on('click', function(){
           obj.upload(index, file);
@@ -182,7 +187,7 @@
           /*files.splice(index,1);*/
           
           
-          delete files[index];//删除对应的文件
+          
           console.log(uploadListIns.pddd);
           
           console.log(document.getElementsByClassName("layui-upload-file")[0]);
@@ -202,6 +207,7 @@
         tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
         tds.eq(3).html(''); //清空操作
         delete files[index]; //删除文件队列已经上传成功的文件
+        tr.setAttribute("url",res.url);
         return;
       }
       this.error(index, upload);
@@ -212,9 +218,7 @@
       tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
       tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
     }
-  });
-               
-              
+  });   
             });
             
             
@@ -232,5 +236,4 @@
         })();
         </script>
     </body>
-
 </html>
