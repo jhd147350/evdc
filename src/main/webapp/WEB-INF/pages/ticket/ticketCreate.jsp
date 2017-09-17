@@ -62,7 +62,7 @@
 						      <tbody id="demoList"></tbody>
 						    </table>
 						  </div>
-						  <button type="button" class="layui-btn" id="uploadList" dis="">开始上传</button>
+						 
 					</div> 
                
             
@@ -71,7 +71,8 @@
                         提交
                     </button>
                 </div>
-                 
+                <!-- 文件上传 -->
+                
             </form>
             
                       
@@ -90,9 +91,6 @@
               ,layer = layui.layer
               ,layedit = layui.layedit
               ,upload = layui.upload;
-			 	//隐藏上传按钮
-				var uploadList = document.getElementById("uploadList");
-				uploadList.style.display='none';
 
                 /*layedit.set({
                   uploadImage: {
@@ -149,32 +147,20 @@
 		    ,bindAction: '#uploadList'
 		    ,choose: function(obj){ 
 		    	
-		    	console.log(document.getElementsByClassName("layui-upload-file")[0]);
-		    	console.log(upload);
-		    	console.log(uploadListIns);
-		    	console.log(obj);
-		      var files = obj.pushFile(); //将每次选择的文件追加到文件队列
-		      console.log(files)
-		      //delete files[0];
-		      console.log(files)
-		      console.log(obj)
-		      /*console.log("length"+files.length);
-		      console.log("sizie"+files.size());*/
 		      //读取本地文件
 		      
 		      obj.preview(function(index, file, result){
-		        var tr = $(['<tr id="upload-'+ index +'" url="">'
-		          ,'<td>'+ file.name +'</td>'
+		        var tr = $(['<tr id="upload-'+ index +'">'
+		          ,'<td id="">'+ file.name +'</td>'
 		          ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
 		          ,'<td id="uploadStatus">正在上传</td>'
 		          ,'<td>'
 		          
-		            ,'<button class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>'
+		            ,'<button  serFileName="" class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>'
 		          ,'</td>'
 		        ,'</tr>'].join(''));
 		    //添加完文件后直接上传 
-
-        	uploadList.click();       
+			obj.upload(index, file);      
         /*//单个重传
         tr.find('.demo-reload').on('click', function(){
           obj.upload(index, file);
@@ -185,30 +171,43 @@
         tr.find('.demo-delete').on('click', function(){
           //var a =files[index];
           /*files.splice(index,1);*/
-          
-          
-          
-          console.log(uploadListIns.pddd);
-          
-          console.log(document.getElementsByClassName("layui-upload-file")[0]);
-          
-          console.log(obj.pushFile);         
-          console.log(files);
-          tr.remove();
+          var but = this;
+          var deleteFileName = but.getAttribute("serFileName");
+		  $.ajax({  
+          	url: './deleteTicketFile', 
+              type: 'POST',  
+              dataType: 'json',
+              data: {
+              	"serFileName": deleteFileName
+              },
+              timeout: 1000,  
+              cache: false,     
+       		}).done(function(data) { 
+       		if(data.status==0){
+       			
+					layer.alert("删除成功", {closeBtn: 1},function (index) {
+						console.log(but);
+						but.parentNode.parentNode.remove();
+						layer.close(index);
+               });
+				}else{
+					layer.alert("删除失败", {icon: 5},function () { 
+	                });
+				}	
+          }); 		  
         });
         
         demoListView.append(tr);
       });
     }
     ,done: function(res, index, upload){
-      if(res.code == 0){ //上传成功
+      if(res.status == 0){ //上传成功
         var tr = demoListView.find('tr#upload-'+ index)
         ,tds = tr.children();
         tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
-        tds.eq(3).html(''); //清空操作
-        delete files[index]; //删除文件队列已经上传成功的文件
-        tr.setAttribute("url",res.url);
-        return;
+        var button = tds.eq(3).children().eq(0);
+        button[0].setAttribute("serFileName",res.ticketFilePath);
+      	return;
       }
       this.error(index, upload);
     }
