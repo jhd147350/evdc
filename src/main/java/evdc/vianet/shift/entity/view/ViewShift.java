@@ -3,7 +3,7 @@ package evdc.vianet.shift.entity.view;
 import java.sql.Timestamp;
 
 public class ViewShift {
-	public static final String TABLE_NAME = "view_shift";
+	public static final String VIEW_NAME = "view_shift";
 	private long id;
 	private String name;
 	private String createUser;

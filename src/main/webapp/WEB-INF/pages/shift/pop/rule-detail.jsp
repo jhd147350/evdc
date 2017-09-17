@@ -26,7 +26,7 @@
 		</div>
 		<div class="layui-form-item item">
 			<label class="layui-form-label">创建人员</label>
-			<div class="layui-input-block mycenter">${shift.createUserId}</div>
+			<div class="layui-input-block mycenter">ID:${shift.createUserId}->${username}</div>
 		</div>
 		<div class="layui-form-item item">
 			<label class="layui-form-label">最近更新</label>

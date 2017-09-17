@@ -52,7 +52,7 @@
 			// console.log(table);
 
 			var shiftname = $("#shiftname").val();
-			var createuserid = 1;
+			var createuserid = 6;
 			var json = {};
 			json.shiftname = shiftname;
 			json.createuserid = createuserid;

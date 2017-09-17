@@ -69,23 +69,24 @@ public class ShiftController {
 
 	
 	@RequestMapping("/schedule/create")
-	String createSchedulePop(Long teamid, Model m) {
+	String createSchedulePop(Long teamId,String teamName, Model m) {
 		//m.addAttribute("action", "rule");
-		shiftService.getCreateSchedulePage("", m);
+		m.addAttribute("teamName", teamName);
+		shiftService.getCreateSchedulePage(teamId, m);
 		return "shift/pop/schedule-create";
 	}
 	
 	@RequestMapping("/schedule/detail")
 	String detailSchedulePop(Long teamid, Model m) {
 		//m.addAttribute("action", "rule");
-		shiftService.getCreateSchedulePage("", m);
+		shiftService.getDetailSchedulePage("", m);
 		return "shift/pop/schedule-detail";
 	}
 	
 	@RequestMapping("/schedule/edit")
-	String editSchedulePop(Long teamid, Model m) {
+	String editSchedulePop(Long teamId, Model m) {
 		//m.addAttribute("action", "rule");
-		shiftService.getCreateSchedulePage("", m);
+		shiftService.getCreateSchedulePage(teamId, m);
 		return "shift/pop/schedule-edit";
 	}
 
@@ -125,7 +126,7 @@ public class ShiftController {
 	String getTeamSchedule(Boolean schedule, HttpServletResponse response) {
 		response.setCharacterEncoding("utf-8");
 
-		List<Team> teams1 = new ArrayList<>();
+	/*	List<Team> teams1 = new ArrayList<>();
 		List<Team> teams2 = new ArrayList<>();
 
 		Team t1 = new Team();
@@ -148,8 +149,9 @@ public class ShiftController {
 		} else {
 			data.setMsg("无排班");
 			data.setData(teams2);
-		}
-		return new JSONObject(data).toString();
+		}*/
+		//新方法
+		return shiftService.getScheduleTeam(schedule);
 		// return
 		// "{\"code\":0,\"msg\":\"\",\"count\":1000,\"data\":[{\"id\":10000,\"name\":\"user-0\",\"createUserId\":\"Ů\",\"updateDate\":\"����-0\"}]}";
 

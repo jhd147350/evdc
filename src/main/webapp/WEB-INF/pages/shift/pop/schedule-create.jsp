@@ -27,13 +27,13 @@ table>tbody>tr>th {
 		<div class="layui-input-block">
 			<input type="text" name="title" required lay-verify="required"
 				placeholder="请输入班次名称" autocomplete="off" class="layui-input"
-				value="test">
+				value="${teamName}">
 		</div>
 	</div>
 	<div class="layui-form-item">
 		<label class="layui-form-label">班次名称</label>
 		<div class="layui-input-block">
-			<select name="shift" lay-verify="required">
+			<select id="shift" name="shift" lay-verify="required">
 				<option value=""></option>
 				<c:forEach items="${shifts}" var="temp">
 					<option value="${temp.id}">${temp.name}</option>
@@ -41,6 +41,14 @@ table>tbody>tr>th {
 			</select>
 		</div>
 
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">起始日期</label>
+		<div class="layui-input-block">
+			<input id="begindate" type="text" name="title2" required
+				lay-verify="required" autocomplete="off" placeholder="请选择起始日期"
+				class="layui-input">
+		</div>
 	</div>
 	<div class="layui-form-item">
 		<label class="layui-form-label">循环周期</label>

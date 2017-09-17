@@ -25,7 +25,11 @@ public interface ShiftService {
 	 */
 	String createShift(String json);
 	
-	void getCreateSchedulePage(String json, Model m);
+	void getCreateSchedulePage(Long teamId, Model m);
+	
+	void getDetailSchedulePage(String json, Model m);
+	
+	String getScheduleTeam(boolean hasSchedule);
 
 	/**
 	 * 直接删除一个值班规则和所有关联的详细规则

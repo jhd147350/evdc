@@ -8,7 +8,7 @@
 	<thead>
 		<tr>
 			<th lay-data="{field:'id', width:80, sort: true}">ID</th>
-			<th lay-data="{field:'name', width:80}">团队名</th>
+			<th lay-data="{field:'name', width:170}">团队名</th>
 			<th
 				lay-data="{fixed: 'right', width:160, align:'center', toolbar: '#toolbar1'}"></th>
 		</tr>
@@ -22,7 +22,7 @@
 	<thead>
 		<tr>
 			<th lay-data="{field:'id', width:80, sort: true}">ID</th>
-			<th lay-data="{field:'name', width:80}">团队名</th>
+			<th lay-data="{field:'name', width:170}">团队名</th>
 			<th
 				lay-data="{fixed: 'right', width:160, align:'center', toolbar: '#toolbar2'}"></th>
 		</tr>
@@ -46,9 +46,11 @@
 		table.on('tool(filter1)', function(obj) {
 			console.log('table1');
 			var data = obj.data;
+			var teamId=data.id;
+			var teamName=data.name;
 			if (obj.event === 'create') {
 				layer.msg('teamId：' + data.id);
-				createSchedule();
+				createSchedule(teamId,teamName);
 			}
 		});
 
@@ -71,13 +73,13 @@
 		});
 	}();
 
-	function createSchedule() {
+	function createSchedule(teamId,teamName) {
 		layer.open({
 			type : 2,
 			title : '创建排班计划',
 			skin : 'layui-layer-rim', // 加上边框
-			area : [ '1024px', '550px' ], // 宽高
-			content : 'schedule/create',
+			area : [ '1024px', '700px' ], // 宽高
+			content : 'schedule/create?teamId='+teamId+'&teamName='+teamName,
 			btn : [ '关闭', '取消' ],
 			yes : function(index, layero) {
 				layer.close(index);

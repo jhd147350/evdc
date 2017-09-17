@@ -7,7 +7,7 @@ public class Schedule {
 	public static final String TABLE_NAME = "admin_shift_schedule";
 	private long id;
 	private long teamId;
-	private Timestamp begainDate;
+	private Timestamp beginDate;
 	private int circle;
 	private long shiftId;
 	private boolean enble;
@@ -28,12 +28,12 @@ public class Schedule {
 		this.teamId = teamId;
 	}
 
-	public Timestamp getBegainDate() {
-		return begainDate;
+	public Timestamp getBeginDate() {
+		return beginDate;
 	}
 
-	public void setBegainDate(Timestamp begainDate) {
-		this.begainDate = begainDate;
+	public void setBeginDate(Timestamp beginDate) {
+		this.beginDate = beginDate;
 	}
 
 	public int getCircle() {
@@ -62,7 +62,7 @@ public class Schedule {
 
 	@Override
 	public String toString() {
-		return "Schedule [id=" + id + ", teamId=" + teamId + ", begainDate=" + begainDate + ", circle=" + circle
+		return "Schedule [id=" + id + ", teamId=" + teamId + ", begainDate=" + beginDate + ", circle=" + circle
 				+ ", shiftId=" + shiftId + ", enble=" + enble + "]";
 	}
 

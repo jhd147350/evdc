@@ -11,15 +11,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
+import evdc.vianet.auth.entity.Team;
 import evdc.vianet.auth.entity.User;
+import evdc.vianet.auth.mapper.UserMapper;
 import evdc.vianet.shift.entity.Rule;
 import evdc.vianet.shift.entity.Shift;
 import evdc.vianet.shift.entity.Staff;
 import evdc.vianet.shift.entity.jo.JsonResult;
 import evdc.vianet.shift.entity.jo.TableData;
 import evdc.vianet.shift.entity.view.ViewShift;
+import evdc.vianet.shift.entity.view.ViewTeamSchedule;
 import evdc.vianet.shift.mapper.RuleMapper;
+import evdc.vianet.shift.mapper.ScheduleMapper;
 import evdc.vianet.shift.mapper.ShiftMapper;
+import evdc.vianet.shift.mapper.StaffMapper;
 
 @Service("shiftService")
 public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
@@ -28,6 +33,12 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 	ShiftMapper shiftMapper;
 	@Autowired
 	RuleMapper ruleMapper;
+
+	@Autowired
+	ScheduleMapper scheduleMapper;
+
+	@Autowired
+	UserMapper userMapper;
 
 	/**
 	 * 接收的数据格式如下：<br>
@@ -134,33 +145,73 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 
 	@Override
 	public void loadShiftAndRulesDataToModelByShiftId(long shiftId, Model m) {
-		m.addAttribute("shift", shiftMapper.selectShiftById(shiftId));
+		Shift shift = shiftMapper.selectShiftById(shiftId);
+		m.addAttribute("shift", shift);
 		m.addAttribute("rules", ruleMapper.selectRuleByShiftId(shiftId));
+		String username = userMapper.findUserById(shift.getCreateUserId()).getName();
+		m.addAttribute("username", username);
 
 	}
 
 	@Override
-	public void getCreateSchedulePage(String json, Model m) {
+	public void getCreateSchedulePage(Long teamId, Model m) {
+
+		List<User> users = userMapper.findAllUsersByTeamId(teamId);
 
 		// List<ViewShift> selectAllShift = shiftMapper.selectAllShift();
-		List<Shift> selectAllShift = shiftMapper.selectAllShift();
+		List<Shift> shifts = shiftMapper.selectAllShift();
 
-		List<User> users = new ArrayList<>();
-		User u = new User();
-
-		u.setId(1);
-		u.setName("jhd1");
-		u.setTeamId(1);
-		User u2 = new User();
-
-		u2.setId(2);
-		u2.setName("jhd2");
-		u2.setTeamId(1);
-		
-		users.add(u);
-		users.add(u2);
+		m.addAttribute("teamId", teamId);
 		m.addAttribute("users", users);
-		m.addAttribute("shifts", selectAllShift);
+		m.addAttribute("shifts", shifts);
+
+	}
+
+	@Override
+	public void getDetailSchedulePage(String json, Model m) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public String getScheduleTeam(boolean hasSchedule) {
+		// TODO Auto-generated method stub
+		//List<Team> teams = new ArrayList<>();
+		TableData<ViewTeamSchedule> data = new TableData<>();
+		List<ViewTeamSchedule> teamScheduleView = scheduleMapper.selectAllTeamScheduleView();
+		List<ViewTeamSchedule> teamsView=new ArrayList<>();
+
+		for (ViewTeamSchedule viewTeamSchedule : teamScheduleView) {
+			System.out.println(viewTeamSchedule.toString());
+			if(hasSchedule) {
+			
+				if(viewTeamSchedule.getScheduleId()!=null) {
+					teamsView.add(viewTeamSchedule);
+				}
+			}else {
+				if(viewTeamSchedule.getScheduleId()==null) {
+					teamsView.add(viewTeamSchedule);
+				}
+			}
+			
+		}
+
+		data.setCount(100);
+		if (hasSchedule) {
+			data.setMsg("有排班");
+			// teams = scheduleMapper.selectAllTeamWithSchedule();
+		} else {
+			data.setMsg("无排班");
+			// teams = scheduleMapper.selectAllTeamNoSchedule();
+
+		}
+
+		data.setCode(200);
+
+		//data.setData(teams);
+		data.setData(teamsView);
+
+		return new JSONObject(data).toString();
 
 	}
 

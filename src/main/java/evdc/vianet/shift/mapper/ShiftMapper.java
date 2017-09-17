@@ -25,7 +25,7 @@ public interface ShiftMapper {
 	@Select("select * from " + Shift.TABLE_NAME + " where teamId=#{teamId}")
 	List<Shift> selectShiftByTeamId(long teamId);
 
-	@Select("select * from " + ViewShift.TABLE_NAME)
+	@Select("select * from " + ViewShift.VIEW_NAME)
 	List<ViewShift> selectAllShiftView();
 	
 	@Select("select * from " + Shift.TABLE_NAME)
