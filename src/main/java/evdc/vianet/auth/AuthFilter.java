@@ -33,7 +33,7 @@ public abstract class AuthFilter implements Filter {
 		String uri = req.getRequestURI();
 
 		//静态资源与登录页面
-		if (uri.endsWith("login") || uri.indexOf("evdc/static/")!=-1 ) {
+		if (uri.endsWith("login") || uri.indexOf("/static/")!=-1 ) {
 			System.out.println("skip uri: " + uri);
 			chain.doFilter(request, response);
 			return;
