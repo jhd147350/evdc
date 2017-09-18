@@ -20,14 +20,20 @@ import evdc.vianet.shift.entity.Shift;
 public interface ShiftService {
 
 	/**
-	 * 创建一个值班规则
+	 * 创建一个排班规则
 	 * @param json
 	 */
 	String createShift(String json);
 	
+	/**
+	 * 创建一个排班计划，schedule和staff
+	 * @param json
+	 */
+	String createSchedule(String json);
+	
 	void getCreateSchedulePage(Long teamId, Model m);
 	
-	void getDetailSchedulePage(String json, Model m);
+	void getDetailSchedulePage(long teamId, Model m);
 	
 	String getScheduleTeam(boolean hasSchedule);
 

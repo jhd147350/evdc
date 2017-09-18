@@ -60,7 +60,8 @@
 			var data = obj.data;
 			if (obj.event === 'detail') {
 				layer.msg('ID：' + data.id + ' 的查看操作');
-				detailSchedule();
+				var teamId=data.id;
+				detailSchedule(teamId);
 			} else if (obj.event === 'del') {
 				layer.confirm('真的删除行么', function(index) {
 					obj.del();
@@ -89,13 +90,13 @@
 		});
 	}
 	
-	function detailSchedule() {
+	function detailSchedule(teamId) {
 		layer.open({
 			type : 2,
 			title : '排班表',
 			skin : 'layui-layer-rim', // 加上边框
 			area : [ '1024px', '550px' ], // 宽高
-			content : 'schedule/detail',
+			content : 'schedule/detail?teamId='+teamId,
 			btn : [ '关闭', '取消' ],
 			yes : function(index, layero) {
 				layer.close(index);

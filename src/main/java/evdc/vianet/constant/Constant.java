@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 预定义的常量
+ * 公共的常量
  * 
  * @author jhd147350
  *
@@ -14,6 +14,12 @@ import java.util.Map;
 public class Constant {
 	static public List<Severity> sev = new ArrayList<>();
 	static public Map<Integer, String> sevMap = new HashMap<>();
+	
+	/**
+	 * 周一到周日索引从1-7
+	 */
+	public static List<String> WEEK_ORDER_IN_CHINA=new ArrayList<>();
+	
 	static {
 		sev.add(new Severity("Sev1", 1));
 		sev.add(new Severity("Sev2", 2));
@@ -24,6 +30,14 @@ public class Constant {
 		sevMap.put(2, "Sev2");
 		sevMap.put(3, "Sev3");
 		sevMap.put(4, "Sev4");
+		
+		WEEK_ORDER_IN_CHINA.add("一");
+		WEEK_ORDER_IN_CHINA.add("二");
+		WEEK_ORDER_IN_CHINA.add("三");
+		WEEK_ORDER_IN_CHINA.add("四");
+		WEEK_ORDER_IN_CHINA.add("五");
+		WEEK_ORDER_IN_CHINA.add("六");
+		WEEK_ORDER_IN_CHINA.add("日");
 
 	}
 

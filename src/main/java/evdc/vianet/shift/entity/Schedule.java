@@ -1,5 +1,6 @@
 package evdc.vianet.shift.entity;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Schedule {
@@ -7,10 +8,10 @@ public class Schedule {
 	public static final String TABLE_NAME = "admin_shift_schedule";
 	private long id;
 	private long teamId;
-	private Timestamp beginDate;
+	private Date beginDate;
 	private int circle;
 	private long shiftId;
-	private boolean enble;
+	private boolean enable;
 
 	public long getId() {
 		return id;
@@ -28,11 +29,11 @@ public class Schedule {
 		this.teamId = teamId;
 	}
 
-	public Timestamp getBeginDate() {
+	public Date getBeginDate() {
 		return beginDate;
 	}
 
-	public void setBeginDate(Timestamp beginDate) {
+	public void setBeginDate(Date beginDate) {
 		this.beginDate = beginDate;
 	}
 
@@ -52,18 +53,18 @@ public class Schedule {
 		this.shiftId = shiftId;
 	}
 
-	public boolean isEnble() {
-		return enble;
+	public boolean isEnable() {
+		return enable;
 	}
 
-	public void setEnble(boolean enble) {
-		this.enble = enble;
+	public void setEnable(boolean enable) {
+		this.enable = enable;
 	}
 
 	@Override
 	public String toString() {
 		return "Schedule [id=" + id + ", teamId=" + teamId + ", begainDate=" + beginDate + ", circle=" + circle
-				+ ", shiftId=" + shiftId + ", enble=" + enble + "]";
+				+ ", shiftId=" + shiftId + ", enble=" + enable + "]";
 	}
 
 }
