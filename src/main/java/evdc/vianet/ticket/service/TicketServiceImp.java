@@ -1,5 +1,6 @@
 package evdc.vianet.ticket.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,22 @@ public class TicketServiceImp implements TicketService {
 	private TicketMapper ticketMapper;
 
 	@Override
-	public void createTicket() {
-
+	public long createTicket(String source, String title, String description, String serviceType, String severity,
+			long submitUserId, long submitTeamId) {
+		Ticket ticket = new Ticket();
+		ticket.setSource(source);
+		ticket.setTitle(title);
+		ticket.setDescription(description);
+		ticket.setService(Long.parseLong(serviceType));
+		ticket.setSeverity(severity);
+		ticket.setStatus("New");
+		ticket.setSubmitUserId(submitUserId);
+		ticket.setSubmitTeamId(submitTeamId);
+		ticket.setSubmitDate(new Timestamp(System.currentTimeMillis()));
+		ticketMapper.insertTicket(ticket);
+		return ticket.getId();
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -45,5 +60,7 @@ public class TicketServiceImp implements TicketService {
 		// TODO Auto-generated method stub
 		return ticketMapper.findAllTicketsByKeyword(service, status, severity, keyword);
 	}
+
+	
 
 }

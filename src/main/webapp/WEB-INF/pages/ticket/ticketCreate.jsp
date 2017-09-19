@@ -27,30 +27,31 @@
     
     <body>
         <div class="x-body">
-            <form class="layui-form layui-form-pane">
+            <form action="./createTicket" class="layui-form layui-form-pane" method="POST">
                 <div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">
                         标题
                     </label>
                     <div class="layui-input-block">
-                        <input type="text" id="L_title" name="title" required lay-verify="title"
+                        <input type="text" id="L_title" name="title" required lay-verify=""
                         autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 
                 <div class="layui-form-item layui-form-text">
-                    <div class="layui-input-block">
-                        <textarea id="L_content" name="content" 
-                        placeholder="请输入内容" class="layui-textarea fly-editor" style="height: 260px;"></textarea>
-                    </div>
-                    <label for="L_content" class="layui-form-label" style="top: -2px;">
+                <label for="L_content" class="layui-form-label" style="top: -2px;">
                         描述
                     </label>
+                    <div class="layui-input-block">
+                        <textarea id="L_content" name="description" 
+                        placeholder="请输入内容" class="layui-textarea fly-editor" style="height: 260px;"></textarea>
+                    </div>
+                    
                 </div>
                
                
                <div class="layui-upload">
-						  <button type="button" class="layui-btn layui-btn-normal" id="addFileList">选择多文件</button> 
+						  <input type="button" class="layui-btn layui-btn-normal" id="addFileList" value="选择多文件"/> 
 						  <div class="layui-upload-list">
 						    <table class="layui-table">
 						      <thead>
@@ -64,14 +65,45 @@
 						  </div>
 						 
 					</div> 
-               
-            
-                <div class="layui-form-item">
-                    <button class="layui-btn" id="createTicketBut" lay-filter="add" lay-submit>
-                        提交
-                    </button>
+               <div class="layui-form-item">
+               <div class="layui-inline">
+                        <label class="layui-form-label">
+                            服务类型
+                        </label>
+                   
+                        <div class="layui-input-block">
+                            <select id="serviceType" lay-verify="required" name="serviceType">	
+                                    <c:forEach items="${ticketServices}" var="item" varStatus="status">  
+										<option name="ticketService[]" value="${item.id}" > ${item.name}</option>
+									</c:forEach>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">
+                            严重等级
+                        </label>
+                   
+                        <div class="layui-input-block">
+                            <select id="severity" lay-verify="required" name="severity">
+                            	
+                                    <option value="Sev1">1-严重</option>
+                                    <option value="Sev2">2-高级</option>
+                                    <option value="Sev3">3-一般</option>
+                                    <option value="Sev4">4-最低</option>
+                            </select>
+                        </div>
+                    </div>
+            </div>
+                <div class="layui-form-item"> 
+                    <input type="submit" class="layui-btn" lay-filter="add" lay-submit="" value="提交">
                 </div>
                 <!-- 文件上传 -->
+                <!-- <div id="fileNames" hidden>
+                </div>
+                <div id="serFileNames" hidden>
+                </div> -->
                 
             </form>
             
@@ -98,7 +130,7 @@
                     ,type: 'post' //默认post
                   }
                 })*/
-  
+               var buttonNum = 0;
             //创建一个编辑器
             editIndex = layedit.build('L_content',{
             	
@@ -122,15 +154,41 @@
               
 
               //监听提交
-              form.on('submit(add)', function(data){
-                console.log(data);
+             form.on('submit(add)', function(data){
                 //发异步，把数据提交给php
-                layer.alert("增加成功", {icon: 6},function () {
-                    // 获得frame索引
-                    var index = parent.layer.getFrameIndex(window.name);
-                    //关闭当前frame
-                    parent.layer.close(index);
-                });
+                console.log("data is "+data.field.serviceType);
+                var fileNameArray = new Array();
+                var serFileNameArray = new Array();
+                var fileNameInps = document.getElementsByName("fileNameArr");
+                var serFileNameInps = document.getElementsByName("serFileNameArr");
+                for(var i = 0; i < buttonNum; i++){
+                	fileNameArray[i] = fileNameInps[i].getAttribute("value");
+                	serFileNameArray[i] = serFileNameInps[i].getAttribute("value");
+                }
+                fileNameArray[buttonNum]='填充';
+                serFileNameArray[buttonNum]='填充';
+                $.ajax({  
+          	url: './createTicket', 
+              type: 'POST',  
+              dataType: 'json',
+              data: {
+              	"title": data.field.title, "description": layedit.getContent(editIndex), "serviceType": data.field.serviceType, "severity": data.field.severity, "fileName[]": fileNameArray, "serFileName[]": serFileNameArray 
+              },
+              timeout: 1000,  
+              cache: false,     
+       		}).done(function(data) { 
+       			
+       		if(data.status==0){
+       			
+					layer.alert("提交成功", {icon: 6},function (index) {
+						layer.close(index);
+               });
+				}else{
+					layer.alert("提交失败", {icon: 5},function (index) { 
+						layer.close(index);
+	                });
+				}	
+          });
                 return false;
               });
               
@@ -155,9 +213,10 @@
 		          ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
 		          ,'<td id="uploadStatus">正在上传</td>'
 		          ,'<td>'
-		          
-		            ,'<button  serFileName="" class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>'
-		          ,'</td>'
+		          ,'<div>'
+		            ,'<button  serFileName="" class="layui-btn layui-btn-mini layui-btn-danger demo-delete" >删除</button>'
+		          ,'</div>'
+		            ,'</td>'
 		        ,'</tr>'].join(''));
 		    //添加完文件后直接上传 
 			obj.upload(index, file);      
@@ -185,13 +244,15 @@
        		}).done(function(data) { 
        		if(data.status==0){
        			
-					layer.alert("删除成功", {closeBtn: 1},function (index) {
+					layer.alert("删除成功", {icon: 6},function (index) {
+						buttonNum--;
 						console.log(but);
-						but.parentNode.parentNode.remove();
+						but.parentNode.parentNode.parentNode.remove();
 						layer.close(index);
                });
 				}else{
-					layer.alert("删除失败", {icon: 5},function () { 
+					layer.alert("删除失败", {icon: 5},function (index) { 
+						layer.close(index);
 	                });
 				}	
           }); 		  
@@ -205,8 +266,12 @@
         var tr = demoListView.find('tr#upload-'+ index)
         ,tds = tr.children();
         tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
-        var button = tds.eq(3).children().eq(0);
+        var buttonDiv = tds.eq(3).children().eq(0);
+        buttonNum++;
+        var button = buttonDiv.children().eq(0);
         button[0].setAttribute("serFileName",res.ticketFilePath);
+        buttonDiv.prepend($("<input type='text' name='fileNameArr' value='"+res.fileName+"' hidden/>"));
+        buttonDiv.prepend($("<input type='text' name='serFileNameArr' value='"+res.ticketFilePath+"' hidden/>"));
       	return;
       }
       this.error(index, upload);
@@ -215,7 +280,7 @@
       var tr = demoListView.find('tr#upload-'+ index)
       ,tds = tr.children();
       tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
-      tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+      tds.eq(3).find('.demo-reload').removeClass('layui-hide');
     }
   });   
             });

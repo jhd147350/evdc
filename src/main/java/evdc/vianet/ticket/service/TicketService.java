@@ -6,7 +6,7 @@ import evdc.vianet.ticket.entity.*;
 
 
 public interface TicketService {
-	public void createTicket();
+	public long createTicket(String source, String title, String description, String serviceType, String severity, long submitUserId, long submitTeamId);
 	public List<Ticket> findAllTicketsBySubmitTeamAndKeyword(long submitTeamId, String service, String status, String severity, String keyword);
 	public List<Ticket> findAllTicketsByAssignTeamAndKeyword(long assignTeamId, String service, String status, String severity, String keyword);
 	public List<Ticket> findAllTicketsBySubscibeTeamAndKeyword(long subscibeTeamId, String service, String status, String severity, String keyword);

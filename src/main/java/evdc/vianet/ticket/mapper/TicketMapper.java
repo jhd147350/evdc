@@ -3,6 +3,7 @@ package evdc.vianet.ticket.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -17,8 +18,9 @@ import evdc.vianet.ticket.entity.TicketSubscibeTeam;;
 public interface TicketMapper {
 
 	@Insert("insert into " + Ticket.TABLE_NAME
-			+ " (`source`,`title`,`description`,`severity`,`status`,`service`,`submitUserId`,`submitTeamId`,`assignUserId`,`assignTeamId`,`satisfation`,`updateUserId`,`updateDate`)"
-			+ " values(#{t.source},#{t.title},#{t.description},#{t.severity},#{t.status},#{t.service},#{t.submitUserId},#{t.submitTeamId},#{t.assignUserId},#{t.assignTeamId},#{t.satisfation},#{t.updateUserId},#{t.updateDate})")
+			+ " (`source`,`title`,`description`,`severity`,`status`,`serviceId`,`submitUserId`,`submitTeamId`,`assignUserId`,`assignTeamId`,`satisfation`,`updateUserId`,`updateDate`)"
+			+ " values(#{t.source},#{t.title},#{t.description},#{t.severity},#{t.status},#{t.serviceId},#{t.submitUserId},#{t.submitTeamId},#{t.assignUserId},#{t.assignTeamId},#{t.satisfation},#{t.updateUserId},#{t.updateDate})")
+	@Options(useGeneratedKeys = true, keyProperty = "t.id")
 	int insertTicket(@Param("t") Ticket t);
 	
 	//根据提交组及关键字查询工单
