@@ -60,8 +60,8 @@
 				function() {
 					//$('#table_body').append("<tr></tr>");
 					console.log('click exe');
-					var shiftIdStr=$("#shift").val();
-					var shiftId=parseInt(shiftIdStr);
+					var shiftIdStr = $("#shift").val();
+					var shiftId = parseInt(shiftIdStr);
 					//注意：parent 是 JS 自带的全局对象，可用于操作父页面									
 					var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 					//console.log(index);
@@ -71,7 +71,7 @@
 					var staffs = new Array();
 
 					for (var n = 0; n < tableTr.length; n++) {
-						
+
 						var tdArr = tableTr.eq(n).find("td");
 						//var name = tdArr.eq(0).text();
 
@@ -79,10 +79,10 @@
 							for (var o = 1; o <= order; o++) {
 								var userTd = tdArr.eq((c - 1) * order + o - 1)
 										.find('select');
-								
+
 								var staff = {};
-								
-								var userIdStr=userTd.val();
+
+								var userIdStr = userTd.val();
 
 								staff.userId = parseInt(userIdStr);
 								//var selectedText = userTd.find("option:selected").text();
@@ -90,54 +90,43 @@
 								staff.orderOfCircle = c;
 								staff.orderOfDay = o;
 								staff.isPrimary = n === 0 ? true : false;
-								if (userIdStr.length !== 0){
+								if (userIdStr.length !== 0) {
 									staffs.push(staff);
 								}
 							}
 						}
 					}
-					
-				
-					var json={};
-					json.teamId=${teamId};
-					json.begainDate=$("#begindate").val();
-					json.circle=circle;
-					json.shiftId = shiftId;
-					
-					json.staffs=staffs;
-					
-					console.log(JSON.stringify(json));
-				
-					/*var shiftname = $("#shiftname").val();
-					var createuserid = 6;
-					var json = {};
-					json.shiftname = shiftname;
-					json.createuserid = createuserid;
-					json.rules = rules;
 
-					//console.log(JSON.stringify(json));
-					console.log(json);
+					var json = {};
+					json.teamId = ${teamId};
+					json.beginDate = $("#begindate").val();
+					json.circle = circle;
+					json.shiftId = shiftId;
+
+					json.staffs = staffs;
+
+					console.log(JSON.stringify(json));
+
 					$.ajaxSetup({
 						contentType : "application/json; charset=utf-8"
 					});
 
-					$.post("../create", JSON.stringify(json), function(data, status) {
-						console.log('post -> ../create');
+					$.post("create", JSON.stringify(json), function(
+							data, status) {
+						console.log('post shcedule-> ../create');
 						console.log(data, status);
 						if (data.code == 200) {
 							parent.layer.msg('创建成功' + data.info);
 							console.log(parent);
 							console.log(parent.layer);
 							console.log(parent.table);
+							parent.layer.close(index);// 关闭
 
 							//parent.reload(parent.table);//重新加载表格
 						} else {
 							parent.layer.msg('创建失败' + data.info);
 						}
-
 					});
-					parent.layer.close(index);// 关闭*/
-
 				});
 	}();
 </script>

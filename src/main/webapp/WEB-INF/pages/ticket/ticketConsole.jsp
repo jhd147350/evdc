@@ -221,14 +221,13 @@
                   type: 'POST',  
                   dataType: 'json',
                   data: {
-                  	"keyword": keyword, "serviceId": serviceType, "severity": severity, "status": ticketStatus
+                  	"keyword": keyword, "service": serviceType, "severity": severity, "status": ticketStatus
                   },
                   timeout: 1000,  
                   cache: false,     
                	}).done(function(data) { 
-
-               		$.each(data, function(tickets){
-               			$.each(tickets, function(ticket){
+               		$.each(data, function(ticketIndex){
+               			var ticket = data[ticketIndex];
                				var $tr = $("<tr><")
                				var $td = $("<td>"+ticket.id+"</td>")
                				$tr.append($td);
@@ -251,8 +250,7 @@
                					$td = $("<td>"+ticket.assignUser+"</td>")
                    				$tr.append($td);
                				}
-               			})
-               			
+               				$(ticketList).append($tr);
                		})
                   }); 
             }

@@ -40,7 +40,7 @@ public class ShiftController {
 		m.addAttribute("action", "rule");
 		return "admin/admin";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/rule/delete", method = RequestMethod.DELETE)
 	String deleteShift(Long shiftid) {
@@ -60,32 +60,42 @@ public class ShiftController {
 		shiftService.loadShiftAndRulesDataToModelByShiftId(shiftid, m);
 		return "shift/pop/rule-detail";
 	}
-	
+
 	@RequestMapping("/schedule")
 	String queryShift(Model m) {
 		m.addAttribute("action", "schedule");
 		return "admin/admin";
 	}
 
-	
-	@RequestMapping("/schedule/create")
-	String createSchedulePop(Long teamId,String teamName, Model m) {
-		//m.addAttribute("action", "rule");
+	@RequestMapping(value = "/schedule/create", method = RequestMethod.GET)
+	String createSchedulePop(Long teamId, String teamName, Model m) {
+		// m.addAttribute("action", "rule");
 		m.addAttribute("teamName", teamName);
 		shiftService.getCreateSchedulePage(teamId, m);
 		return "shift/pop/schedule-create";
 	}
-	
+
+	@RequestMapping(value = "/schedule/create", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	@ResponseBody
+	String createScheduleByJson(@RequestBody String json, HttpServletResponse response) {
+		response.setCharacterEncoding("utf-8");
+		System.out.println("create:" + json);
+
+		// TODO iframe 和 父页面传值问题需要解决
+		return shiftService.createSchedule(json);
+		// return JsonResult.SUC.toString();
+	}
+
 	@RequestMapping("/schedule/detail")
-	String detailSchedulePop(Long teamid, Model m) {
-		//m.addAttribute("action", "rule");
-		shiftService.getDetailSchedulePage("", m);
+	String detailSchedulePop(Long teamId, Model m) {
+		// m.addAttribute("action", "rule");
+		shiftService.getDetailSchedulePage(teamId, m);
 		return "shift/pop/schedule-detail";
 	}
-	
+
 	@RequestMapping("/schedule/edit")
 	String editSchedulePop(Long teamId, Model m) {
-		//m.addAttribute("action", "rule");
+		// m.addAttribute("action", "rule");
 		shiftService.getCreateSchedulePage(teamId, m);
 		return "shift/pop/schedule-edit";
 	}
@@ -96,7 +106,7 @@ public class ShiftController {
 		response.setCharacterEncoding("utf-8");
 		System.out.println("create:" + json);
 
-		//TODO iframe 和 父页面传值问题需要解决
+		// TODO iframe 和 父页面传值问题需要解决
 		return shiftService.createShift(json);
 		// return JsonResult.SUC.toString();
 	}
@@ -126,31 +136,20 @@ public class ShiftController {
 	String getTeamSchedule(Boolean schedule, HttpServletResponse response) {
 		response.setCharacterEncoding("utf-8");
 
-	/*	List<Team> teams1 = new ArrayList<>();
-		List<Team> teams2 = new ArrayList<>();
-
-		Team t1 = new Team();
-		t1.setId(1);
-		t1.setName("有排班");
-
-		Team t2 = new Team();
-		t2.setId(2);
-		t2.setName("无排班");
-
-		teams1.add(t1);
-		teams2.add(t2);
-		TableData<Team> data = new TableData<>();
-		data.setCode(200);
-		data.setCount(100);
-		if (schedule) {
-			data.setMsg("有排班");
-			data.setData(teams1);
-
-		} else {
-			data.setMsg("无排班");
-			data.setData(teams2);
-		}*/
-		//新方法
+		/*
+		 * List<Team> teams1 = new ArrayList<>(); List<Team> teams2 = new ArrayList<>();
+		 * 
+		 * Team t1 = new Team(); t1.setId(1); t1.setName("有排班");
+		 * 
+		 * Team t2 = new Team(); t2.setId(2); t2.setName("无排班");
+		 * 
+		 * teams1.add(t1); teams2.add(t2); TableData<Team> data = new TableData<>();
+		 * data.setCode(200); data.setCount(100); if (schedule) { data.setMsg("有排班");
+		 * data.setData(teams1);
+		 * 
+		 * } else { data.setMsg("无排班"); data.setData(teams2); }
+		 */
+		// 新方法
 		return shiftService.getScheduleTeam(schedule);
 		// return
 		// "{\"code\":0,\"msg\":\"\",\"count\":1000,\"data\":[{\"id\":10000,\"name\":\"user-0\",\"createUserId\":\"Ů\",\"updateDate\":\"����-0\"}]}";

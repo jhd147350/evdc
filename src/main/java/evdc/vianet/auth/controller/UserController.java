@@ -1,9 +1,8 @@
 package evdc.vianet.auth.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.jws.soap.SOAPBinding.Use;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -15,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import evdc.vianet.auth.entity.Authority;
 import evdc.vianet.auth.entity.Status;
 import evdc.vianet.auth.entity.TeamRole;
 import evdc.vianet.auth.entity.User;
 import evdc.vianet.auth.entity.UserRole;
+import evdc.vianet.auth.service.AuthorityService;
 import evdc.vianet.auth.service.TeamRoleService;
 import evdc.vianet.auth.service.TeamService;
 import evdc.vianet.auth.service.UserRoleService;
@@ -40,7 +41,9 @@ public class UserController {
 	@Autowired
 	@Qualifier("teamService")
 	private TeamService teamService;
-	
+	@Autowired
+	@Qualifier("authorityService")
+	private AuthorityService authorityService;
 	
 	@RequestMapping("/login")
 	public String login(Model m, String loginId, String password) {
@@ -75,7 +78,15 @@ public class UserController {
 	public String indexPage(HttpSession httpSession, Model m) {
 		User u = (User) httpSession.getAttribute("user");
 		m.addAttribute("user",u);
-		
+		List<AuthModule> mainModule = new ArrayList<AuthModule>();
+		List<Authority> mainAuth = authorityService.findAuthoritysByType("mainModule");
+		for (Authority authority : mainAuth) {
+			AuthModule authModule = new AuthModule(authority);
+			List<Authority> subAuth = authorityService.findAuthoritysByType("subModule"+authority.getId());
+			authModule.setSubmodulesByAuth(subAuth);
+			mainModule.add(authModule);
+		}
+		m.addAttribute("mainModules", mainModule);
 		return "template";
 		
 	}
@@ -117,4 +128,5 @@ public class UserController {
 		System.out.println(status.getStatus());
 		return status;
 	}
+	
 }
