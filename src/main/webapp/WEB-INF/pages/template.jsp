@@ -72,10 +72,10 @@
   		<c:forEach items="${mainModules}" var="item" varStatus="status">
   			<li class="layui-nav-item">
   			<a href="..${item.path}">${item.authName}</a>
-  			<c:if test="${fn:length(mainModules.submodules) > 0}">  
+  			<c:if test="${fn:length(item.submodules) > 0}">  
 			
 	  			<dl class="layui-nav-child"> 
-		  			<c:forEach items="${mainModules.submodules}" var="subitem" varStatus="status"> 
+		  			<c:forEach items="${item.submodules}" var="subitem" varStatus="status"> 
 							  <dd><a href="..${subitem.path}">${subitem.authName}</a></dd>
 		  			</c:forEach>
 	  			</dl>  
