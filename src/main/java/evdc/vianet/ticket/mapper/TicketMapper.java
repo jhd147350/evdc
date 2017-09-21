@@ -26,7 +26,7 @@ public interface TicketMapper {
 	//根据提交组及关键字查询工单
 	@Select("select * from "
 			+ "( select * from "+Ticket.TABLE_NAME+" where submitTeamId=#{submitTeamId} and status regexp #{status} and severity regexp #{severity} and serviceId regexp #{service}) ticket_a "
-					+ "where ticket_a.id like '%${keyword}%' or ticket_a.title like '%${keyword}%' or ticket_a.description like '%${keyword}%'")
+				+ "where ticket_a.id like '${keyword}' or ticket_a.title like '${keyword}' or ticket_a.description like '${keyword}'")
 	List<Ticket> findAllTicketsBySubmitTeamAndKeyword(@Param("submitTeamId") long submitTeamId, @Param("service") String service, @Param("status") String status, @Param("severity") String severity, @Param("keyword") String keyword);
 	
 	
@@ -35,7 +35,7 @@ public interface TicketMapper {
 	//select * from ( select * from evdc_ss.ticket where `assignTeamId` = 1 and status regexp '.*' and severity regexp '.*' and service regexp '' ) ticket_a where ticket_a.id like '%1%' or ticket_a.title like '%1%' or ticket_a.description like '%1%';
 	@Select("select * from "
 			+ "( select * from "+Ticket.TABLE_NAME+" where assignTeamId=#{assignTeamId} and status regexp #{status} and severity regexp #{severity} and serviceId regexp #{service}) ticket_a "
-					+ "where ticket_a.id like '%${keyword}%' or ticket_a.title like '%${keyword}%' or ticket_a.description like '%${keyword}%'")
+				+ "where ticket_a.id like '${keyword}' or ticket_a.title like '${keyword}' or ticket_a.description like '${keyword}'")
 	List<Ticket> findAllTicketsByAssignTeamAndKeyword(@Param("assignTeamId") long assignTeamId, @Param("service") String service, @Param("status") String status, @Param("severity") String severity, @Param("keyword") String keyword);
 	
 	/*@Select("select * from "
@@ -45,11 +45,11 @@ public interface TicketMapper {
 	//根据订阅组及关键字查询工单
 	@Select("select * from "
 			+ "(select a.* from "+Ticket.TABLE_NAME+" as a left join "+TicketSubscibeTeam.TABLE_NAME+" as b on a.id = b.ticketId where b.subscibeTeamId = #{subscibeTeamId} and a.status regexp #{status} and a.severity regexp #{severity} and a.serviceId regexp #{service}) ticket_a "
-					+ "where ticket_a.id like '%${keyword}%' or ticket_a.title like '%${keyword}%' or ticket_a.description like '%${keyword}%'")
+				+ "where ticket_a.id like '${keyword}' or ticket_a.title like '${keyword}' or ticket_a.description like '${keyword}'")
 	List<Ticket> findAllTicketsBySubscibeTeamAndKeyword(@Param("subscibeTeamId") long subscibeTeamId, @Param("service") String service, @Param("status") String status, @Param("severity") String severity, @Param("keyword") String keyword);
 	//根据关键字查询工单
 	@Select("select * from "
 			+ "( select * from "+Ticket.TABLE_NAME+" where status regexp #{status} and severity regexp #{severity} and serviceId regexp #{service}) ticket_a "
-					+ "where ticket_a.id like '%${keyword}%' or ticket_a.title like '%${keyword}%' or ticket_a.description like '%${keyword}%'")
+					+ "where ticket_a.id like '${keyword}' or ticket_a.title like '${keyword}' or ticket_a.description like '${keyword}'")
 	List<Ticket> findAllTicketsByKeyword(@Param("service") String service, @Param("status") String status, @Param("severity") String severity, @Param("keyword") String keyword);
 }

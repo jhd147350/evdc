@@ -156,7 +156,7 @@
 					<c:forEach items="${tickets}" var="item" varStatus="status">  
 					  <tr >  
 					    <td >${item.id}</td>  
-					    <td style="cursor:pointer" onclick="question_show()">${item.title}</td>  
+					    <td style="cursor:pointer" ticketId="${item.id}" onclick="ticket_show(this)">${item.title}</td>  
 					    <td>${item.service}</td>  
 					    <td>${item.severity}</td> 
 					    <td>${item.status}</td>
@@ -182,20 +182,6 @@
 			var form = layui.form;
               lement = layui.element;//面包导航
               layer = layui.layer;//弹出层
-
-              //以上模块根据需要引入
-              /*laypage({
-                cont: 'page'
-                ,pages: 100
-                ,first: 1
-                ,last: 100
-                ,prev: '<em><</em>'
-                ,next: '<em>></em>'
-              }); */
-              
-	
-             
-
             });
             
             /*查询*/
@@ -209,8 +195,6 @@
                     ticketList.removeChild(n);
                     n = m;
                 }
-            	
-            	
             	var findMethod = document.getElementById("findMethod").value;
             	var keyword = document.getElementById("keyword").value;
             	var serviceType = document.getElementById("serviceType").value;
@@ -221,7 +205,7 @@
                   type: 'POST',  
                   dataType: 'json',
                   data: {
-                  	"keyword": keyword, "service": serviceType, "severity": severity, "status": ticketStatus
+                  	"keyword": "%"+keyword+"%", "service": serviceType, "severity": severity, "status": ticketStatus
                   },
                   timeout: 1000,  
                   cache: false,     
@@ -231,7 +215,7 @@
                				var $tr = $("<tr><")
                				var $td = $("<td>"+ticket.id+"</td>")
                				$tr.append($td);
-               				$td = $('<td style="cursor:pointer" onclick="question_show()">'+ticket.title+'</td>');
+               				$td = $('<td style="cursor:pointer" ticketId="'+ticket.id+'" onclick="ticket_show(this)">'+ticket.title+'</td>');
                				$tr.append($td);
                				$td = $("<td>"+ticket.service+"</td>")
                				$tr.append($td);
@@ -254,22 +238,11 @@
                		})
                   }); 
             }
-            
-       
-            
-            
-            
+             /*查看工单详情 */
+             function ticket_show (argument) {
 
-            //批量删除提交
-             function delAll () {
-                layer.confirm('确认要删除吗？',function(index){
-                    //捉到所有被选中的，发异步进行删除
-                    layer.msg('删除成功', {icon: 1});
-                });
-             }
-
-             function question_show (argument) {
-                layer.msg('可以跳到前台具体问题页面',{icon:1,time:1000});
+            	 console.log(argument);
+            	 x_admin_show('工单详情','./ticketShowPage?ticketId='+argument.getAttribute("ticketId"),'600','500');
              }
              /*创建工单*/
             function ticket_create(title,url,w,h){

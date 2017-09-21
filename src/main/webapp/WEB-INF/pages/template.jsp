@@ -41,7 +41,7 @@
     <div class="layui-side-scroll">
       <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
       <ul class="layui-nav layui-nav-tree"  lay-filter="test">
-        <!-- <li class="layui-nav-item layui-nav-itemed">
+        <li class="layui-nav-item layui-nav-itemed">
           <a class="" href="javascript:;" _href="../ticket/ticketConsole">工单控制台</a>
         </li>
         <li class="layui-nav-item">
@@ -68,8 +68,8 @@
             <dd><a href="javascript:;" _href="../teamManagement/teamManagementPage">组织管理</a></dd>
             <dd><a href="javascript:;" _href="../teamRoleManagement/teamRoleManagementPage">组织角色管理</a></dd>
           </dl>
-        </li> --> 
-  		<c:forEach items="${mainModules}" var="item" varStatus="status">
+        </li> 
+  		<%-- <c:forEach items="${mainModules}" var="item" varStatus="status">
   			<li class="layui-nav-item">
   			<a href="..${item.path}">${item.authName}</a>
   			<c:if test="${fn:length(item.submodules) > 0}">  
@@ -81,7 +81,7 @@
 	  			</dl>  
 			</c:if>
 			</li> 
-  		</c:forEach>			  
+  		</c:forEach> --%>			  
   		
       </ul>
     </div>

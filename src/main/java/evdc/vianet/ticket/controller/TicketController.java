@@ -1,9 +1,5 @@
 package evdc.vianet.ticket.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -189,7 +185,6 @@ public class TicketController {
 	}
 	
 	@RequestMapping(value="/ticketCreatePage",method=RequestMethod.GET)
-	
 	public String ticketCreatePage(Model m) {
 		m.addAttribute("ticketServices", ticketSerService.findAllTicketService());
 		return "ticket/ticketCreate";
@@ -255,7 +250,29 @@ public class TicketController {
 		status.setStatus(0);
 		return status;		
 	}
-	
+	@RequestMapping(value="/ticketShowPage",method=RequestMethod.GET)
+	public String ticketShowPage(HttpSession httpSession, Model m, String ticketId) {
+		u = (User) httpSession.getAttribute("user");
+		List<Authority> ticketFindAuthoritys = authorityService.findAuthoritysByType("ticketFind");
+		List<Authority> authoritys = new ArrayList<Authority>();
+		for (Authority authority : ticketFindAuthoritys) {
+			if(userRoleService.findUserRoleById(u.getRole()).getAuthValue()%authority.getAuthValue()==0) {
+				authoritys.add(authority);
+			}
+		}
+		int methods = authoritys.size();
+		if(methods==1) {
+			
+			return "ticket/ticketShowCustomer";
+		}else {
+			List<Ticket> tickets = ticketService.findAllTicketsByKeyword(".*", ".*", ".*", ticketId);
+			m.addAttribute("ticketServices", ticketSerService.findAllTicketService());
+			m.addAttribute("ticket", tickets.get(0));
+			return "ticket/ticketShow";
+		}
+		
+		
+	}
 	class SearchTicket{
 		private long id;
 		private String title;

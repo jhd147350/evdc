@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <title>
-            二当家的Lay1.0
+            创建工单
         </title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -14,15 +14,7 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="format-detection" content="telephone=no">
-        <link rel="stylesheet" href="../static/css/x-admin.css" media="all">
-        
-        
-       
-        
-        
-        
-        
-        
+        <link rel="stylesheet" href="../static/css/x-admin.css" media="all">      
     </head>
     
     <body>
@@ -130,11 +122,10 @@
                     ,type: 'post' //默认post
                   }
                 })*/
+               //实际上传文件数
                var buttonNum = 0;
             //创建一个编辑器
             editIndex = layedit.build('L_content',{
-            	
-            	
             	tool: [
 				  'strong' //加粗
 				  ,'italic' //斜体
@@ -147,13 +138,9 @@
 				  ,'center' //居中对齐
 				  ,'right' //右对齐
 				  ,'face' //表情
-				]
-            	
-            });
-            
-              
-
-              //监听提交
+				]	
+            });           
+             //监听提交
              form.on('submit(add)', function(data){
                 //发异步，把数据提交给php
                 console.log("data is "+data.field.serviceType);
@@ -179,22 +166,20 @@
        		}).done(function(data) { 
        			
        		if(data.status==0){
-       			
 					layer.alert("提交成功", {icon: 6},function (index) {
-						layer.close(index);
+						var index = parent.layer.getFrameIndex(window.name);
+	                    //关闭当前frame
+	                    parent.layer.close(index);
                });
 				}else{
 					layer.alert("提交失败", {icon: 5},function (index) { 
 						layer.close(index);
 	                });
 				}	
-          });
+          	 });
                 return false;
-              });
-              
-              
-              //upload 为对象o
-              
+          });                  
+              //upload 为对象o              
               var demoListView = $('#demoList')
 		  ,uploadListIns = upload.render({
 		    elem: '#addFileList'
@@ -206,7 +191,6 @@
 		    ,choose: function(obj){ 
 		    	
 		      //读取本地文件
-		      
 		      obj.preview(function(index, file, result){
 		        var tr = $(['<tr id="upload-'+ index +'">'
 		          ,'<td id="">'+ file.name +'</td>'
@@ -219,17 +203,9 @@
 		            ,'</td>'
 		        ,'</tr>'].join(''));
 		    //添加完文件后直接上传 
-			obj.upload(index, file);      
-        /*//单个重传
-        tr.find('.demo-reload').on('click', function(){
-          obj.upload(index, file);
-        });
-        */
-       
+			obj.upload(index, file);          
         //删除
         tr.find('.demo-delete').on('click', function(){
-          //var a =files[index];
-          /*files.splice(index,1);*/
           var but = this;
           var deleteFileName = but.getAttribute("serFileName");
 		  $.ajax({  
@@ -284,11 +260,7 @@
     }
   });   
             });
-            
-            
-       
-            
-            
+
         </script>
         <script>
         var _hmt = _hmt || [];
