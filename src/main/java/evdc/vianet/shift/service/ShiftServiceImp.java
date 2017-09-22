@@ -186,7 +186,7 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 	}
 
 	@Override
-	public void getDetailSchedulePage(long teamId, Model m) {
+	public void getDetailSchedulePage(long teamId, boolean isWeekView, String searchDate, Model m) {
 
 		Schedule schedule = scheduleMapper.selectScheduleByTeamId(teamId);
 
@@ -207,6 +207,9 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 		LocalDate localDate = LocalDate.now();
 		// 和周一差几天
 		int mondayDiff = localDate.getDayOfWeek().getValue() - 1;
+		
+		//和这个月差几天
+		int dayOfMonthDiff = localDate.getDayOfMonth()-1;
 
 		// 将日期重置到这周的周一
 		c.add(Calendar.DATE, -mondayDiff);
@@ -239,6 +242,7 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 				MyTimeDuration time = result.new MyTimeDuration();
 				time.setStartTime(rules.get(j).getStartTime() + "");
 				time.setEndTime(rules.get(j).getEndTime() + "");
+				time.setInfo(rules.get(j).getInfo());
 				times.add(time);
 				int orderOfDay = j + 1;
 				MyStaff myStaffP = result.new MyStaff();
