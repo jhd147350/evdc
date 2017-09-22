@@ -47,10 +47,9 @@
         <li class="layui-nav-item">
         <a href="javascript:;">值班管理</a>
         	<dl class="layui-nav-child">
+	          <dd><a href="javascript:;" _href="../shift/schedule">值班信息</a></dd>
+	          <dd><a href="javascript:;" _href="../shift/schedule">值班规则</a></dd>
 	          
-	          <dd><a href="javascript:;">值班查询</a></dd>
-	          <dd><a href="javascript:;">批量排班</a></dd>
-	          <dd><a href="javascript:;">批量删除</a></dd>
 	        </dl>
         </li>
         <li class="layui-nav-item">
