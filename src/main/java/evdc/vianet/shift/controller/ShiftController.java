@@ -41,7 +41,7 @@ public class ShiftController {
 	@RequestMapping("/rule")
 	String rulePage(Model m) {
 		m.addAttribute("action", "rule");
-		return "admin/admin";
+		return "shift/rule";
 	}
 
 	@ResponseBody
@@ -67,7 +67,7 @@ public class ShiftController {
 	@RequestMapping("/schedule")
 	String queryShift(Model m) {
 		m.addAttribute("action", "schedule");
-		return "admin/admin";
+		return "shift/schedule";
 	}
 
 	@RequestMapping(value = "/schedule/create", method = RequestMethod.GET)
@@ -162,7 +162,7 @@ public class ShiftController {
 		response.setCharacterEncoding("utf-8");
 		// shiftService.createShift(json);
 
-		return "admin/admin";
+		return "shift/test";
 	}
 
 	@RequestMapping(value = "/teamschedule", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
