@@ -6,6 +6,7 @@ public class ScheduleResult {
 	public class MyTimeDuration {
 		private String startTime;
 		private String endTime;
+		private String info;
 
 		public String getStartTime() {
 			return startTime;
@@ -22,6 +23,15 @@ public class ScheduleResult {
 		public void setEndTime(String endTime) {
 			this.endTime = endTime;
 		}
+
+		public String getInfo() {
+			return info;
+		}
+
+		public void setInfo(String info) {
+			this.info = info;
+		}
+		
 
 	}
 

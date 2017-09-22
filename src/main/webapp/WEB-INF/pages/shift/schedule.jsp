@@ -76,7 +76,7 @@
 				editSchedule();
 			} else if (obj.event === 'detail1') {//按月查看
 				var teamId=data.id;
-				window.open("schedule/detail/month");
+				window.open("schedule/detail/month?teamId="+teamId);
 					
 			}
 		});
@@ -87,7 +87,7 @@
 			type : 2,
 			title : '创建排班计划',
 			skin : 'layui-layer-rim', // 加上边框
-			area : [ '1024px', '700px' ], // 宽高
+			area : [ '1024px', '500px' ], // 宽高
 			content : 'schedule/create?teamId='+teamId+'&teamName='+teamName,
 			btn : [ '关闭', '取消' ],
 			yes : function(index, layero) {

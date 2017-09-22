@@ -36,8 +36,14 @@ public interface ShiftService {
 	String createSchedule(String json);
 	
 	void getCreateSchedulePage(Long teamId, Model m);
-	
-	void getDetailSchedulePage(long teamId, Model m);
+	/**
+	 * 
+	 * @param teamId 团队id
+	 * @param isWeekView 是表示按周查询，否表示按月查询
+	 * @param date 查询所在的周或月的一天即可
+	 * @param m 传给视图的数据
+	 */
+	void getDetailSchedulePage(long teamId, boolean isWeekView, String date, Model m);
 	
 	String getScheduleTeam(boolean hasSchedule);
 

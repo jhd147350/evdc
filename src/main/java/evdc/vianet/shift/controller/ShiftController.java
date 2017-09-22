@@ -93,7 +93,7 @@ public class ShiftController {
 	String detailSchedulePop(Long teamId, Model m) {
 		// m.addAttribute("action", "rule");
 		System.out.println(teamId);
-		shiftService.getDetailSchedulePage(teamId, m);
+		shiftService.getDetailSchedulePage(teamId,true,"", m);
 		try {
 			Calendar c=Calendar.getInstance();
 			c.set(Calendar.HOUR_OF_DAY, 20);
@@ -117,8 +117,8 @@ public class ShiftController {
 	@RequestMapping("/schedule/detail/month")
 	String detailScheduleMonth(Long teamId, Model m) {
 		// m.addAttribute("action", "rule");
-		shiftService.getDetailSchedulePage(teamId, m);
-		return "shift/pop/schedule-detail";
+		shiftService.getDetailSchedulePage(teamId, true, "", m);
+		return "shift/pop/schedule-detail-month";
 	}
 
 	@RequestMapping("/schedule/edit")
