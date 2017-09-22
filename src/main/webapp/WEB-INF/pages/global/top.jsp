@@ -15,11 +15,11 @@
 			<dd>
 				<a href="javascript:;">网站首页</a>
 			</dd>
-			<c:if test="${sessionScope.user.teamAdmin==true }">
+			
 				<dd>
 					<a href="javascript:;">管理页面</a>
 				</dd>
-			</c:if>
+			
 
 
 			<dd>
