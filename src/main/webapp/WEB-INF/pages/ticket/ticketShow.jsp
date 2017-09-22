@@ -26,7 +26,7 @@
                     </label>
                     <div class="layui-input-block">
                         <input type="text" id="L_title" name="title" required lay-verify=""
-                        autocomplete="off" class="layui-input">
+                        autocomplete="off" class="layui-input" disabled="disabled" value="${ticket.title}">
                     </div>
                 </div>
                 
@@ -35,14 +35,13 @@
                         描述
                     </label>
                     <div class="layui-input-block">
-                        <textarea id="L_content" name="description" 
-                        placeholder="请输入内容" class="layui-textarea fly-editor" style="height: 260px;"></textarea>
+                        <textarea name="" required lay-verify="required" placeholder="请输入" class="layui-textarea" disabled="disabled">${ticket.description}</textarea>
                     </div>
                     
                 </div>
                
                
-               <div class="layui-upload">
+               <!-- <div class="layui-upload">
 						  <input type="button" class="layui-btn layui-btn-normal" id="addFileList" value="选择多文件"/> 
 						  <div class="layui-upload-list">
 						    <table class="layui-table">
@@ -56,7 +55,7 @@
 						    </table>
 						  </div>
 						 
-					</div> 
+					</div>  -->
                <div class="layui-form-item">
                <div class="layui-inline">
                         <label class="layui-form-label">
@@ -64,7 +63,7 @@
                         </label>
                    
                         <div class="layui-input-block">
-                            <select id="serviceType" lay-verify="required" name="serviceType">	
+                            <select id="serviceType" lay-verify="required" name="serviceType" value="${ticket.serviceId}">	
                                     <c:forEach items="${ticketServices}" var="item" varStatus="status">  
 										<option name="ticketService[]" value="${item.id}" > ${item.name}</option>
 									</c:forEach>
@@ -78,7 +77,7 @@
                         </label>
                    
                         <div class="layui-input-block">
-                            <select id="severity" lay-verify="required" name="severity">
+                            <select id="severity" lay-verify="required" name="severity" value="${ticket.severity}">
                             	
                                     <option value="Sev1">1-严重</option>
                                     <option value="Sev2">2-高级</option>
@@ -87,14 +86,25 @@
                             </select>
                         </div>
                     </div>
+                    
+                    
+                    <div class="layui-inline">
+                        <label class="layui-form-label">
+                            状态
+                        </label>
+                   
+                        <div class="layui-input-block">
+                            <select id="ticketStatus" lay-verify="required" name="cid" value="${ticket.status}">
+                                    <option value="New">新建</option>
+                                    <option value="In_Process">已受理</option>
+                                    <option value="Resolved">已解决</option>
+                                    <option value="Closed">已关闭</option>
+                            </select>
+                        </div>
+                    </div>
             </div>
-                <div class="layui-form-item"> 
+                <!-- <div class="layui-form-item"> 
                     <input type="submit" class="layui-btn" lay-filter="add" lay-submit="" value="提交">
-                </div>
-                <!-- 文件上传 -->
-                <!-- <div id="fileNames" hidden>
-                </div>
-                <div id="serFileNames" hidden>
                 </div> -->
                 
             </form>

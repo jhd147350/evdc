@@ -1,9 +1,5 @@
 package evdc.vianet.ticket.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,6 +18,7 @@ import org.springframework.ui.Model;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -34,6 +31,7 @@ import evdc.vianet.auth.service.AuthorityService;
 import evdc.vianet.auth.service.UserRoleService;
 import evdc.vianet.auth.service.UserService;
 import evdc.vianet.ticket.entity.Ticket;
+import evdc.vianet.ticket.service.TicketAttachmentService;
 import evdc.vianet.ticket.service.TicketSerService;
 import evdc.vianet.ticket.service.TicketService;
 import evdc.vianet.util.FtpServer;
@@ -60,7 +58,9 @@ public class TicketController {
 	@Autowired
 	@Qualifier("ftpServer")
 	private FtpServer ftpServer;
-	
+	@Autowired
+	@Qualifier("ticketAttachmentService")
+	TicketAttachmentService ticketAttachmentService;
 	
 	private User u ;
 	
@@ -185,7 +185,6 @@ public class TicketController {
 	}
 	
 	@RequestMapping(value="/ticketCreatePage",method=RequestMethod.GET)
-	
 	public String ticketCreatePage(Model m) {
 		m.addAttribute("ticketServices", ticketSerService.findAllTicketService());
 		return "ticket/ticketCreate";
@@ -198,9 +197,7 @@ public class TicketController {
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");//设置日期格式
 		
 		FileUploadStatus status = new FileUploadStatus();
-		try { 
-				String uploadPath = "E:\\temp\\"; // 上传文件的目录  
-				
+		try {  
 				CommonsMultipartFile multipartFile = null;
 				Iterator<String> itr =  request.getFileNames();
 				while(itr.hasNext()){
@@ -209,44 +206,73 @@ public class TicketController {
 			         String fileName = multipartFile.getOriginalFilename();   //原文件名
 			         String serFileName = df.format(new Date())+fileName;
 			         MultipartFile mpf = request.getFile(str);
-			         if(ftpServer.init()) {
+			         /*if(ftpServer.init()) {
 				         System.out.println("开始上传:"+serFileName);
 			        	 InputStream input = mpf.getInputStream();
 			        	 ftpServer.execute(ftpServer.getMethod("UPLOAD"), serFileName, input, null);
-			        	 status.setStatus(0);
-			        	 status.setTicketFilePath(serFileName);
-			        	 status.setFileName(fileName);
-			         }
+			        	 
+			         }*/
+			         status.setStatus(0);
+		        	 status.setTicketFilePath(serFileName);
+		        	 status.setFileName(fileName);
 			     }	     
 
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
+		} /*catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		return status;	
 	}
 	@RequestMapping(value="/deleteTicketFile",method=RequestMethod.POST)
 	@ResponseBody
 	public Status deleteTicketFile(String serFileName) {
 		Status status = new Status();
-		if(ftpServer.init()) {
+		/*if(ftpServer.init()) {
 			ftpServer.execute(ftpServer.getMethod("DELETE"), serFileName, null, null);
 			System.out.println("删除成功"+serFileName);
-		}
+		}*/
 		status.setStatus(0);
 		return status;		
 	}
 	
-	/*@RequestMapping(value="/createTicket",method=RequestMethod.GET)
-	public String createTicket(Model m, String title, ) {
-		m.addAttribute("ticketServices", ticketSerService.findAllTicketService());
-		return "ticket/ticketCreate";
+	@RequestMapping(value="/createTicket",method=RequestMethod.POST)
+	@ResponseBody
+	public Status createTicket(HttpSession httpSession, String title, String description, String serviceType, String severity, @RequestParam(value = "fileName[]")String[] fileName, @RequestParam(value = "serFileName[]")String[] serFileName) {
+		u = (User) httpSession.getAttribute("user");
+		long ticketId = ticketService.createTicket("web", title, description, serviceType, severity, u.getId(), u.getTeamId());
+		for(int i = 0; i < fileName.length-1; i++){
+			ticketAttachmentService.addTicketAttachmentService(ticketId, 0, null, serFileName[i], fileName[i]);
+		}
+		Status status = new Status();
+		status.setStatus(0);
+		return status;		
+	}
+	@RequestMapping(value="/ticketShowPage",method=RequestMethod.GET)
+	public String ticketShowPage(HttpSession httpSession, Model m, String ticketId) {
+		u = (User) httpSession.getAttribute("user");
+		List<Authority> ticketFindAuthoritys = authorityService.findAuthoritysByType("ticketFind");
+		List<Authority> authoritys = new ArrayList<Authority>();
+		for (Authority authority : ticketFindAuthoritys) {
+			if(userRoleService.findUserRoleById(u.getRole()).getAuthValue()%authority.getAuthValue()==0) {
+				authoritys.add(authority);
+			}
+		}
+		int methods = authoritys.size();
+		if(methods==1) {
+			
+			return "ticket/ticketShowCustomer";
+		}else {
+			List<Ticket> tickets = ticketService.findAllTicketsByKeyword(".*", ".*", ".*", ticketId);
+			m.addAttribute("ticketServices", ticketSerService.findAllTicketService());
+			m.addAttribute("ticket", tickets.get(0));
+			return "ticket/ticketShow";
+		}
 		
-	}*/
-	
+		
+	}
 	class SearchTicket{
 		private long id;
 		private String title;

@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <title>
-            创建工单
+            二当家的Lay1.0
         </title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -87,6 +87,22 @@
                             </select>
                         </div>
                     </div>
+                    
+                    <div class="layui-inline">
+                        <label class="layui-form-label">
+                            状态
+                        </label>
+                   
+                        <div class="layui-input-block">
+                            <select id="ticketStatus" lay-verify="required" name="cid" value="">
+                                    <option value="New">新建</option>
+                                    <option value="In_Process">已受理</option>
+                                    <option value="Resolved">已解决</option>
+                                    <option value="Closed">已关闭</option>
+                            </select>
+                        </div>
+                    </div>
+                    
             </div>
                 <div class="layui-form-item"> 
                     <input type="submit" class="layui-btn" lay-filter="add" lay-submit="" value="提交">
