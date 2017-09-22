@@ -1,6 +1,7 @@
 package evdc.vianet.shift.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import evdc.vianet.auth.entity.Team;
+import evdc.vianet.constant.ScheduleException;
 import evdc.vianet.shift.entity.Shift;
 import evdc.vianet.shift.entity.jo.TableData;
+import evdc.vianet.shift.entity.view.ViewOnDutyUser;
 import evdc.vianet.shift.service.ShiftService;
 
 /**
@@ -89,6 +92,31 @@ public class ShiftController {
 	@RequestMapping("/schedule/detail")
 	String detailSchedulePop(Long teamId, Model m) {
 		// m.addAttribute("action", "rule");
+		System.out.println(teamId);
+		shiftService.getDetailSchedulePage(teamId, m);
+		try {
+			Calendar c=Calendar.getInstance();
+			c.set(Calendar.HOUR_OF_DAY, 20);
+			List<ViewOnDutyUser> onDutyUsersByTeamId = shiftService.getOnDutyUsersByTeamId(18,c);
+			for(ViewOnDutyUser u:onDutyUsersByTeamId) 
+			{
+				System.out.println(u.getName());
+			}
+		} catch (ScheduleException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "shift/pop/schedule-detail";
+	}
+	/**
+	 * 按年月查看排班 TODO
+	 * @param teamId
+	 * @param m
+	 * @return
+	 */
+	@RequestMapping("/schedule/detail/month")
+	String detailScheduleMonth(Long teamId, Model m) {
+		// m.addAttribute("action", "rule");
 		shiftService.getDetailSchedulePage(teamId, m);
 		return "shift/pop/schedule-detail";
 	}
@@ -98,6 +126,12 @@ public class ShiftController {
 		// m.addAttribute("action", "rule");
 		shiftService.getCreateSchedulePage(teamId, m);
 		return "shift/pop/schedule-edit";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/schedule/delete", method = RequestMethod.DELETE)
+	String deleteSchedule(Long teamid) {
+		return shiftService.deleteSchedule(teamid);
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json; charset=utf-8")

@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Update;
 
 import evdc.vianet.auth.entity.Team;
 import evdc.vianet.shift.entity.Schedule;
+import evdc.vianet.shift.entity.Shift;
 import evdc.vianet.shift.entity.view.ViewShift;
 import evdc.vianet.shift.entity.view.ViewTeamSchedule;
 
@@ -20,8 +21,8 @@ public interface ScheduleMapper {
 			+ " (teamId,beginDate,circle,shiftId,enable) values(#{teamId},#{beginDate},#{circle},#{shiftId},#{enable})")
 	int insertSchedule(Schedule schedule);
 
-	@Delete("")
-	int deleteScheduleById(long id);
+	@Delete("delete from " + Schedule.TABLE_NAME + " where teamId=#{teamId}")
+	int deleteScheduleByTeamId(long teamId);
 
 	@Update("")
 	int updateSchedule(Schedule schedule);

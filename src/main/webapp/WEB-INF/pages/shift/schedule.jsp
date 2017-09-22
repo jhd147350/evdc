@@ -24,7 +24,7 @@
 			<th lay-data="{field:'id', width:80, sort: true}">ID</th>
 			<th lay-data="{field:'name', width:170}">团队名</th>
 			<th
-				lay-data="{fixed: 'right', width:160, align:'center', toolbar: '#toolbar2'}"></th>
+				lay-data="{fixed: 'right', width:260, align:'center', toolbar: '#toolbar2'}"></th>
 		</tr>
 	</thead>
 </table>
@@ -32,7 +32,8 @@
     <a class="layui-btn layui-btn-mini" lay-event="create">创建排班计划</a>
 </script>
 <script type="text/html" id="toolbar2">
-    <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">按周查看</a>
+    <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail1">按月查看</a>
     <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
 </script>
@@ -42,6 +43,7 @@
 	;
 	!function() {
 		var table = layui.table;
+		var $ = layui.jquery;
 		//监听工具条
 		table.on('tool(filter1)', function(obj) {
 			console.log('table1');
@@ -65,11 +67,17 @@
 			} else if (obj.event === 'del') {
 				layer.confirm('真的删除行么', function(index) {
 					obj.del();
+					var teamId=data.id;
+					deleteSchedule($,teamId);
 					layer.close(index);
 				});
 			} else if (obj.event === 'edit') {
 				layer.msg('编辑行：<br>' + JSON.stringify(data))
 				editSchedule();
+			} else if (obj.event === 'detail1') {//按月查看
+				var teamId=data.id;
+				window.open("schedule/detail/month");
+					
 			}
 		});
 	}();
@@ -86,6 +94,11 @@
 				layer.close(index);
 			},
 			cancel : function() {
+			},
+			end : function () {
+				
+				reloadAll();
+				
 			}
 		});
 	}
@@ -108,7 +121,7 @@
 	
 	function editSchedule() {
 		layer.open({
-			type : 2,
+			type : 1,
 			title : '编辑排班规则',
 			skin : 'layui-layer-rim', // 加上边框
 			area : [ '1024px', '550px' ], // 宽高
@@ -124,7 +137,7 @@
 	
 	function deleteSchedule($,id) {
 		$.ajax({
-		    url: 'delete?shiftid='+id,
+		    url: 'schedule/delete?teamid='+id,
 		    type: 'DELETE',
 		    success: function(result) {
 		    	var data=JSON.parse(result);
@@ -132,8 +145,23 @@
 		        console.log(data);
 		        if(data.code === 200){
 		        	layer.msg("删除成功");
+		        	reloadAll();
 		        }
 		    }
 		});
+	}
+	
+	function reload(myUrl,tableId) {
+		var table = layui.table;
+		console.log('table->'+table);
+		table.reload(''+tableId, {
+			url : ''+myUrl
+		});
+	}
+	
+	function reloadAll() {
+		console.log("刷新");
+		reload('teamschedule?schedule=true','haveSchedule');
+		reload('teamschedule?schedule=false','noSchedule');
 	}
 </script>

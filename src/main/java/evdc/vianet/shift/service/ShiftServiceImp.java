@@ -17,10 +17,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
+import evdc.vianet.auth.entity.Authority;
 import evdc.vianet.auth.entity.Team;
 import evdc.vianet.auth.entity.User;
 import evdc.vianet.auth.mapper.UserMapper;
 import evdc.vianet.constant.Constant;
+import evdc.vianet.constant.ScheduleException;
 import evdc.vianet.shift.entity.Rule;
 import evdc.vianet.shift.entity.Schedule;
 import evdc.vianet.shift.entity.Shift;
@@ -31,6 +33,7 @@ import evdc.vianet.shift.entity.jo.ScheduleResult.MyDate;
 import evdc.vianet.shift.entity.jo.ScheduleResult.MyStaff;
 import evdc.vianet.shift.entity.jo.ScheduleResult.MyTimeDuration;
 import evdc.vianet.shift.entity.jo.TableData;
+import evdc.vianet.shift.entity.view.ViewOnDutyUser;
 import evdc.vianet.shift.entity.view.ViewShift;
 import evdc.vianet.shift.entity.view.ViewTeamSchedule;
 import evdc.vianet.shift.mapper.RuleMapper;
@@ -150,7 +153,6 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 	@Override
 	public void deleteShiftRule(String json) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -238,32 +240,32 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 				time.setStartTime(rules.get(j).getStartTime() + "");
 				time.setEndTime(rules.get(j).getEndTime() + "");
 				times.add(time);
-				int orderOfDay=j+1;
+				int orderOfDay = j + 1;
 				MyStaff myStaffP = result.new MyStaff();
-				Staff staffP = getStaffByDayOfCircleAndOrderOfDay(dayOfCircle, orderOfDay, staffs,true);
-				if(staffP!=null) {
+				Staff staffP = getStaffByDayOfCircleAndOrderOfDay(dayOfCircle, orderOfDay, staffs, true);
+				if (staffP != null) {
 					myStaffP.setId(staffP.getUserId());
 					myStaffP.setName(staffMapper.selectUserNameByUserId(staffP.getUserId()));
-				}else {
+				} else {
 					myStaffP.setId(0);
 					myStaffP.setName("");
 				}
-				
+
 				myStaffsP.add(myStaffP);
-				
+
 				MyStaff myStaffS = result.new MyStaff();
-				Staff staffS = getStaffByDayOfCircleAndOrderOfDay(dayOfCircle, orderOfDay, staffs,false);
-				if(staffS!=null) {
+				Staff staffS = getStaffByDayOfCircleAndOrderOfDay(dayOfCircle, orderOfDay, staffs, false);
+				if (staffS != null) {
 					myStaffS.setId(staffS.getUserId());
 					myStaffS.setName(staffMapper.selectUserNameByUserId(staffS.getUserId()));
-				}else {
+				} else {
 					myStaffS.setId(0);
 					myStaffS.setName("");
 				}
-				
+
 				myStaffsS.add(myStaffS);
 			}
-			
+
 			result.setTimes(times);
 			result.setStaffsS(myStaffsS);
 			result.setStaffsP(myStaffsP);
@@ -272,7 +274,6 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 			// 日期加一
 			c.add(Calendar.DATE, 1);
 		}
-
 		m.addAttribute("scheduleResults", results);
 	}
 
@@ -284,9 +285,10 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 	 * @param staffs
 	 * @return
 	 */
-	private Staff getStaffByDayOfCircleAndOrderOfDay(int dayOfCircle, int orderOfDay, List<Staff> staffs, boolean isPrimary) {
+	private Staff getStaffByDayOfCircleAndOrderOfDay(int dayOfCircle, int orderOfDay, List<Staff> staffs,
+			boolean isPrimary) {
 		for (Staff s : staffs) {
-			if (s.getOrderOfCircle() == dayOfCircle && s.getOrderOfDay() == orderOfDay && s.isPrimary()==isPrimary) {
+			if (s.getOrderOfCircle() == dayOfCircle && s.getOrderOfDay() == orderOfDay && s.isPrimary() == isPrimary) {
 				return s;
 			}
 		}
@@ -395,6 +397,155 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 		}
 
 		return JsonResult.SUC.toString();
+	}
+
+	@Override
+	public List<ViewOnDutyUser> getOnDutyUsersByTeamId(long teamId, Calendar currentTime) throws ScheduleException {
+		// int orderOfCircle=0;
+		int orderOfDay = 0;
+
+		Schedule schedule = scheduleMapper.selectScheduleByTeamId(teamId);
+		// 改排班所用到的规则
+
+		if (schedule == null) {
+			throw new ScheduleException("所查团队还没进行过排班");
+		}
+		// rules应该是按order排序的，没个order的时间应当遵循从小到大，最后一个班可以跨天
+		List<Rule> rules = ruleMapper.selectRuleByShiftId(schedule.getShiftId());
+
+		if (rules == null) {
+			throw new ScheduleException("所查团队使用的排班规则为空");
+		}
+
+		// -----
+		Calendar c = Calendar.getInstance();
+		if (currentTime != null) {
+			c = currentTime;
+		}
+		// c.set(Calen, value);
+		// Calendar cBefore = (Calendar) c.clone();
+		// cBefore.add(Calendar.DATE, -1);
+		// Calendar cAfter = (Calendar) c.clone();
+		// cAfter.add(Calendar.DATE, 1);
+
+		// -----
+
+		int h = c.get(Calendar.HOUR_OF_DAY);
+		int m = c.get(Calendar.MINUTE);
+		// 不计算秒了int s = c.get(Calendar.SECOND);
+
+		// 当时 是这一天的第几分钟
+		int currentMinute = h * 60 + m;
+
+		boolean span = false;
+		// 和第一个班次和最后一个班次的比较都是很重要的
+		for (int i = 0; i < rules.size(); i++) {
+			// boolean isAfterSpan = false;
+			// 第一个班次
+			if (i == 0) {
+				Time startTime = rules.get(i).getStartTime();
+				int startMinute = startTime.getHours() * 60 + startTime.getMinutes();
+				Time endTime = rules.get(i).getEndTime();
+				int endMinute = endTime.getHours() * 60 + endTime.getMinutes();
+				// 8:00-20:00的班 如果当前时间是8:00 则当前属于8:00-20:00的班次，否则可能是上一天跨天的班次
+				if (currentMinute < startMinute) {// TODO
+					Rule lastRule = rules.get(rules.size() - 1);
+					Time laststartTime = lastRule.getStartTime();
+					int laststartMinute = laststartTime.getHours() * 60 + laststartTime.getMinutes();
+					Time lastendTime = lastRule.getEndTime();
+					int lastendMinute = lastendTime.getHours() * 60 + lastendTime.getMinutes();
+					// 开始时间大于结束时间表名改班次跨天了，比如：20:00-8:00的班次
+					if (laststartTime.getTime() > lastendTime.getTime()) {// 跨天
+						// isAfterSpan = true;
+						if (currentMinute < lastendMinute) {
+							orderOfDay = lastRule.getOrder();
+							System.out.println("orderOfDay：" + orderOfDay);
+							span = true;
+							break;
+						}
+					} else {// 不跨天
+
+						if (currentMinute >= laststartMinute && currentMinute < lastendMinute) {
+							orderOfDay = lastRule.getOrder();
+							System.out.println("orderOfDay：" + orderOfDay);
+							span = true;
+							break;// 跳出循环
+						}
+					}
+
+				} else if (currentMinute < endMinute) {// 20:00 属于8:00-20:00,20:00-8:00中的后者
+					orderOfDay = rules.get(i).getOrder();
+					System.out.println("orderOfDay：" + orderOfDay);
+					break;// 跳出循环
+				}
+			} else if (i != 0 && i < (rules.size() - 1)) {
+				Time startTime = rules.get(i).getStartTime();
+				int startMinute = startTime.getHours() * 60 + startTime.getMinutes();
+				Time endTime = rules.get(i).getEndTime();
+				int endMinute = endTime.getHours() * 60 + endTime.getMinutes();
+				// 8:00-20:00的班 如果当前时间是8:00 则当前属于8:00-20:00的班次，否则可能是上一天跨天的班次
+				if (currentMinute >= startMinute && currentMinute < endMinute) {
+					orderOfDay = rules.get(i).getOrder();
+					System.out.println("orderOfDay：" + orderOfDay);
+					break;// 跳出循环
+				}
+			}
+
+			// 最后一个班次才可能跨天
+			else if (i == (rules.size() - 1)) {
+				Time startTime = rules.get(i).getStartTime();
+				int startMinute = startTime.getHours() * 60 + startTime.getMinutes();
+				Time endTime = rules.get(i).getEndTime();
+				int endMinute = endTime.getHours() * 60 + endTime.getMinutes();
+
+				// 开始时间大于结束时间表名改班次跨天了，比如：20:00-8:00的班次
+				if (startTime.getTime() > endTime.getTime()) {// 跨天
+					// isAfterSpan = true;
+					if (currentMinute >= startMinute) {
+						orderOfDay = rules.get(i).getOrder();
+						System.out.println("orderOfDay：" + orderOfDay);
+						break;
+
+					}
+				} else {// 不跨天
+
+					if (currentMinute >= startMinute && currentMinute < endMinute) {
+						orderOfDay = rules.get(i).getOrder();
+						System.out.println("orderOfDay：" + orderOfDay);
+						break;// 跳出循环
+					}
+				}
+
+			}
+
+		}
+
+		// 先计算这个团队的班次循环周期是多少
+		int circle = schedule.getCircle();
+
+		Date beginDate = schedule.getBeginDate();
+
+		// 和循环开始日期相差多少天
+		int dayDiffToBegin = (int) ((c.getTimeInMillis() - beginDate.getTime()) / (1000 * 3600 * 24));
+
+		// 计算这一天是circle的第几天根据开始日期和circle天数
+		int orderOfCircle = dayDiffToBegin % circle + 1;
+		if (span) {
+			orderOfCircle--;
+		}
+
+		// TODO 计算 这一天是那个循环的第几天，那个次序
+
+		// staffMapper.selectOnDutyUsersByTeamId(teamId, orderOfCircle, orderOfDay);
+		return staffMapper.selectOnDutyUsersByTeamId(teamId, orderOfCircle, orderOfDay);
+	}
+
+	@Override
+	public String deleteSchedule(long teamid) {
+		int delete = scheduleMapper.deleteScheduleByTeamId(teamid);
+		System.out.println("deleteSchedule:" + delete);
+
+		return delete == 1 ? JsonResult.SUC.toString() : JsonResult.FAILED.toString();
 	}
 
 }

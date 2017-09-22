@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Update;
 import evdc.vianet.auth.entity.User;
 import evdc.vianet.shift.entity.Schedule;
 import evdc.vianet.shift.entity.Staff;
+import evdc.vianet.shift.entity.view.ViewOnDutyUser;
 
 public interface StaffMapper {
 
@@ -23,14 +24,17 @@ public interface StaffMapper {
 	@Update("")
 	int updateStaff(Staff staff);
 
-	@Select("select * from "+Staff.TABLE_NAME+" where scheduleId=#{scheduleId}")
+	@Select("select * from " + Staff.TABLE_NAME + " where scheduleId=#{scheduleId}")
 	List<Staff> selectStaffByScheduleId(long scheduleId);
 	/*
-	@Select("")
-	List<Staff> selectStaffSByScheduleId(long scheduleId);
-	*/
-	
+	 * @Select("") List<Staff> selectStaffSByScheduleId(long scheduleId);
+	 */
+
 	@Select("select name from " + User.TABLE_NAME + " where `id`=#{userId}")
 	String selectUserNameByUserId(long userId);
+
+	@Select("SELECT * FROM " + ViewOnDutyUser.VIEW_NAME
+			+ " where teamId=#{arg0} and orderOfCircle=#{arg1} and orderOfDay=#{arg2};")
+	List<ViewOnDutyUser> selectOnDutyUsersByTeamId(long teamId, int orderOfCircle, int orderOfDay);
 
 }

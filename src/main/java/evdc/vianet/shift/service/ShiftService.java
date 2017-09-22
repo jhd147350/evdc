@@ -1,12 +1,16 @@
 package evdc.vianet.shift.service;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
+import evdc.vianet.auth.entity.User;
+import evdc.vianet.constant.ScheduleException;
 import evdc.vianet.shift.entity.Rule;
 import evdc.vianet.shift.entity.Shift;
+import evdc.vianet.shift.entity.view.ViewOnDutyUser;
 
 /**
  * 所有排班相关页面<br>
@@ -43,6 +47,12 @@ public interface ShiftService {
 	 */
 	String deleteShift(long shiftid);
 	
+	/**
+	 * 直接删除一个团队的值班计划和所有关联的值班人员
+	 * @param json
+	 */
+	String deleteSchedule(long teamid);
+	
 	void deleteShiftRule(String json);
 
 	/**
@@ -56,5 +66,13 @@ public interface ShiftService {
 	String findAllShift();
 
 	void findShiftByTeamId(long teamId);
+	
+	/**
+	 * 指定团队的（主/次）值班人
+	 * @param teamId
+	 * @return
+	 */
+	List<ViewOnDutyUser> getOnDutyUsersByTeamId(long teamId, Calendar currentTime) throws ScheduleException;
+	
 
 }
