@@ -39,9 +39,10 @@
 	<script type="text/html" id="toolbar1">
     <a class="layui-btn layui-btn-mini" lay-event="create">创建排班计划</a>
 	</script>
+	<!-- 去掉按月查询<a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail1">按月查看</a> -->
 	<script type="text/html" id="toolbar2">
     <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">按周查看</a>
-    <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail1">按月查看</a>
+    
     <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
 	</script>
@@ -84,7 +85,7 @@
 					editSchedule();
 				} else if (obj.event === 'detail1') {//按月查看
 					var teamId = data.id;
-					window.open("schedule/detail/month?teamId=" + teamId);
+					//window.open("schedule/detail/month?teamId=" + teamId);
 
 				}
 			});
