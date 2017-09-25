@@ -90,10 +90,10 @@ public class ShiftController {
 	}
 
 	@RequestMapping("/schedule/detail")
-	String detailSchedulePop(Long teamId, Model m) {
+	String detailSchedulePop(Long teamId, Integer nextWeek, Model m) {
 		// m.addAttribute("action", "rule");
 		System.out.println(teamId);
-		shiftService.getDetailSchedulePage(teamId,true,"", m);
+		shiftService.getDetailSchedulePage(teamId,true, nextWeek,"", m);
 		try {
 			Calendar c=Calendar.getInstance();
 			c.set(Calendar.HOUR_OF_DAY, 20);
@@ -109,6 +109,30 @@ public class ShiftController {
 		return "shift/pop/schedule-detail";
 	}
 	/**
+	 * 主要用于上一周下一周查看用的
+	 */
+	@RequestMapping("/schedule/detail/week")
+	String detailSchedulePopNextWeek(Long teamId, Integer nextWeek, Model m) {
+		// m.addAttribute("action", "rule");
+		System.out.println(teamId);
+		shiftService.getDetailSchedulePage(teamId,true, nextWeek,"", m);
+		//------------这一段代码纯粹测试当前值班人员是谁---------------------
+		try {
+			Calendar c=Calendar.getInstance();
+			c.set(Calendar.HOUR_OF_DAY, 20);
+			List<ViewOnDutyUser> onDutyUsersByTeamId = shiftService.getOnDutyUsersByTeamId(18,c);
+			for(ViewOnDutyUser u:onDutyUsersByTeamId) 
+			{
+				System.out.println(u.getName());
+			}
+		} catch (ScheduleException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//----------------------
+		return "shift/pop/schedule-detail-week";
+	}
+	/**
 	 * 按年月查看排班 TODO
 	 * @param teamId
 	 * @param m
@@ -117,7 +141,14 @@ public class ShiftController {
 	@RequestMapping("/schedule/detail/month")
 	String detailScheduleMonth(Long teamId, Model m) {
 		// m.addAttribute("action", "rule");
-		shiftService.getDetailSchedulePage(teamId, true, "", m);
+		shiftService.getDetailSchedulePage(teamId, false, 0, "", m);
+		return "shift/pop/schedule-detail-month";
+	}
+	
+	@RequestMapping("/schedule/detail/monthdata")
+	String detailScheduleNextMonth(Long teamId, Integer nextMonth, Model m) {
+		// m.addAttribute("action", "rule");
+		shiftService.getDetailSchedulePage(teamId, false, nextMonth, "", m);
 		return "shift/pop/schedule-detail-month";
 	}
 

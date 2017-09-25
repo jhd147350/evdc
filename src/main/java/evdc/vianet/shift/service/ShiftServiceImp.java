@@ -186,7 +186,7 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 	}
 
 	@Override
-	public void getDetailSchedulePage(long teamId, boolean isWeekView, String searchDate, Model m) {
+	public void getDetailSchedulePage(long teamId, boolean isWeekView, int nextWeek, String searchDate, Model m) {
 
 		Schedule schedule = scheduleMapper.selectScheduleByTeamId(teamId);
 
@@ -207,12 +207,16 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 		LocalDate localDate = LocalDate.now();
 		// 和周一差几天
 		int mondayDiff = localDate.getDayOfWeek().getValue() - 1;
-		
-		//和这个月差几天
-		int dayOfMonthDiff = localDate.getDayOfMonth()-1;
+
+		// 和这个月差几天
+		int dayOfMonthDiff = localDate.getDayOfMonth() - 1;
 
 		// 将日期重置到这周的周一
 		c.add(Calendar.DATE, -mondayDiff);
+
+		// 将日期在根据下几周的参数 重置那周的周一
+		c.add(Calendar.DATE, nextWeek * 7);
+
 		// 一一周的数据为例子，TODO 这个数值以后可以根据传进来的参数来决定
 		for (int i = 1; i <= 7; i++) {
 			System.out.println("星期" + i + ":" + c.get(Calendar.DAY_OF_MONTH));

@@ -36,6 +36,14 @@
 			</div>
 		</div>
 		<div class="layui-form-item">
+			<label class="layui-form-label">备注信息</label>
+			<div class="layui-input-block">
+				<input id="info" type="text" name="name1" required
+					lay-verify="required" placeholder="请输入备注信息" autocomplete="off"
+					class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
 			<a id="add" class="layui-btn">添加</a> <a id="delete" class="layui-btn">清空</a>
 		</div>
 	</form>

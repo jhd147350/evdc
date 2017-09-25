@@ -43,7 +43,7 @@ public interface ShiftService {
 	 * @param date 查询所在的周或月的一天即可
 	 * @param m 传给视图的数据
 	 */
-	void getDetailSchedulePage(long teamId, boolean isWeekView, String date, Model m);
+	void getDetailSchedulePage(long teamId, boolean isWeekView, int nextWeek, String date, Model m);
 	
 	String getScheduleTeam(boolean hasSchedule);
 
@@ -74,9 +74,9 @@ public interface ShiftService {
 	void findShiftByTeamId(long teamId);
 	
 	/**
-	 * 指定团队的（主/次）值班人
+	 * 
 	 * @param teamId
-	 * @return
+	 * @return 指定团队的（主/次）值班人
 	 */
 	List<ViewOnDutyUser> getOnDutyUsersByTeamId(long teamId, Calendar currentTime) throws ScheduleException;
 	

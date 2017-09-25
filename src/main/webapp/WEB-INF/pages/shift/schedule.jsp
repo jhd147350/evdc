@@ -118,7 +118,7 @@
 				title : '排班表',
 				skin : 'layui-layer-rim', // 加上边框
 				area : [ '1024px', '550px' ], // 宽高
-				content : 'schedule/detail?teamId=' + teamId,
+				content : 'schedule/detail?teamId=' + teamId + '&nextWeek=0',
 				btn : [ '关闭', '取消' ],
 				yes : function(index, layero) {
 					layer.close(index);

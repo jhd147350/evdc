@@ -91,13 +91,14 @@
 					console.log($("#shiftname").val());
 					var starttime = $("#starttime").val();
 					var endtime = $("#endtime").val();
+					var info = $("#info").val();
 					var list = [ name, starttime, endtime ];
 					/*
 					 * for(var j=0;j<list.size();j++){ if(list[j]==null){
 					 * layer.msg(list[j]+"不能为空"); } }
 					 */
 					if (shiftname.length === 0 || starttime.length === 0
-							|| endtime.length === 0) {
+							|| endtime.length === 0 || info.length === 0) {
 
 						layer.msg("所有选项都为必填项");
 						return;
@@ -108,7 +109,7 @@
 									+ "        <td>" + starttime + "</td>\n"
 									+ "        <td>" + endtime + "</td>\n"
 									+ "        <td>" + i + "</td>\n"
-									+ "        <td>暂不支持</td>\n" + "    </tr>");
+									+ "        <td>" + info + "</td>\n" + "    </tr>");
 					i++;
 				});
 		$("#delete").click(function() {

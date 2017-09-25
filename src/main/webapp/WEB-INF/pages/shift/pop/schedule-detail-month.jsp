@@ -12,37 +12,7 @@
 	<button class="layui-btn">上一周</button>
 	<button class="layui-btn">下一周</button>
 	<table class="layui-table">
-		<thead>
-			<tr>
-				<c:forEach items="${scheduleResults}" var="result">
-					<th colspan="${result.orderOfDay}">${result.date.week}(${result.date.month}月${result.date.day}日)</th>
-				</c:forEach>
-			</tr>
-			<tr>
-				<c:forEach items="${scheduleResults}" var="result">
-					<c:forEach items="${result.times}" var="time">
-						<th title="${time.startTime}-${time.endTime}">${time.info}</th>
-					</c:forEach>
-				</c:forEach>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<c:forEach items="${scheduleResults}" var="result">
-					<c:forEach items="${result.staffsP}" var="staff">
-						<th id="${staff.id}">${staff.name}</th>
-					</c:forEach>
-				</c:forEach>
-
-			</tr>
-			<tr>
-				<c:forEach items="${scheduleResults}" var="result">
-					<c:forEach items="${result.staffsS}" var="staff">
-						<th id="${staff.id}">${staff.name}</th>
-					</c:forEach>
-				</c:forEach>
-			</tr>
-		</tbody>
+		
 	</table>
 	<script src="${ctx}/static/layui/layui.all.js"></script>
 	<script>
@@ -83,6 +53,22 @@
 			});
 
 		}();
+		
+		function nextWeekQuery() {
+			var $ = layui.jquery;
+			var teamId=18;
+			var index = layer.load(1, {shade: [0.3]});//显示加载图标 shade遮罩透明度为0.3
+			$.ajax({
+				url : 'detail/week?teamId=' + teamId + '&nextWeek=' + nextWeek,
+				type : 'GET',
+				success : function(result) {
+					layer.close(index);//关闭加载图标
+					console.log(result);
+					$("table").empty();
+					$("table").html(result);
+				}
+			});			
+		}
 	</script>
 </body>
 </html>
