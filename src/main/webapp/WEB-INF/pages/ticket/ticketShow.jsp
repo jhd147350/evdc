@@ -14,7 +14,8 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="format-detection" content="telephone=no">
-        <link rel="stylesheet" href="../static/css/x-admin.css" media="all">      
+        <link rel="stylesheet" href="../static/css/x-admin.css" media="all">  
+           
     </head>
     
     <body>
@@ -25,23 +26,37 @@
                         标题
                     </label>
                     <div class="layui-input-block">
-                        <input type="text" id="L_title" name="title" required lay-verify=""
+                        <input type="text" id="L_title" name=""
                         autocomplete="off" class="layui-input" disabled="disabled" value="${ticket.title}">
                     </div>
                 </div>
                 
                 <div class="layui-form-item layui-form-text">
-                <label for="L_content" class="layui-form-label" style="top: -2px;">
-                        描述
-                    </label>
+	                <label for="L_content" class="layui-form-label" style="top: -2px;">
+	                        描述
+	                </label>
                     <div class="layui-input-block">
-                        <textarea name="" required lay-verify="required" placeholder="请输入" class="layui-textarea" disabled="disabled">${ticket.description}</textarea>
-                    </div>
-                    
-                </div>
-               
-               
-               <!-- <div class="layui-upload">
+                        <textarea name="" class="layui-textarea" disabled="disabled">${ticket.description}</textarea>
+                    </div>     
+               </div>
+               <div class="layui-inline">
+		                <label class="layui-form-label">
+		                            状态
+		                </label>        
+	                    <div class="layui-input-block">
+		                    <select id="ticketStatus" lay-verify="required" name="cid" value="${ticket.status}" disabled="true">
+			                    <option value="New">新建</option>
+			                    <option value="In_Process">已受理</option>
+			                    <option value="Resolved">已解决</option>
+			                    <option value="Closed">已关闭</option>                                
+		                    </select>        
+	                    </div>
+	                    <%-- <div class="layui-input-block">
+                        	<input type="text" id="L_title" name="status" required lay-verify=""
+                        	autocomplete="off" class="layui-input" disabled="disabled" value="${ticket.status}">
+                    	</div> --%>
+	           </div>
+		  		<!-- <div class="layui-upload">
 						  <input type="button" class="layui-btn layui-btn-normal" id="addFileList" value="选择多文件"/> 
 						  <div class="layui-upload-list">
 						    <table class="layui-table">
@@ -55,21 +70,20 @@
 						    </table>
 						  </div>
 						 
-					</div>  -->
+				</div>  -->
                <div class="layui-form-item">
-               <div class="layui-inline">
-                        <label class="layui-form-label">
-                            服务类型
-                        </label>
-                   
-                        <div class="layui-input-block">
-                            <select id="serviceType" lay-verify="required" name="serviceType" value="${ticket.serviceId}">	
+               	<div class="layui-inline">
+	               <label class="layui-form-label">
+	                            服务类型
+	               </label>         
+                   <div class="layui-input-block">
+                            <select id="serviceType" lay-filter="serviceType" name="serviceType" value="${ticket.serviceId}">	
                                     <c:forEach items="${ticketServices}" var="item" varStatus="status">  
 										<option name="ticketService[]" value="${item.id}" > ${item.name}</option>
 									</c:forEach>
-
                             </select>
-                        </div>
+                    </div>
+                    
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">
@@ -77,8 +91,7 @@
                         </label>
                    
                         <div class="layui-input-block">
-                            <select id="severity" lay-verify="required" name="severity" value="${ticket.severity}">
-                            	
+                            <select id="severity" lay-filter="severity" name="severity" value="${ticket.severity}">
                                     <option value="Sev1">1-严重</option>
                                     <option value="Sev2">2-高级</option>
                                     <option value="Sev3">3-一般</option>
@@ -86,52 +99,46 @@
                             </select>
                         </div>
                     </div>
-                    
-                    
-                    <div class="layui-inline">
-                        <label class="layui-form-label">
-                            状态
-                        </label>
-                   
-                        <div class="layui-input-block">
-                            <select id="ticketStatus" lay-verify="required" name="cid" value="${ticket.status}">
-                                    <option value="New">新建</option>
-                                    <option value="In_Process">已受理</option>
-                                    <option value="Resolved">已解决</option>
-                                    <option value="Closed">已关闭</option>
-                            </select>
-                        </div>
-                    </div>
-            </div>
-                <!-- <div class="layui-form-item"> 
-                    <input type="submit" class="layui-btn" lay-filter="add" lay-submit="" value="提交">
-                </div> -->
+            	</div>
+                <div class="layui-form-item"> 
+                    <input type="submit"  id="saveChange" class="layui-btn layui-btn-disabled" lay-filter="save" lay-submit="" disabled="true" value="保存">
+                </div>
                 
             </form>
-            
-                      
-               
-         </div>                   	     	
+            <div class="layui-inline">
+            	<button id="changeTicketStatus" class="layui-btn" lay-filter="changeTicketStatus" lay-submit="">状态更改</button>
+            </div>
+            <div class="layui-inline">
+            	<button id="subscribeTicket" class="layui-btn" lay-filter="subscribeTicket" lay-submit="">订阅</button>          
+            </div>
+        </div>                   	     	
         
         <script src="../static/layui/layui.js" charset="utf-8"></script>
-        <script src="../static/js/x-layui.js" charset="utf-8"></script>
-        
-        
-        <script>
-        	
+        <script src="../static/js/x-layui.js" charset="utf-8"></script> 
+        <script> 
             layui.use(['form','layer','layedit','upload'], function(){
-                $ = layui.jquery;
+                layui$ = layui.jquery;
               var form = layui.form
               ,layer = layui.layer
               ,layedit = layui.layedit
               ,upload = layui.upload;
-
+              	
                 /*layedit.set({
                   uploadImage: {
                     url: "./upimg.json" //接口url
                     ,type: 'post' //默认post
                   }
                 })*/
+                
+                form.on('select', function (data) {
+  		      	  	layui$('#saveChange').attr("class", "layui-btn");
+  		      	  	layui$('#saveChange').removeAttr("disabled");	
+                });
+                /* form.on('select(severity)', function (data) {
+                	console.log("修改");
+  		      	  	layui$('#saveChange').attr("class", "layui-btn");
+  		      	  	layui$('#saveChange').attr("disabled", "false");	
+                }); */
                //实际上传文件数
                var buttonNum = 0;
             //创建一个编辑器
@@ -164,7 +171,7 @@
                 }
                 fileNameArray[buttonNum]='填充';
                 serFileNameArray[buttonNum]='填充';
-                $.ajax({  
+                layui$.ajax({  
           	url: './createTicket', 
               type: 'POST',  
               dataType: 'json',
@@ -190,7 +197,7 @@
                 return false;
           });                  
               //upload 为对象o              
-              var demoListView = $('#demoList')
+              var demoListView = layui$('#demoList')
 		  ,uploadListIns = upload.render({
 		    elem: '#addFileList'
 		    ,url: './uploadTicketFile'
@@ -202,7 +209,7 @@
 		    	
 		      //读取本地文件
 		      obj.preview(function(index, file, result){
-		        var tr = $(['<tr id="upload-'+ index +'">'
+		        var tr = layui$(['<tr id="upload-'+ index +'">'
 		          ,'<td id="">'+ file.name +'</td>'
 		          ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
 		          ,'<td id="uploadStatus">正在上传</td>'
@@ -218,7 +225,7 @@
         tr.find('.demo-delete').on('click', function(){
           var but = this;
           var deleteFileName = but.getAttribute("serFileName");
-		  $.ajax({  
+          layui$.ajax({  
           	url: './deleteTicketFile', 
               type: 'POST',  
               dataType: 'json',
@@ -229,7 +236,6 @@
               cache: false,     
        		}).done(function(data) { 
        		if(data.status==0){
-       			
 					layer.alert("删除成功", {icon: 6},function (index) {
 						buttonNum--;
 						console.log(but);
@@ -256,8 +262,8 @@
         buttonNum++;
         var button = buttonDiv.children().eq(0);
         button[0].setAttribute("serFileName",res.ticketFilePath);
-        buttonDiv.prepend($("<input type='text' name='fileNameArr' value='"+res.fileName+"' hidden/>"));
-        buttonDiv.prepend($("<input type='text' name='serFileNameArr' value='"+res.ticketFilePath+"' hidden/>"));
+        buttonDiv.prepend(layui$("<input type='text' name='fileNameArr' value='"+res.fileName+"' hidden/>"));
+        buttonDiv.prepend(layui$("<input type='text' name='serFileNameArr' value='"+res.ticketFilePath+"' hidden/>"));
       	return;
       }
       this.error(index, upload);
