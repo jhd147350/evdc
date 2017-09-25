@@ -48,7 +48,7 @@
         <a href="javascript:;">值班管理</a>
         	<dl class="layui-nav-child">
 	          <dd><a href="javascript:;" _href="../shift/schedule">值班信息</a></dd>
-	          <dd><a href="javascript:;" _href="../shift/schedule">值班规则</a></dd>
+	          <dd><a href="javascript:;" _href="../shift/rule">值班规则</a></dd>
 	          
 	        </dl>
         </li>
