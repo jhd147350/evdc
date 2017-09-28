@@ -104,18 +104,14 @@
                             </select>
                         </div>
                     </div>
-
-
-
-
-                    
                     <div class="layui-inline">
                         <button class="layui-btn" onclick="ticket_sreach(this,'1')"><i class="layui-icon">&#xe615;</i></button>
                     </div>
                   </div>
                 
             </div>
-            <xblock><button class="layui-btn" onclick="ticket_create('创建工单','./ticketCreatePage','600','500')"><i class="layui-icon">&#xe608;</i>创建工单</button><span class="x-right" style="line-height:40px">共有工单：1 条</span></xblock>
+            <xblock><button class="layui-btn" onclick="ticket_create('创建工单','./ticketCreatePage','600','500')"><i class="layui-icon">&#xe608;</i>创建工单</button>
+            <span id="ticketNumSpan" class="x-right" style="line-height:40px">共有工单：${fn:length(tickets)} 条</span></xblock>
             <table class="layui-table">
                 <thead>
                     <tr>
@@ -147,11 +143,13 @@
 						</c:if> 
                     </tr>
                 </thead>
-                <tbody id="ticketList">
-                    <c:if test="${tickets==null || fn:length(tickets) == 0}">  
-					<tr>  
-					  <td >查询结果为空</td>
-					</tr>   
+                <tbody id="ticketList"> 
+                    <c:if test="${tickets==null || fn:length(tickets) == 0}"> 
+                    	<%int cloms = 7;%> 
+						<c:if test="${fn:length(authoritys) > 1}">  
+								  <%cloms = 9; %>
+						</c:if>
+						<td colspan="<%=cloms%>">查询结果为空</td>
 					</c:if>  
 					<c:forEach items="${tickets}" var="item" varStatus="status">  
 					  <tr >  
@@ -209,10 +207,11 @@
                   },
                   timeout: 1000,  
                   cache: false,     
-               	}).done(function(data) { 
+               	}).done(function(data) {
+               		$('#ticketNumSpan').text("共有工单："+data.length+" 条");
                		$.each(data, function(ticketIndex){
                			var ticket = data[ticketIndex];
-               				var $tr = $("<tr><")
+               				var $tr = $("<tr></tr>")
                				var $td = $("<td>"+ticket.id+"</td>")
                				$tr.append($td);
                				$td = $('<td style="cursor:pointer" ticketId="'+ticket.id+'" onclick="ticket_show(this)">'+ticket.title+'</td>');
@@ -242,7 +241,7 @@
              function ticket_show (argument) {
 
             	 console.log(argument);
-            	 x_admin_show('工单详情','./ticketShowPage?ticketId='+argument.getAttribute("ticketId"),'600','500');
+            	 x_admin_show('工单详情','./ticketShowPage?ticketId='+argument.getAttribute("ticketId"));
              }
              /*创建工单*/
             function ticket_create(title,url,w,h){

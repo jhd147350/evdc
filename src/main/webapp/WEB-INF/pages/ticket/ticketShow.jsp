@@ -22,7 +22,7 @@
         <div class="x-body">
             <form action="./createTicket" class="layui-form layui-form-pane" method="POST">
                 <div class="layui-form-item">
-                    <label for="L_title" class="layui-form-label">
+                    <label ticketId="${ticket.id}" for="L_title" class="layui-form-label">
                         标题
                     </label>
                     <div class="layui-input-block">
@@ -39,23 +39,6 @@
                         <textarea name="" class="layui-textarea" disabled="disabled">${ticket.description}</textarea>
                     </div>     
                </div>
-               <div class="layui-inline">
-		                <label class="layui-form-label">
-		                            状态
-		                </label>        
-	                    <div class="layui-input-block">
-		                    <select id="ticketStatus" lay-verify="required" name="cid" value="${ticket.status}" disabled="true">
-			                    <option value="New">新建</option>
-			                    <option value="In_Process">已受理</option>
-			                    <option value="Resolved">已解决</option>
-			                    <option value="Closed">已关闭</option>                                
-		                    </select>        
-	                    </div>
-	                    <%-- <div class="layui-input-block">
-                        	<input type="text" id="L_title" name="status" required lay-verify=""
-                        	autocomplete="off" class="layui-input" disabled="disabled" value="${ticket.status}">
-                    	</div> --%>
-	           </div>
 		  		<!-- <div class="layui-upload">
 						  <input type="button" class="layui-btn layui-btn-normal" id="addFileList" value="选择多文件"/> 
 						  <div class="layui-upload-list">
@@ -72,6 +55,19 @@
 						 
 				</div>  -->
                <div class="layui-form-item">
+               <div class="layui-inline">
+		                <label class="layui-form-label">
+		                            状态
+		                </label>        
+	                    <div class="layui-input-block">
+		                    <select id="ticketStatus" lay-verify="required" name="cid" value="${ticket.status}" disabled="true">
+			                    <option value="New">新建</option>
+			                    <option value="In_Process">已受理</option>
+			                    <option value="Resolved">已解决</option>
+			                    <option value="Closed">已关闭</option>                                
+		                    </select>        
+	                    </div>
+	           </div>
                	<div class="layui-inline">
 	               <label class="layui-form-label">
 	                            服务类型
@@ -109,7 +105,7 @@
             	<button id="changeTicketStatus" class="layui-btn" lay-filter="changeTicketStatus" lay-submit="">状态更改</button>
             </div>
             <div class="layui-inline">
-            	<button id="subscribeTicket" class="layui-btn" lay-filter="subscribeTicket" lay-submit="">订阅</button>          
+            	<button id="subscribeTicket" class="layui-btn" lay-filter="subscribeTicket" onclick="ticket_subscribe(this)" lay-submit="">订阅</button>          
             </div>
         </div>                   	     	
         
@@ -117,30 +113,25 @@
         <script src="../static/js/x-layui.js" charset="utf-8"></script> 
         <script> 
             layui.use(['form','layer','layedit','upload'], function(){
-                layui$ = layui.jquery;
+                $ = layui.jquery;
               var form = layui.form
               ,layer = layui.layer
               ,layedit = layui.layedit
               ,upload = layui.upload;
-              	
+            	//实际上传文件数
+              	var buttonNum = 0;
                 /*layedit.set({
                   uploadImage: {
                     url: "./upimg.json" //接口url
                     ,type: 'post' //默认post
                   }
                 })*/
-                
+              
                 form.on('select', function (data) {
-  		      	  	layui$('#saveChange').attr("class", "layui-btn");
-  		      	  	layui$('#saveChange').removeAttr("disabled");	
+  		      	  	$('#saveChange').attr("class", "layui-btn");
+  		      	  	$('#saveChange').removeAttr("disabled");	
                 });
-                /* form.on('select(severity)', function (data) {
-                	console.log("修改");
-  		      	  	layui$('#saveChange').attr("class", "layui-btn");
-  		      	  	layui$('#saveChange').attr("disabled", "false");	
-                }); */
-               //实际上传文件数
-               var buttonNum = 0;
+            
             //创建一个编辑器
             editIndex = layedit.build('L_content',{
             	tool: [
@@ -155,7 +146,7 @@
 				  ,'center' //居中对齐
 				  ,'right' //右对齐
 				  ,'face' //表情
-				]	
+				]
             });           
              //监听提交
              form.on('submit(add)', function(data){
@@ -171,7 +162,7 @@
                 }
                 fileNameArray[buttonNum]='填充';
                 serFileNameArray[buttonNum]='填充';
-                layui$.ajax({  
+                $.ajax({  
           	url: './createTicket', 
               type: 'POST',  
               dataType: 'json',
@@ -197,7 +188,7 @@
                 return false;
           });                  
               //upload 为对象o              
-              var demoListView = layui$('#demoList')
+              var demoListView = $('#demoList')
 		  ,uploadListIns = upload.render({
 		    elem: '#addFileList'
 		    ,url: './uploadTicketFile'
@@ -209,7 +200,7 @@
 		    	
 		      //读取本地文件
 		      obj.preview(function(index, file, result){
-		        var tr = layui$(['<tr id="upload-'+ index +'">'
+		        var tr = $(['<tr id="upload-'+ index +'">'
 		          ,'<td id="">'+ file.name +'</td>'
 		          ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
 		          ,'<td id="uploadStatus">正在上传</td>'
@@ -225,7 +216,7 @@
         tr.find('.demo-delete').on('click', function(){
           var but = this;
           var deleteFileName = but.getAttribute("serFileName");
-          layui$.ajax({  
+          $.ajax({  
           	url: './deleteTicketFile', 
               type: 'POST',  
               dataType: 'json',
@@ -262,8 +253,8 @@
         buttonNum++;
         var button = buttonDiv.children().eq(0);
         button[0].setAttribute("serFileName",res.ticketFilePath);
-        buttonDiv.prepend(layui$("<input type='text' name='fileNameArr' value='"+res.fileName+"' hidden/>"));
-        buttonDiv.prepend(layui$("<input type='text' name='serFileNameArr' value='"+res.ticketFilePath+"' hidden/>"));
+        buttonDiv.prepend($("<input type='text' name='fileNameArr' value='"+res.fileName+"' hidden/>"));
+        buttonDiv.prepend($("<input type='text' name='serFileNameArr' value='"+res.ticketFilePath+"' hidden/>"));
       	return;
       }
       this.error(index, upload);
@@ -276,7 +267,12 @@
     }
   });   
             });
+          //订阅
+            function ticket_subscribe (argument) {
 
+           	 console.log(argument);
+           	 x_admin_show('工单订阅','./ticketSubcribePage?ticketId=${ticket.id}','500','400');
+            };
         </script>
         <script>
         var _hmt = _hmt || [];
