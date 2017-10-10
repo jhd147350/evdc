@@ -262,7 +262,9 @@ public class TicketController {
 		}
 		int methods = authoritys.size();
 		if(methods==1) {
-			
+			List<Ticket> tickets = ticketService.findAllTicketsByKeyword(".*", ".*", ".*", ticketId);
+			m.addAttribute("ticketServices", ticketSerService.findAllTicketService());
+			m.addAttribute("ticket", tickets.get(0));
 			return "ticket/ticketShowCustomer";
 		}else {
 			List<Ticket> tickets = ticketService.findAllTicketsByKeyword(".*", ".*", ".*", ticketId);

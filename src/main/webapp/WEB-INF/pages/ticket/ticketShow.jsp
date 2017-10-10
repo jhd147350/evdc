@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <title>
-            创建工单
+            工单详情
         </title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">

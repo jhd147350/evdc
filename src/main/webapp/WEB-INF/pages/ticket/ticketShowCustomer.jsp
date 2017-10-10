@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <title>
-            二当家的Lay1.0
+            工单详情
         </title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -14,35 +14,32 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="format-detection" content="telephone=no">
-        <link rel="stylesheet" href="../static/css/x-admin.css" media="all">      
+        <link rel="stylesheet" href="../static/css/x-admin.css" media="all">  
+           
     </head>
     
     <body>
         <div class="x-body">
             <form action="./createTicket" class="layui-form layui-form-pane" method="POST">
                 <div class="layui-form-item">
-                    <label for="L_title" class="layui-form-label">
+                    <label ticketId="${ticket.id}" for="L_title" class="layui-form-label">
                         标题
                     </label>
                     <div class="layui-input-block">
-                        <input type="text" id="L_title" name="title" required lay-verify=""
-                        autocomplete="off" class="layui-input">
+                        <input type="text" id="L_title" name=""
+                        autocomplete="off" class="layui-input" disabled="disabled" value="${ticket.title}">
                     </div>
                 </div>
                 
                 <div class="layui-form-item layui-form-text">
-                <label for="L_content" class="layui-form-label" style="top: -2px;">
-                        描述
-                    </label>
+	                <label for="L_content" class="layui-form-label" style="top: -2px;">
+	                        描述
+	                </label>
                     <div class="layui-input-block">
-                        <textarea id="L_content" name="description" 
-                        placeholder="请输入内容" class="layui-textarea fly-editor" style="height: 260px;"></textarea>
-                    </div>
-                    
-                </div>
-               
-               
-               <div class="layui-upload">
+                        <textarea name="" class="layui-textarea" disabled="disabled">${ticket.description}</textarea>
+                    </div>     
+               </div>
+		  		<!-- <div class="layui-upload">
 						  <input type="button" class="layui-btn layui-btn-normal" id="addFileList" value="选择多文件"/> 
 						  <div class="layui-upload-list">
 						    <table class="layui-table">
@@ -56,21 +53,33 @@
 						    </table>
 						  </div>
 						 
-					</div> 
+				</div>  -->
                <div class="layui-form-item">
                <div class="layui-inline">
-                        <label class="layui-form-label">
-                            服务类型
-                        </label>
-                   
-                        <div class="layui-input-block">
-                            <select id="serviceType" lay-verify="required" name="serviceType">	
+		                <label class="layui-form-label">
+		                            状态
+		                </label>        
+	                    <div class="layui-input-block">
+		                    <select id="ticketStatus" lay-verify="required" name="cid" value="${ticket.status}" disabled="true">
+			                    <option value="New">新建</option>
+			                    <option value="In_Process">已受理</option>
+			                    <option value="Resolved">已解决</option>
+			                    <option value="Closed">已关闭</option>                                
+		                    </select>        
+	                    </div>
+	           </div>
+               	<div class="layui-inline">
+	               <label class="layui-form-label">
+	                            服务类型
+	               </label>         
+                   <div class="layui-input-block">
+                            <select id="serviceType" lay-filter="serviceType" name="serviceType" value="${ticket.serviceId}" disabled="true">	
                                     <c:forEach items="${ticketServices}" var="item" varStatus="status">  
 										<option name="ticketService[]" value="${item.id}" > ${item.name}</option>
 									</c:forEach>
-
                             </select>
-                        </div>
+                    </div>
+                    
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">
@@ -78,8 +87,7 @@
                         </label>
                    
                         <div class="layui-input-block">
-                            <select id="severity" lay-verify="required" name="severity">
-                            	
+                            <select id="severity" lay-filter="severity" name="severity" value="${ticket.severity}" disabled="true">
                                     <option value="Sev1">1-严重</option>
                                     <option value="Sev2">2-高级</option>
                                     <option value="Sev3">3-一般</option>
@@ -87,59 +95,43 @@
                             </select>
                         </div>
                     </div>
-                    
-                    <div class="layui-inline">
-                        <label class="layui-form-label">
-                            状态
-                        </label>
-                   
-                        <div class="layui-input-block">
-                            <select id="ticketStatus" lay-verify="required" name="cid" value="">
-                                    <option value="New">新建</option>
-                                    <option value="In_Process">已受理</option>
-                                    <option value="Resolved">已解决</option>
-                                    <option value="Closed">已关闭</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-            </div>
-                <div class="layui-form-item"> 
-                    <input type="submit" class="layui-btn" lay-filter="add" lay-submit="" value="提交">
-                </div>
-                <!-- 文件上传 -->
-                <!-- <div id="fileNames" hidden>
-                </div>
-                <div id="serFileNames" hidden>
+            	</div>
+                <!-- <div class="layui-form-item"> 
+                    <input type="submit"  id="saveChange" class="layui-btn layui-btn-disabled" lay-filter="save" lay-submit="" disabled="true" value="保存">
                 </div> -->
                 
             </form>
-            
-                      
-               
-         </div>                   	     	
+            <div class="layui-inline">
+            	<button id="changeTicketStatus" class="layui-btn" lay-filter="changeTicketStatus" lay-submit="">状态更改</button>
+            </div>
+            <!-- <div class="layui-inline">
+            	<button id="subscribeTicket" class="layui-btn" lay-filter="subscribeTicket" onclick="ticket_subscribe(this)" lay-submit="">订阅</button>          
+            </div> -->
+        </div>                   	     	
         
         <script src="../static/layui/layui.js" charset="utf-8"></script>
-        <script src="../static/js/x-layui.js" charset="utf-8"></script>
-        
-        
-        <script>
-        	
+        <script src="../static/js/x-layui.js" charset="utf-8"></script> 
+        <script> 
             layui.use(['form','layer','layedit','upload'], function(){
                 $ = layui.jquery;
               var form = layui.form
               ,layer = layui.layer
               ,layedit = layui.layedit
               ,upload = layui.upload;
-
+            	//实际上传文件数
+              	var buttonNum = 0;
                 /*layedit.set({
                   uploadImage: {
                     url: "./upimg.json" //接口url
                     ,type: 'post' //默认post
                   }
                 })*/
-               //实际上传文件数
-               var buttonNum = 0;
+              
+                form.on('select', function (data) {
+  		      	  	$('#saveChange').attr("class", "layui-btn");
+  		      	  	$('#saveChange').removeAttr("disabled");	
+                });
+            
             //创建一个编辑器
             editIndex = layedit.build('L_content',{
             	tool: [
@@ -154,7 +146,7 @@
 				  ,'center' //居中对齐
 				  ,'right' //右对齐
 				  ,'face' //表情
-				]	
+				]
             });           
              //监听提交
              form.on('submit(add)', function(data){
@@ -224,7 +216,7 @@
         tr.find('.demo-delete').on('click', function(){
           var but = this;
           var deleteFileName = but.getAttribute("serFileName");
-		  $.ajax({  
+          $.ajax({  
           	url: './deleteTicketFile', 
               type: 'POST',  
               dataType: 'json',
@@ -235,7 +227,6 @@
               cache: false,     
        		}).done(function(data) { 
        		if(data.status==0){
-       			
 					layer.alert("删除成功", {icon: 6},function (index) {
 						buttonNum--;
 						console.log(but);
@@ -276,7 +267,12 @@
     }
   });   
             });
+          //订阅
+            function ticket_subscribe (argument) {
 
+           	 console.log(argument);
+           	 x_admin_show('工单订阅','./ticketSubcribePage?ticketId=${ticket.id}','500','400');
+            };
         </script>
         <script>
         var _hmt = _hmt || [];

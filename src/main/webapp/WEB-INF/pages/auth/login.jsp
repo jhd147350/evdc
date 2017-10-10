@@ -9,6 +9,27 @@
         <title>
            	EVDC登录页面
         </title>
+        <style>
+			.my-box {
+				 position: relative;
+ 				 width: 400px;
+ 				 height: 450px;
+			 	 background: #fff url() 0 0 no-repeat;
+ 				 border-radius: 20px;
+ 				 margin: 80px auto;
+ 				 overflow: hidden;
+				}
+				.title {
+				color:#000;
+				text-align:center;
+  				line-height:100px;   
+  				overflow:hidden;
+				font-size:22px;
+				height: 100px;
+  				width: 100%;
+  				position: relative;
+				}
+		</style>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -20,23 +41,10 @@
     </head>
     
     <body style="background-color: #393D49">
-        <div class="x-box">
-            <div class="x-top">
-                <i class="layui-icon x-login-close">
-                    &#x1007;
-                </i>
-                <ul class="x-login-right">
-                    <li style="background-color: #F1C85F;" color="#F1C85F">
-                    </li>
-                    <li style="background-color: #EA569A;" color="#EA569A">
-                    </li>
-                    <li style="background-color: #393D49;" color="#393D49">
-                    </li>
-                </ul>
-            </div>
-            <div class="x-mid">
-                <div class="x-avtar">
-                    <img src="../static/images/logo.png" alt="">
+
+            <div class="my-box">
+               	<div class="title">
+                    	EVDC客户支持系统
                 </div>
                 <div class="input">
                     <form action="./dologin" class="layui-form" method="post">
@@ -65,8 +73,7 @@
                     </form>
                 </div>
             </div>
-        </div>
-        <p style="color:#fff;text-align: center;">Copyright © 2017.Company name All rights X-admin </p>
+        <p style="color:#fff;text-align: center;">Copyright © 2017.vianet </p>
         <script src="../static/layui/layui.js" charset="utf-8">
         </script>
         <script>
