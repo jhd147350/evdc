@@ -43,7 +43,7 @@ public class EvdcAuthFilter extends AuthFilter {
 
 		String path = request.getRequestURL().toString();
 		System.out.println(path);
-		
+		//权限判断
 		UserRole userRole = userRoleService.findUserRoleById(u.getRole());
 		List<Authority> authoritys = authorityService.findAuthoritysByPath(path.split("evdc")[1]);
 		if(authoritys.size()>=1){

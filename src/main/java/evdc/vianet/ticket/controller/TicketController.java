@@ -63,7 +63,7 @@ public class TicketController {
 	TicketAttachmentService ticketAttachmentService;
 	
 	private User u ;
-	
+	//权限判断
 	@RequestMapping("/ticketConsole")
 	public String ticketConsole(Model m, HttpSession httpSession) {
 		u = (User) httpSession.getAttribute("user");
@@ -250,6 +250,7 @@ public class TicketController {
 		status.setStatus(0);
 		return status;		
 	}
+	//权限判断
 	@RequestMapping(value="/ticketShowPage",method=RequestMethod.GET)
 	public String ticketShowPage(HttpSession httpSession, Model m, String ticketId) {
 		u = (User) httpSession.getAttribute("user");

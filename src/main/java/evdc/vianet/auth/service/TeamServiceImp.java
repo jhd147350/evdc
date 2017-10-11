@@ -55,7 +55,7 @@ public class TeamServiceImp implements TeamService {
 	public void updateTeamById(Team t) {
 		teamMapper.updateTeam(t);
 	}
-
+	//权限判断
 	@Override
 	public List<Authority> getTeamAuthsById(long teamId) {
 		// TODO Auto-generated method stub

@@ -72,7 +72,7 @@ public class UserServiceImp implements UserService {
 		// TODO Auto-generated method stub
 		return userMapper.findAllUsersByTeamId(teamId);
 	}
-
+	//权限判断
 	@Override
 	public List<Authority> getUserAuthsById(long userId) {
 		// TODO Auto-generated method stub
