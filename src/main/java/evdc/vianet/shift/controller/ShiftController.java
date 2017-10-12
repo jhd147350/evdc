@@ -103,7 +103,6 @@ public class ShiftController {
 				System.out.println(u.getName());
 			}
 		} catch (ScheduleException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return "shift/pop/schedule-detail";
@@ -126,7 +125,6 @@ public class ShiftController {
 				System.out.println(u.getName());
 			}
 		} catch (ScheduleException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		//----------------------

@@ -46,6 +46,7 @@
 	<mybatis:scan base-package="evdc.vianet.ticket.mapper" />
 	<mybatis:scan base-package="evdc.vianet.admin.mapper" />
 	<mybatis:scan base-package="evdc.vianet.shift.mapper" />
+	<mybatis:scan base-package="evdc.vianet.emailticket.task" />
 
 
 	<!-- sessionFactory -->

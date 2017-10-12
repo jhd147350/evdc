@@ -137,7 +137,6 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 
 	@Override
 	public void findShiftByTeamId(long teamId) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -152,12 +151,10 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 
 	@Override
 	public void deleteShiftRule(String json) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void updateShift(String json) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -305,7 +302,6 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 
 	@Override
 	public String getScheduleTeam(boolean hasSchedule) {
-		// TODO Auto-generated method stub
 		// List<Team> teams = new ArrayList<>();
 		TableData<ViewTeamSchedule> data = new TableData<>();
 		List<ViewTeamSchedule> teamScheduleView = scheduleMapper.selectAllTeamScheduleView();
@@ -351,7 +347,6 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 	@Override
 	@Transactional
 	public String createSchedule(String json) {
-		// TODO Auto-generated method stub
 		System.out.println(json);
 		JSONObject jo = new JSONObject(json);
 		long teamId = jo.getLong("teamId");

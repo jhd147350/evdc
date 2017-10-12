@@ -109,6 +109,13 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
+		
+		<!-- exchange ews-java-api 用于exchange邮箱服务器https://github.com/OfficeDev/ews-java-api/wiki/Getting-Started-Guide#maven  -->
+		<dependency>
+			<groupId>com.microsoft.ews-java-api</groupId>
+			<artifactId>ews-java-api</artifactId>
+			<version>2.0</version>
+		</dependency>
 
 
 
