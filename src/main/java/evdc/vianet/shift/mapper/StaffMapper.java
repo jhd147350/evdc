@@ -33,6 +33,7 @@ public interface StaffMapper {
 	@Select("select name from " + User.TABLE_NAME + " where `id`=#{userId}")
 	String selectUserNameByUserId(long userId);
 
+	//TODO 多个参数问题 http://www.cnblogs.com/EasonJim/p/7056256.html 
 	@Select("SELECT * FROM " + ViewOnDutyUser.VIEW_NAME
 			+ " where teamId=#{arg0} and orderOfCircle=#{arg1} and orderOfDay=#{arg2};")
 	List<ViewOnDutyUser> selectOnDutyUsersByTeamId(long teamId, int orderOfCircle, int orderOfDay);
