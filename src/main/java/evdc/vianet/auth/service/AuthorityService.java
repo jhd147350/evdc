@@ -9,6 +9,7 @@ import evdc.vianet.auth.entity.Authority;
  * 2017年9月8日上午10:56:16
  */
 public interface AuthorityService {
+	Authority findAuthById(long id);
 	List<Authority> findAllAuthoritys();
 	List<Authority> findAuthoritysByPath(String path);
 	List<Authority> findAuthoritysByType(String type);

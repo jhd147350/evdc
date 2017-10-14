@@ -41,7 +41,7 @@
     <div class="layui-side-scroll">
       <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
       <ul class="layui-nav layui-nav-tree"  lay-filter="test">
-        <li class="layui-nav-item layui-nav-itemed">
+        <!-- <li class="layui-nav-item layui-nav-itemed">
           <a class="" href="javascript:;" _href="../ticket/ticketConsole">工单控制台</a>
         </li>
         <li class="layui-nav-item">
@@ -67,20 +67,20 @@
             <dd><a href="javascript:;" _href="../teamManagement/teamManagementPage">组织管理</a></dd>
             <dd><a href="javascript:;" _href="../teamRoleManagement/teamRoleManagementPage">组织角色管理</a></dd>
           </dl>
-        </li> 
-  		<%-- <c:forEach items="${mainModules}" var="item" varStatus="status">
+        </li>  -->
+  		<c:forEach items="${mainModules}" var="item" varStatus="status">
   			<li class="layui-nav-item">
-  			<a href="..${item.path}">${item.authName}</a>
+  			<a id="${item.path}" href="javascript:;" _href="${item.path}">${item.listname}</a>
   			<c:if test="${fn:length(item.submodules) > 0}">  
 			
 	  			<dl class="layui-nav-child"> 
 		  			<c:forEach items="${item.submodules}" var="subitem" varStatus="status"> 
-							  <dd><a href="..${subitem.path}">${subitem.authName}</a></dd>
+							  <dd><a id="${subitem.path}" href="javascript:;" _href="${subitem.path}">${subitem.listname}</a></dd>
 		  			</c:forEach>
 	  			</dl>  
 			</c:if>
 			</li> 
-  		</c:forEach> --%>			  
+  		</c:forEach>		  
   		
       </ul>
     </div>
@@ -102,6 +102,7 @@
 //JavaScript代码区域
 
 layui.use('element', function(){
+	$ = layui.jquery;//jquery
   var element = layui.element;
 	element.on('nav(test)', function(elem){
 	url = elem.find('a').attr('_href');
@@ -109,7 +110,7 @@ layui.use('element', function(){
   ifram.item(0).setAttribute('src',url);	
   });
   
-  
+  document.getElementById("${defPage}").click();
 });
 
 </script>

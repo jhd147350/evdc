@@ -15,11 +15,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import evdc.vianet.auth.entity.Authority;
+import evdc.vianet.auth.entity.ClientConfig;
+import evdc.vianet.auth.entity.ConsoleList;
 import evdc.vianet.auth.entity.Status;
 import evdc.vianet.auth.entity.TeamRole;
 import evdc.vianet.auth.entity.User;
 import evdc.vianet.auth.entity.UserRole;
 import evdc.vianet.auth.service.AuthorityService;
+import evdc.vianet.auth.service.ClientConfigService;
+import evdc.vianet.auth.service.ConsoleListService;
 import evdc.vianet.auth.service.TeamRoleService;
 import evdc.vianet.auth.service.TeamService;
 import evdc.vianet.auth.service.UserRoleService;
@@ -44,6 +48,12 @@ public class UserController {
 	@Autowired
 	@Qualifier("authorityService")
 	private AuthorityService authorityService;
+	@Autowired
+	@Qualifier("consoleListService")
+	private ConsoleListService consoleListService;
+	@Autowired
+	@Qualifier("clientConfigService")
+	ClientConfigService clientConfigService;
 	
 	@RequestMapping("/login")
 	public String login(Model m, String loginId, String password) {
@@ -63,7 +73,6 @@ public class UserController {
 		if(u!=null){
 			httpSession.setMaxInactiveInterval(30*60);
 			httpSession.setAttribute("user", u);
-			
 			return "redirect:/user/indexPage";
 		}
 		return "redirect:/user/login";
@@ -78,17 +87,21 @@ public class UserController {
 	public String indexPage(HttpSession httpSession, Model m) {
 		User u = (User) httpSession.getAttribute("user");
 		m.addAttribute("user",u);
-		List<AuthModule> mainModule = new ArrayList<AuthModule>();
-		List<Authority> mainAuth = authorityService.findAuthoritysByType("mainModule");
-		for (Authority authority : mainAuth) {
-			AuthModule authModule = new AuthModule(authority);
-			List<Authority> subAuth = authorityService.findAuthoritysByType("subModule"+authority.getId());
-			authModule.setSubmodulesByAuth(subAuth);
-			mainModule.add(authModule);
+		long userAuth = userRoleService.findUserRoleById(u.getRole()).getAuthValue();
+		List<ConsoleList> mainMeans = consoleListService.getMeansByFather(0);
+		List<MeanModule> mainModules = new ArrayList<>(); 
+		for (ConsoleList consoleList : mainMeans) {
+			if((userAuth&consoleList.getValue()) > 0){
+				MeanModule mainModule = new MeanModule(consoleList);
+				List<ConsoleList> subCl = consoleListService.getMeansByFather(consoleList.getId());
+				mainModule.setSubmodulesByConsoleList(userAuth , subCl);
+				mainModules.add(mainModule);
+			}
 		}
-		m.addAttribute("mainModules", mainModule);
+		ClientConfig clientConfig = clientConfigService.getMeansByTeamRoleId((teamService.findTeamById(u.getTeamId())).getRole());
+		m.addAttribute("mainModules", mainModules);
+		m.addAttribute("defPage", consoleListService.getMeanById(clientConfig.getConsoleMeanId()).getPath());
 		return "template";
-		
 	}
 	@RequestMapping("/userAddPage")
 	public String userAddPage(String teamId, Model m, HttpSession httpSession) {

@@ -39,5 +39,10 @@ public class AuthoritySericeImp implements AuthorityService {
 		// TODO Auto-generated method stub
 		return authorityMapper.findAllMainAuthoritys();
 	}
+	@Override
+	public Authority findAuthById(long id) {
+		// TODO Auto-generated method stub
+		return authorityMapper.findAuthById(id);
+	}
 
 }

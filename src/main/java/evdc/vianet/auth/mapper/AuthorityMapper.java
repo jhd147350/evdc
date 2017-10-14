@@ -23,4 +23,6 @@ public interface AuthorityMapper {
 	List<Authority> findAuthoritysByType(String type);
 	@Select("select * from " + Authority.TABLE_NAME+" where fatherAuthId='0'")
 	List<Authority> findAllMainAuthoritys();
+	@Select("SELECT * FROM "+Authority.TABLE_NAME+" where id =#{id}")
+	Authority findAuthById(@Param("id") long id);
 }
