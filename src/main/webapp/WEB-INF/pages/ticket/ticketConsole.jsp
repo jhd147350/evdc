@@ -207,7 +207,7 @@
                   data: {
                   	"keyword": "%"+keyword+"%", "service": serviceType, "severity": severity, "status": ticketStatus
                   },
-                  timeout: 1000,  
+                  timeout: 10000,  
                   cache: false,     
                	}).done(function(data) {
                		$('#ticketNumSpan').text("共有工单："+data.length+" 条");

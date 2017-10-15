@@ -1,5 +1,7 @@
 package evdc.vianet.ticket.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -210,12 +212,12 @@ public class TicketController {
 			         String fileName = multipartFile.getOriginalFilename();   //原文件名
 			         String serFileName = df.format(new Date())+fileName;
 			         MultipartFile mpf = request.getFile(str);
-			         /*if(ftpServer.init()) {
+			         if(ftpServer.init()) {
 				         System.out.println("开始上传:"+serFileName);
 			        	 InputStream input = mpf.getInputStream();
 			        	 ftpServer.execute(ftpServer.getMethod("UPLOAD"), serFileName, input, null);
 			        	 
-			         }*/
+			         }
 			         status.setStatus(0);
 		        	 status.setTicketFilePath(serFileName);
 		        	 status.setFileName(fileName);
@@ -224,20 +226,20 @@ public class TicketController {
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} /*catch (IOException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 		return status;	
 	}
 	@RequestMapping(value="/deleteTicketFile",method=RequestMethod.POST)
 	@ResponseBody
 	public Status deleteTicketFile(String serFileName) {
 		Status status = new Status();
-		/*if(ftpServer.init()) {
+		if(ftpServer.init()) {
 			ftpServer.execute(ftpServer.getMethod("DELETE"), serFileName, null, null);
 			System.out.println("删除成功"+serFileName);
-		}*/
+		}
 		status.setStatus(0);
 		return status;		
 	}

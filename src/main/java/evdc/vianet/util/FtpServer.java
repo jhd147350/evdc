@@ -1,16 +1,26 @@
 package evdc.vianet.util;
 
-import java.io.File;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 
-import org.apache.commons.net.ftp.FTPClient;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPSClient;
 import org.apache.commons.net.ftp.FTPReply;
+import org.apache.commons.net.ftp.FTPSClient;
 import org.apache.commons.net.ftp.FTPFile;
 
 /**
@@ -28,20 +38,12 @@ public class FtpServer {
 	private String username; // FTP登录账号  
 	private String password; // FTP登录密码  
 	private String path; // FTP服务器保存目录  
-	FTPClient ftp;
+	private String certPath;
+	private String certPasswd;
+	FTPSClient ftp;
 	public FtpServer() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
-
-	public FtpServer(String url, int port, String username, String password, String path, FTPClient ftp) {
-		super();
-		this.url = url;
-		this.port = port;
-		this.username = username;
-		this.password = password;
-		this.path = path;
-		this.ftp = ftp;
 	}
 
 	public String getUrl() {
@@ -84,31 +86,58 @@ public class FtpServer {
 		this.path = path;
 	}
 	
-	public FTPClient getFtp() {
+	public FTPSClient getFtp() {
 		return ftp;
 	}
 
-	public void setFtp(FTPClient ftp) {
+	public void setFtp(FTPSClient ftp) {
 		this.ftp = ftp;
 	}
+	
+
+	public String getCertPath() {
+		return certPath;
+	}
+
+	public void setCertPath(String certPath) {
+		this.certPath = certPath;
+	}
+	
+	public String getCertPasswd() {
+		return certPasswd;
+	}
+
+	public void setCertPasswd(String certPasswd) {
+		this.certPasswd = certPasswd;
+	}
+
 	/**
-	 * 初始化FTPClient对象
+	 * 初始化FTPSClient对象
 	 */
 	public boolean init() {
 		boolean success = false;  
-        ftp = new FTPClient();  
-        ftp.setControlEncoding("UTF-8");  
+        ftp = new FTPSClient("SSL");  
+        ftp.setControlEncoding("UTF-8"); 
+        ftp.setKeyManager(getKeyManager());
+        ftp.setTrustManager(getTrustManager());
         try {  
             int reply;  
             ftp.connect(url, port);// 连接FTP服务器  
-            // 如果采用默认端口，可以使用ftp.connect(url)的方式直接连接FTP服务器  
+            // 如果采用默认端口，可以使用ftp.connect(url)的方式直接连接FTP服务器
+            ftp.enterLocalPassiveMode();
+            ftp.setFileTransferMode(FTP.STREAM_TRANSFER_MODE);  
+            ftp.setConnectTimeout(500000);
+            ftp.execPROT("P");
+            ftp.execPBSZ(0);
             ftp.login(username, password);// 登录  
-            reply = ftp.getReplyCode();  
+            reply = ftp.getReplyCode(); 
             if (!FTPReply.isPositiveCompletion(reply)) {  
-                ftp.disconnect();  
+                ftp.disconnect();
+                System.out.println("连接失败");
                 return success;  
-            }  
-            ftp.setFileType(FTPClient.BINARY_FILE_TYPE);  
+            } 
+            ftp.setFileType(FTPSClient.BINARY_FILE_TYPE);
+            System.out.println(ftp.listFiles().length);
             ftp.makeDirectory(path);  
             ftp.changeWorkingDirectory(path);  
             success = true;  
@@ -123,9 +152,8 @@ public class FtpServer {
 	protected boolean uploadFile(String filename, InputStream fileInputStream){  
 		boolean success = false;
         try {  
-            ftp.storeFile(filename, fileInputStream);  
-            fileInputStream.close();    
-            success = true;  
+            success = ftp.storeFile(filename, fileInputStream);  
+            fileInputStream.close();       
         } catch (IOException e) {  
             e.printStackTrace();  
         }  
@@ -157,8 +185,9 @@ public class FtpServer {
 	protected boolean deleteFile(String filename){  
 		boolean success = false;
         try {  
-        	ftp.dele(filename);
-        	success = true; 
+        	if(ftp.dele(filename)>0) {
+        		success = true;
+        	}
         } catch (IOException e) {  
             e.printStackTrace();  
         }
@@ -233,4 +262,73 @@ public class FtpServer {
         	 * *//*
         }
     }  */
+    
+	private KeyManager getKeyManager() {
+    	  KeyStore key_ks = null;
+    	  KeyManager[] km = null;
+		try {
+			key_ks = KeyStore.getInstance("jks");
+			String p = this.getClass().getResource("/").getPath();
+			System.out.println(p);
+			key_ks.load(new FileInputStream(p+certPath), certPasswd.toCharArray());
+			
+			KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory
+					.getDefaultAlgorithm());
+
+			kmf.init(key_ks, certPasswd.toCharArray());
+			
+			km = kmf.getKeyManagers();
+    	  	System.out.println("km len: " + km.length);
+		} catch (KeyStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnrecoverableKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CertificateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	  return km[0];
+    }
+    private TrustManager getTrustManager() {
+    	TrustManager[] tm = null;
+    	try {
+	  	  	KeyStore trust_ks = KeyStore.getInstance("jks");
+		  	String p = this.getClass().getResource("/").getPath();
+			System.out.println(p);
+			trust_ks.load(new FileInputStream(p+certPath), certPasswd.toCharArray());
+	  	  
+		  	TrustManagerFactory tf = TrustManagerFactory
+		  	    .getInstance(TrustManagerFactory.getDefaultAlgorithm());
+		  	tf.init(trust_ks);
+		  	tm = tf.getTrustManagers();
+		  	System.out.println("tm len: " + tm.length);  
+	    } catch (KeyStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CertificateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+  	  return tm[0];
+  	 } 	 
 }
