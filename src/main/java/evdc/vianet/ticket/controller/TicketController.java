@@ -1,5 +1,7 @@
 package evdc.vianet.ticket.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,9 +27,13 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import evdc.vianet.auth.entity.Authority;
+import evdc.vianet.auth.entity.ClientConfig;
 import evdc.vianet.auth.entity.Status;
 import evdc.vianet.auth.entity.User;
 import evdc.vianet.auth.service.AuthorityService;
+import evdc.vianet.auth.service.ClientConfigService;
+import evdc.vianet.auth.service.TeamRoleService;
+import evdc.vianet.auth.service.TeamService;
 import evdc.vianet.auth.service.UserRoleService;
 import evdc.vianet.auth.service.UserService;
 import evdc.vianet.ticket.entity.Ticket;
@@ -61,31 +67,31 @@ public class TicketController {
 	@Autowired
 	@Qualifier("ticketAttachmentService")
 	TicketAttachmentService ticketAttachmentService;
+	@Autowired
+	@Qualifier("clientConfigService")
+	ClientConfigService clientConfigService;
+	@Autowired
+	@Qualifier("teamService")
+	TeamService teamService;
 	
 	private User u ;
 	//权限判断
 	@RequestMapping("/ticketConsole")
 	public String ticketConsole(Model m, HttpSession httpSession) {
 		u = (User) httpSession.getAttribute("user");
-		List<Authority> ticketFindAuthoritys = authorityService.findAuthoritysByType("ticketFind");
-		List<Authority> authoritys = new ArrayList<Authority>();
-		for (Authority authority : ticketFindAuthoritys) {
-			if(userRoleService.findUserRoleById(u.getRole()).getAuthValue()%authority.getAuthValue()==0) {
-				authoritys.add(authority);
-			}
-		}
 		
+		ClientConfig clientConfig = clientConfigService.getMeansByTeamRoleId((teamService.findTeamById(u.getTeamId())).getRole());
+		String[] selects = clientConfig.getTicketselectId().split(";");
+
+		List<Authority> authoritys = new ArrayList<Authority>();
+		for (String sele : selects) {
+			Authority authority = authorityService.findAuthById(Integer.parseInt(sele));
+			authoritys.add(authority);
+		}
 		m.addAttribute("ticketServices", ticketSerService.findAllTicketService());
 		List<Ticket> tickets;
-		
-		int methods = authoritys.size();
-		if(methods==1) {
-			tickets = ticketService.findAllTicketsBySubmitTeamAndKeyword(u.getTeamId(), ".*", ".*", ".*", "");
-		}else {
-			tickets = ticketService.findAllTicketsBySubscibeTeamAndKeyword(u.getTeamId(), ".*", ".*", ".*", "");
-		}
 		m.addAttribute("authoritys", authoritys);
-		m.addAttribute("tickets", tickets);
+		//m.addAttribute("tickets", tickets);
 		return "ticket/ticketConsole";
 	}
 	
@@ -206,12 +212,12 @@ public class TicketController {
 			         String fileName = multipartFile.getOriginalFilename();   //原文件名
 			         String serFileName = df.format(new Date())+fileName;
 			         MultipartFile mpf = request.getFile(str);
-			         /*if(ftpServer.init()) {
+			         if(ftpServer.init()) {
 				         System.out.println("开始上传:"+serFileName);
 			        	 InputStream input = mpf.getInputStream();
 			        	 ftpServer.execute(ftpServer.getMethod("UPLOAD"), serFileName, input, null);
 			        	 
-			         }*/
+			         }
 			         status.setStatus(0);
 		        	 status.setTicketFilePath(serFileName);
 		        	 status.setFileName(fileName);
@@ -220,20 +226,20 @@ public class TicketController {
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} /*catch (IOException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 		return status;	
 	}
 	@RequestMapping(value="/deleteTicketFile",method=RequestMethod.POST)
 	@ResponseBody
 	public Status deleteTicketFile(String serFileName) {
 		Status status = new Status();
-		/*if(ftpServer.init()) {
+		if(ftpServer.init()) {
 			ftpServer.execute(ftpServer.getMethod("DELETE"), serFileName, null, null);
 			System.out.println("删除成功"+serFileName);
-		}*/
+		}
 		status.setStatus(0);
 		return status;		
 	}
@@ -257,7 +263,7 @@ public class TicketController {
 		List<Authority> ticketFindAuthoritys = authorityService.findAuthoritysByType("ticketFind");
 		List<Authority> authoritys = new ArrayList<Authority>();
 		for (Authority authority : ticketFindAuthoritys) {
-			if(userRoleService.findUserRoleById(u.getRole()).getAuthValue()%authority.getAuthValue()==0) {
+			if((userRoleService.findUserRoleById(u.getRole()).getAuthValue()&authority.getAuthValue())>0) {
 				authoritys.add(authority);
 			}
 		}

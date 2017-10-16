@@ -64,7 +64,7 @@ public class TeamServiceImp implements TeamService {
 		List<Authority> allAuth = authorityService.findAllMainAuthoritys();
 		
 		for (Authority authority : allAuth) {
-			if(teamAuthValue%authority.getAuthValue()==0){
+			if((teamAuthValue&authority.getAuthValue())>0){
 				teamAuths.add(authority);
 			}
 		}

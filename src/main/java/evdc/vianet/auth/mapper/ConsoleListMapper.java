@@ -10,4 +10,6 @@ public interface ConsoleListMapper {
 	List<ConsoleList> findMainMeans();
 	@Select("select * from " + ConsoleList.TABLE_NAME + " where father=#{id}")
 	List<ConsoleList> findMeansByFather(@Param("id") long id);
+	@Select("select * from " + ConsoleList.TABLE_NAME + " where id=#{id}")
+	ConsoleList findMeanById(@Param("id") long id);
 }

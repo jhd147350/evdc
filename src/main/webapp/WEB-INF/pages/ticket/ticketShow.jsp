@@ -223,7 +223,7 @@
               data: {
               	"serFileName": deleteFileName
               },
-              timeout: 1000,  
+              timeout: 10000,  
               cache: false,     
        		}).done(function(data) { 
        		if(data.status==0){

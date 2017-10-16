@@ -82,7 +82,7 @@ public class UserServiceImp implements UserService {
 		List<Authority> allAuth = authorityMapper.findAllMainAuthoritys();
 		
 		for (Authority authority : allAuth) {
-			if(userAuthValue%authority.getAuthValue()==0){
+			if((userAuthValue&authority.getAuthValue())>0){
 				userAuths.add(authority);
 			}
 		}

@@ -105,7 +105,7 @@
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <button class="layui-btn" onclick="ticket_sreach(this,'1')"><i class="layui-icon">&#xe615;</i></button>
+                        <button id="ticketSreachBut" class="layui-btn" onclick="ticket_sreach(this,'1')"><i class="layui-icon">&#xe615;</i></button>
                     </div>
                   </div>
                 
@@ -144,7 +144,7 @@
                     </tr>
                 </thead>
                 <tbody id="ticketList"> 
-                    <c:if test="${tickets==null || fn:length(tickets) == 0}"> 
+                    <%-- <c:if test="${tickets==null || fn:length(tickets) == 0}"> 
                     	<%int cloms = 7;%> 
 						<c:if test="${fn:length(authoritys) > 1}">  
 								  <%cloms = 9; %>
@@ -166,7 +166,7 @@
 						</c:if> 	
 					    
 					  </tr>  
-					</c:forEach>
+					</c:forEach> --%>
                 </tbody>
             </table>
 
@@ -180,11 +180,13 @@
 			var form = layui.form;
               lement = layui.element;//面包导航
               layer = layui.layer;//弹出层
+              $('#ticketSreachBut').click();
             });
             
             /*查询*/
             function ticket_sreach(obj,id){
-            	
+            	obj.disabled=true;
+            	obj.setAttribute("class" , "layui-btn layui-btn-disabled");
             	var ticketList = document.getElementById("ticketList");
             	
             	var n = ticketList.firstChild;
@@ -205,7 +207,7 @@
                   data: {
                   	"keyword": "%"+keyword+"%", "service": serviceType, "severity": severity, "status": ticketStatus
                   },
-                  timeout: 1000,  
+                  timeout: 10000,  
                   cache: false,     
                	}).done(function(data) {
                		$('#ticketNumSpan').text("共有工单："+data.length+" 条");
@@ -235,6 +237,8 @@
                				}
                				$(ticketList).append($tr);
                		})
+               		obj.disabled=false;
+               		obj.setAttribute("class" , "layui-btn");
                   }); 
             }
              /*查看工单详情 */

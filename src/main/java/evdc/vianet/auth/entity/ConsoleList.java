@@ -6,7 +6,7 @@ package evdc.vianet.auth.entity;
  * 2017年10月11日下午5:06:46
  */
 public class ConsoleList {
-	public static final String TABLE_NAME = "auth_authority";
+	public static final String TABLE_NAME = "console_list";
 	private long id;
 	private String listname;
 	private long value;
@@ -16,6 +16,16 @@ public class ConsoleList {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	public ConsoleList(long id, String listname, long value, long father, String path) {
+		super();
+		this.id = id;
+		this.listname = listname;
+		this.value = value;
+		this.father = father;
+		this.path = path;
+	}
+
 	public long getId() {
 		return id;
 	}
