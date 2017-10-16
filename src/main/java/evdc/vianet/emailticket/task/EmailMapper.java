@@ -18,7 +18,10 @@ public interface EmailMapper {
 
 	// TODO long 类型默认为0
 	@Select("select * from " + Email.TABLE_NAME + " where ticketId=0 limit #{arg0},#{arg1}")
-	List<Email> selectAllUnhandledEmail(long page, long limit);
+	List<Email> selectAllUnhandledEmail(long rowsOffset, long limit);
+	
+	@Select("select * from " + Email.TABLE_NAME + " where ticketId=#{id}")
+	List<Email> selectAllEmailsByTicketId(long id);
 
 	@Select("SELECT count(*) FROM " + Email.TABLE_NAME + " where ticketId=0")
 	long countAllUnhandledEmail();
@@ -35,5 +38,24 @@ public interface EmailMapper {
 
 	@Select("select updateDate from " + EmailAccount.TABLE_NAME + " where id=#{id}")
 	Timestamp selectTimeStampFromEmailAccountById(long id);
+	
+	
+	
+	
+	//------------email_ticket-----------------
+	
 
+	@Insert("insert into " + EmailTicket.TABLE_NAME
+			+ " (`title`,`client`,`status`,`timestamp`,`service`) values(#{title},#{client},#{status},#{timestamp},#{service})")
+	int insertEmailTicket(EmailTicket e);
+	
+	
+	@Select("select * from " + EmailTicket.TABLE_NAME + " limit #{arg0},#{arg1}")
+	List<EmailTicket> selectAllEmailTicket(long rowsOffset, long limit);
+	
+	@Select("SELECT count(*) FROM " + EmailTicket.TABLE_NAME)
+	long countAllEmailTicket();
+	
+	@Select("select * from " + EmailTicket.TABLE_NAME + " where id=#{id}")
+	EmailTicket selectEmailTicketById(long id);
 }

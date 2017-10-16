@@ -8,9 +8,9 @@
 <%@ include file="../global/layui_css.jsp"%>
 </head>
 <body>
-	<table id="table1" class="layui-table"
-		lay-data="{url:'data', id:'test',response : {statusCode : 200}, page:true, limits:[20,30,40,50,60], limit:20}"
-		lay-filter="filter1">
+	<table id="table2" class="layui-table"
+		lay-data="{url:'emaildata', id:'test',response : {statusCode : 200}, page:true, limits:[20,30,40,50,60], limit:20}"
+		lay-filter="email">
 		<thead>
 			<tr>
 				<th lay-data="{field:'id', width:80, sort: true}">ID</th>
@@ -18,11 +18,11 @@
 				<th lay-data="{field:'subject', width:600}">主题</th>
 				
 				<th
-					lay-data="{fixed: 'right', width:160, align:'center', toolbar: '#toolbar1'}"></th>
+					lay-data="{fixed: 'right', width:160, align:'center', toolbar: '#emailtoolbar'}"></th>
 			</tr>
 		</thead>
 	</table>
-	<script type="text/html" id="toolbar1">
+	<script type="text/html" id="emailtoolbar">
     <a class="layui-btn layui-btn-mini" lay-event="detail">查看</a>
 	<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
 	</script>
@@ -35,8 +35,7 @@
 			var table = layui.table;
 			var $ = layui.jquery;
 			//监听工具条
-			table.on('tool(filter1)', function(obj) {
-				console.log('table1');
+			table.on('tool(email)', function(obj) {
 				var data = obj.data;
 				var teamId = data.id;
 				var teamName = data.name;
