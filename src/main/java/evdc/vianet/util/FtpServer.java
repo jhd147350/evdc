@@ -18,9 +18,9 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPSClient;
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
-import org.apache.commons.net.ftp.FTPSClient;
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 
 /**
@@ -40,7 +40,7 @@ public class FtpServer {
 	private String path; // FTP服务器保存目录  
 	private String certPath;
 	private String certPasswd;
-	FTPSClient ftp;
+	FTPClient ftp;
 	public FtpServer() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -86,11 +86,11 @@ public class FtpServer {
 		this.path = path;
 	}
 	
-	public FTPSClient getFtp() {
+	public FTPClient getFtp() {
 		return ftp;
 	}
 
-	public void setFtp(FTPSClient ftp) {
+	public void setFtp(FTPClient ftp) {
 		this.ftp = ftp;
 	}
 	
@@ -112,14 +112,12 @@ public class FtpServer {
 	}
 
 	/**
-	 * 初始化FTPSClient对象
+	 * 初始化FTPClient对象
 	 */
 	public boolean init() {
 		boolean success = false;  
-        ftp = new FTPSClient("SSL");  
+        ftp = new FTPClient();  
         ftp.setControlEncoding("UTF-8"); 
-        ftp.setKeyManager(getKeyManager());
-        ftp.setTrustManager(getTrustManager());
         try {  
             int reply;  
             ftp.connect(url, port);// 连接FTP服务器  
@@ -127,8 +125,6 @@ public class FtpServer {
             ftp.enterLocalPassiveMode();
             ftp.setFileTransferMode(FTP.STREAM_TRANSFER_MODE);  
             ftp.setConnectTimeout(500000);
-            ftp.execPROT("P");
-            ftp.execPBSZ(0);
             ftp.login(username, password);// 登录  
             reply = ftp.getReplyCode(); 
             if (!FTPReply.isPositiveCompletion(reply)) {  
@@ -136,7 +132,7 @@ public class FtpServer {
                 System.out.println("连接失败");
                 return success;  
             } 
-            ftp.setFileType(FTPSClient.BINARY_FILE_TYPE);
+            ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
             System.out.println(ftp.listFiles().length);
             ftp.makeDirectory(path);  
             ftp.changeWorkingDirectory(path);  
