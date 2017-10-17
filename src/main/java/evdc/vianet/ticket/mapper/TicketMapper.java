@@ -19,7 +19,7 @@ public interface TicketMapper {
 
 	@Insert("insert into " + Ticket.TABLE_NAME
 			+ " (`source`,`title`,`description`,`severity`,`status`,`serviceId`,`submitUserId`,`submitTeamId`,`assignUserId`,`assignTeamId`,`satisfation`,`updateUserId`,`updateDate`)"
-			+ " values(#{t.source},#{t.title},#{t.description},#{t.severity},#{t.status},#{t.serviceId},#{t.submitUserId},#{t.submitTeamId},#{t.assignUserId},#{t.assignTeamId},#{t.satisfation},#{t.updateUserId},#{t.updateDate})")
+			+ " values(#{t.source},#{t.title},#{t.description},#{t.severity},#{t.status},#{t.serviceId},#{t.submitUserId},#{t.submitTeamId},#{t.assignUserId},#{t.assignTeamId},#{t.satisfation},#{t.updateUserId},#{t.submitDate})")
 	@Options(useGeneratedKeys = true, keyProperty = "t.id")
 	int insertTicket(@Param("t") Ticket t);
 	

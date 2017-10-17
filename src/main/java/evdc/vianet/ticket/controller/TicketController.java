@@ -5,10 +5,12 @@ import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
+import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpSession;
 
@@ -32,10 +34,12 @@ import evdc.vianet.auth.entity.Status;
 import evdc.vianet.auth.entity.User;
 import evdc.vianet.auth.service.AuthorityService;
 import evdc.vianet.auth.service.ClientConfigService;
-import evdc.vianet.auth.service.TeamRoleService;
+
 import evdc.vianet.auth.service.TeamService;
 import evdc.vianet.auth.service.UserRoleService;
 import evdc.vianet.auth.service.UserService;
+
+import evdc.vianet.shift.service.ShiftService;
 import evdc.vianet.ticket.entity.Ticket;
 import evdc.vianet.ticket.service.TicketAttachmentService;
 import evdc.vianet.ticket.service.TicketSerService;
@@ -74,6 +78,7 @@ public class TicketController {
 	@Qualifier("teamService")
 	TeamService teamService;
 	
+	
 	private User u ;
 	//权限判断
 	@RequestMapping("/ticketConsole")
@@ -89,9 +94,7 @@ public class TicketController {
 			authoritys.add(authority);
 		}
 		m.addAttribute("ticketServices", ticketSerService.findAllTicketService());
-		List<Ticket> tickets;
 		m.addAttribute("authoritys", authoritys);
-		//m.addAttribute("tickets", tickets);
 		return "ticket/ticketConsole";
 	}
 	
@@ -248,6 +251,8 @@ public class TicketController {
 	@ResponseBody
 	public Status createTicket(HttpSession httpSession, String title, String description, String serviceType, String severity, @RequestParam(value = "fileName[]")String[] fileName, @RequestParam(value = "serFileName[]")String[] serFileName) {
 		u = (User) httpSession.getAttribute("user");
+		
+		
 		long ticketId = ticketService.createTicket("web", title, description, serviceType, severity, u.getId(), u.getTeamId());
 		for(int i = 0; i < fileName.length-1; i++){
 			ticketAttachmentService.addTicketAttachmentService(ticketId, 0, null, serFileName[i], fileName[i]);

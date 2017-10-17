@@ -19,13 +19,13 @@
     
     <body>
         <div class="x-body">
-            <form action="./createTicket" class="layui-form layui-form-pane" method="POST">
+            <form class="layui-form layui-form-pane">
                 <div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">
                         标题
                     </label>
                     <div class="layui-input-block">
-                        <input type="text" id="L_title" name="title" required lay-verify=""
+                        <input type="text" id="L_title" name="title" lay-verify="required"
                         autocomplete="off" class="layui-input">
                     </div>
                 </div>
@@ -90,13 +90,7 @@
             </div>
                 <div class="layui-form-item"> 
                     <input type="submit" class="layui-btn" lay-filter="add" lay-submit="" value="提交">
-                </div>
-                <!-- 文件上传 -->
-                <!-- <div id="fileNames" hidden>
-                </div>
-                <div id="serFileNames" hidden>
-                </div> -->
-                
+                </div>        
             </form>
             
                       
@@ -198,7 +192,7 @@
 		          ,'<td id="uploadStatus">正在上传</td>'
 		          ,'<td>'
 		          ,'<div>'
-		            ,'<button  serFileName="" class="layui-btn layui-btn-mini layui-btn-danger demo-delete" >删除</button>'
+		            ,'<input lay-filter="deleteFile"  serFileName="" class="layui-btn layui-btn-mini layui-btn-danger demo-delete" value="删除" />'
 		          ,'</div>'
 		            ,'</td>'
 		        ,'</tr>'].join(''));
@@ -215,7 +209,7 @@
               data: {
               	"serFileName": deleteFileName
               },
-              timeout: 1000,  
+              timeout: 50000,  
               cache: false,     
        		}).done(function(data) { 
        		if(data.status==0){

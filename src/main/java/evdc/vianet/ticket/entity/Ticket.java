@@ -115,7 +115,7 @@ public class Ticket {
 		return assignTeamId;
 	}
 	public void setAssignTeamId(long assignTeamId) {
-		assignTeamId = assignTeamId;
+		this.assignTeamId = assignTeamId;
 	}
 	public long getSatisfation() {
 		return satisfation;
