@@ -2,19 +2,26 @@ package evdc.vianet.ticket.entity;
 
 import java.sql.Timestamp;
 
+
 /**
- * @author jaden
- *
- * 2017年9月12日下午4:28:24
+
+ * @ClassName: TicketSubscribeTeam
+
+ * @Description: TODO
+
+ * @author: jaden
+
+ * @date: 2017年10月18日 上午9:35:24
+
+
  */
-public class TicketSubscibeTeam {
-	public static final String TABLE_NAME="ticket_subscibe_team";
+public class TicketSubscribeTeam {
+	public static final String TABLE_NAME="ticket_subscribe_team";
 	private long id;
 	private long ticketId;
-	private long userId;
-	private long subscibeTeamId;
+	private long subscribeTeamId;
 	private Timestamp timestamp;
-	public TicketSubscibeTeam() {
+	public TicketSubscribeTeam() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -30,17 +37,11 @@ public class TicketSubscibeTeam {
 	public void setTicketId(long ticketId) {
 		this.ticketId = ticketId;
 	}
-	public long getUserId() {
-		return userId;
+	public long getSubscribeTeamId() {
+		return subscribeTeamId;
 	}
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
-	public long getSubscibeTeamId() {
-		return subscibeTeamId;
-	}
-	public void setSubscibeTeamId(long subscibeTeamId) {
-		this.subscibeTeamId = subscibeTeamId;
+	public void setSubscribeTeamId(long subscribeTeamId) {
+		this.subscribeTeamId = subscribeTeamId;
 	}
 	public Timestamp getTimestamp() {
 		return timestamp;

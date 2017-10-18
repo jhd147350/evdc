@@ -31,9 +31,6 @@ public class Ticket {
 	 * @author jhd147350
 	 *
 	 */
-	public enum Status {
-		New, In_Process, Resolved, Closed;
-	}
 
 	private long id;
 	private String source;

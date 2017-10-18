@@ -26,8 +26,11 @@
                         标题
                     </label>
                     <div class="layui-input-block">
-                        <input type="text" id="L_title" name=""
-                        autocomplete="off" class="layui-input" disabled="disabled" value="${ticket.title}">
+	                    <label class="layui-form-label">
+	                        ${ticket.title}
+	                    </label>
+                        <%-- <input type="text" id="L_title" name=""
+                        autocomplete="off" class="layui-input" disabled="disabled" value="${ticket.title}"> --%>
                     </div>
                 </div>
                 
@@ -36,24 +39,10 @@
 	                        描述
 	                </label>
                     <div class="layui-input-block">
-                        <textarea name="" class="layui-textarea" disabled="disabled">${ticket.description}</textarea>
+                        
+                        <label class="layui-form-label">${ticket.description}</label>
                     </div>     
                </div>
-		  		<!-- <div class="layui-upload">
-						  <input type="button" class="layui-btn layui-btn-normal" id="addFileList" value="选择多文件"/> 
-						  <div class="layui-upload-list">
-						    <table class="layui-table">
-						      <thead>
-						        <th>文件名</th>
-						        <th>大小</th>
-						        <th>状态</th>
-						        <th>操作</th>
-						      </thead>
-						      <tbody id="demoList"></tbody>
-						    </table>
-						  </div>
-						 
-				</div>  -->
                <div class="layui-form-item">
                <div class="layui-inline">
 		                <label class="layui-form-label">
@@ -61,10 +50,10 @@
 		                </label>        
 	                    <div class="layui-input-block">
 		                    <select id="ticketStatus" lay-verify="required" name="cid" value="${ticket.status}" disabled="true">
-			                    <option value="New">新建</option>
-			                    <option value="In_Process">已受理</option>
-			                    <option value="Resolved">已解决</option>
-			                    <option value="Closed">已关闭</option>                                
+			                    <option id="ticketStatusNew" value="New">新建</option>
+			                    <option id="ticketStatusIn_Process" value="In_Process">已受理</option>
+			                    <option id="ticketStatusResolved" value="Resolved">已解决</option>
+			                    <option id="ticketStatusClosed" value="Closed">已关闭</option>                                
 		                    </select>        
 	                    </div>
 	           </div>
@@ -75,7 +64,7 @@
                    <div class="layui-input-block">
                             <select id="serviceType" lay-filter="serviceType" name="serviceType" value="${ticket.serviceId}">	
                                     <c:forEach items="${ticketServices}" var="item" varStatus="status">  
-										<option name="ticketService[]" value="${item.id}" > ${item.name}</option>
+										<option id="serviceType${item.id}" name="ticketService[]" value="${item.id}" > ${item.name}</option>
 									</c:forEach>
                             </select>
                     </div>
@@ -88,10 +77,10 @@
                    
                         <div class="layui-input-block">
                             <select id="severity" lay-filter="severity" name="severity" value="${ticket.severity}">
-                                    <option value="Sev1">1-严重</option>
-                                    <option value="Sev2">2-高级</option>
-                                    <option value="Sev3">3-一般</option>
-                                    <option value="Sev4">4-最低</option>
+                                    <option id="severitySev1" value="Sev1">1-严重</option>
+                                    <option id="severitySev2" value="Sev2">2-高级</option>
+                                    <option id="severitySev3" value="Sev3">3-一般</option>
+                                    <option id="severitySev4" value="Sev4">4-最低</option>
                             </select>
                         </div>
                     </div>
@@ -101,14 +90,48 @@
                 </div>
                 
             </form>
+            <div class="layui-form layui-form-pane">
+            <div class="layui-form-item"> 
             <div class="layui-inline">
-            	<button id="changeTicketStatus" class="layui-btn" lay-filter="changeTicketStatus" lay-submit="">状态更改</button>
+            	<button id="changeTicketStatus" class="layui-btn" lay-filter="changeTicketStatus">${changeTicketStatus}</button>
             </div>
             <div class="layui-inline">
-            	<button id="subscribeTicket" class="layui-btn" lay-filter="subscribeTicket" onclick="ticket_subscribe(this)" lay-submit="">订阅</button>          
+            	<button id="subscribeTicket" class="layui-btn" lay-filter="subscribeTicket" onclick="ticket_subscribe(this)">订阅</button>          
+            </div>
+            </div>
+            <!-- 评论 -->
+            <div class="layui-form-item layui-form-text"> 
+                <label for="L_content" class="layui-form-label" style="top: -2px;">
+                        评论
+                    </label>
+             <div class="layui-input-block">      
+             <div>
+                        <textarea id="L_content" name="comment" 
+                        placeholder="请输入内容" class="layui-textarea fly-editor" style="height: 260px;"></textarea>
+              </div>      
+                    </div>
+                </div>
+		         <div class="layui-upload">
+						  <input type="button" class="layui-btn layui-btn-normal" id="addFileList" value="选择多文件"/> 
+						  <div class="layui-upload-list">
+						    <table class="layui-table">
+						      <thead>
+						        <th>文件名</th>
+						        <th>大小</th>
+						        <th>状态</th>
+						        <th>操作</th>
+						      </thead>
+						      <tbody id="demoList"></tbody>
+						    </table>
+						  </div>
+	        	</div>
+	        	<div class="layui-form-item"> 
+            <div class="layui-inline">
+            	<button id="addCommment" class="layui-btn" onclick="add_comment()" >添加评论</button>
+            </div>
             </div>
         </div>                   	     	
-        
+        </div>
         <script src="../static/layui/layui.js" charset="utf-8"></script>
         <script src="../static/js/x-layui.js" charset="utf-8"></script> 
         <script> 
@@ -126,11 +149,15 @@
                     ,type: 'post' //默认post
                   }
                 })*/
-              
+              /* 设置ticket状态，等级，服务 */
+              	$("#severity${ticket.severity}").attr("selected", "selected");
+              	$("#serviceType${ticket.serviceId}").attr("selected", "selected");
+              	$("#ticketStatus${ticket.status}").attr("selected", "selected");
                 form.on('select', function (data) {
   		      	  	$('#saveChange').attr("class", "layui-btn");
   		      	  	$('#saveChange').removeAttr("disabled");	
                 });
+                form.render('select');
             
             //创建一个编辑器
             editIndex = layedit.build('L_content',{
@@ -149,7 +176,7 @@
 				]
             });           
              //监听提交
-             form.on('submit(add)', function(data){
+             function add_commment(){
                 //发异步，把数据提交给php
                 console.log("data is "+data.field.serviceType);
                 var fileNameArray = new Array();
@@ -163,11 +190,11 @@
                 fileNameArray[buttonNum]='填充';
                 serFileNameArray[buttonNum]='填充';
                 $.ajax({  
-          	url: './createTicket', 
+          	url: './addCommment', 
               type: 'POST',  
               dataType: 'json',
               data: {
-              	"title": data.field.title, "description": layedit.getContent(editIndex), "serviceType": data.field.serviceType, "severity": data.field.severity, "fileName[]": fileNameArray, "serFileName[]": serFileNameArray 
+              	"ticketId": "${ticket.id}", "comment": layedit.getContent(editIndex), "fileName[]": fileNameArray, "serFileName[]": serFileNameArray 
               },
               timeout: 1000,  
               cache: false,     
@@ -176,17 +203,19 @@
        		if(data.status==0){
 					layer.alert("提交成功", {icon: 6},function (index) {
 						var index = parent.layer.getFrameIndex(window.name);
-	                    //关闭当前frame
-	                    parent.layer.close(index);
+	                    //刷新当前frame
+	                    parent.location.reload(); 
+						buttonNum = 0;
                });
 				}else{
 					layer.alert("提交失败", {icon: 5},function (index) { 
 						layer.close(index);
+						buttonNum = 0;
 	                });
 				}	
           	 });
                 return false;
-          });                  
+          };                  
               //upload 为对象o              
               var demoListView = $('#demoList')
 		  ,uploadListIns = upload.render({
@@ -269,7 +298,6 @@
             });
           //订阅
             function ticket_subscribe (argument) {
-
            	 console.log(argument);
            	 x_admin_show('工单订阅','./ticketSubcribePage?ticketId=${ticket.id}','500','400');
             };

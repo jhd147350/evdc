@@ -46,7 +46,9 @@ public class EvdcAuthFilter extends AuthFilter {
 		//权限判断
 		UserRole userRole = userRoleService.findUserRoleById(u.getRole());
 		List<Authority> authoritys = authorityService.findAuthoritysByPath(path.split("evdc")[1]);
+		
 		if(authoritys.size()>=1){
+			System.out.println("权限值要求为："+authoritys.get(0).getAuthValue());
 			if(userRole.getAuthValue()==1||(userRole.getAuthValue()&authoritys.get(0).getAuthValue())>0){
 				return 0;
 			}else{
