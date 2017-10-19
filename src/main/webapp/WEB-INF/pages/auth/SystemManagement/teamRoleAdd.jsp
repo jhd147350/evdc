@@ -107,10 +107,10 @@
     			but.addEventListener("click", function(){
             		 //发异步，把数据提交给php
                 	var inputs = document.getElementsByName("id[]");
-                	var authValue = 1;
+                	var authValue = 0;
                 	for(var i = 0; i < inputs.length; i++){
                 		if(inputs[i].checked){
-                			authValue = authValue*(inputs[i].getAttribute("authValue"));
+                			authValue = authValue|(inputs[i].getAttribute("authValue"));
                 		}
                 	}
                 	var roleName = document.getElementById("roleName");

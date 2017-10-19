@@ -31,9 +31,6 @@ public class Ticket {
 	 * @author jhd147350
 	 *
 	 */
-	public enum Status {
-		New, In_Process, Resolved, Closed;
-	}
 
 	private long id;
 	private String source;
@@ -115,7 +112,7 @@ public class Ticket {
 		return assignTeamId;
 	}
 	public void setAssignTeamId(long assignTeamId) {
-		assignTeamId = assignTeamId;
+		this.assignTeamId = assignTeamId;
 	}
 	public long getSatisfation() {
 		return satisfation;

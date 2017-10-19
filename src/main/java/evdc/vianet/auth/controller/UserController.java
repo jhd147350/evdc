@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import evdc.vianet.auth.entity.Authority;
 import evdc.vianet.auth.entity.ClientConfig;
 import evdc.vianet.auth.entity.ConsoleList;
 import evdc.vianet.auth.entity.Status;

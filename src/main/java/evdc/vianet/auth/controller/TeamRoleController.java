@@ -64,8 +64,10 @@ public class TeamRoleController {
 		return status;
 	}
 	@RequestMapping("/teamRoleEditPage")
-	public String teamRoleEditPage(String id, Model m) {
+	public String teamRoleEditPage(HttpServletRequest req, String id, Model m) {
 		List<Authority> authoritys = authorityService.findAllMainAuthoritys();
+		req.setAttribute("authoritys", authoritys);
+		req.setAttribute("teamRole", teamRoleService.findTeamRoleById(Long.parseLong(id)));
 		m.addAttribute("authoritys", authoritys);
 		m.addAttribute("teamRole", teamRoleService.findTeamRoleById(Long.parseLong(id)));
 		return "auth/SystemManagement/teamRoleEdit";

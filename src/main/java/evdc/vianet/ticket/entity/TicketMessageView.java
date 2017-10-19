@@ -2,16 +2,14 @@ package evdc.vianet.ticket.entity;
 
 import java.sql.Timestamp;
 
-public class TicketMessage {
-	public static final String TABLE_NAME = "ticket_message";
+public class TicketMessageView {
+	public static final String TABLE_NAME = "view_ticketMessage";
 
 	/**
 	 * 消息的显示范围，确保能和客户交流的只有一个团队<br>
 	 * Client只有客户和工单受派组能看到<br>
 	 * Internal的只有发送该条消息的组能看到<br>
 	 * Shared除了客户都能看到，团队之间共享的消息
-	 * 
-	 * @author jhd147350
 	 *
 	 */
 	public enum Scope {
@@ -26,7 +24,25 @@ public class TicketMessage {
 	private String attachments;// TODO 先不急于实现
 	private Timestamp timestamp;
 	private String scope;
-	
+	private String userName;
+	private String teamName;
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getTeamName() {
+		return teamName;
+	}
+
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -89,12 +105,5 @@ public class TicketMessage {
 
 	public void setScope(String scope) {
 		this.scope = scope;
-	}
-
-	@Override
-	public String toString() {
-		return "TicketMessage [id=" + id + ", ticketId=" + ticketId + ", userId=" + userId + ", teamId=" + teamId
-				+ ", message=" + message + ", attachments=" + attachments + ", timestamp=" + timestamp + ", scope="
-				+ scope + "]";
 	}
 }

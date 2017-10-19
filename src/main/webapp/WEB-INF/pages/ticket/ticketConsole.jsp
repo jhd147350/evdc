@@ -144,29 +144,6 @@
                     </tr>
                 </thead>
                 <tbody id="ticketList"> 
-                    <%-- <c:if test="${tickets==null || fn:length(tickets) == 0}"> 
-                    	<%int cloms = 7;%> 
-						<c:if test="${fn:length(authoritys) > 1}">  
-								  <%cloms = 9; %>
-						</c:if>
-						<td colspan="<%=cloms%>">查询结果为空</td>
-					</c:if>  
-					<c:forEach items="${tickets}" var="item" varStatus="status">  
-					  <tr >  
-					    <td >${item.id}</td>  
-					    <td style="cursor:pointer" ticketId="${item.id}" onclick="ticket_show(this)">${item.title}</td>  
-					    <td>${item.service}</td>  
-					    <td>${item.severity}</td> 
-					    <td>${item.status}</td>
-					    <td>${item.updateDate}</td>
-					    <td>${item.submitUser}</td>
-					    <c:if test="${fn:length(authoritys) > 1}">  
-							<td>${item.updateUser}</td>
-							<td>${item.assignUser}</td>  
-						</c:if> 	
-					    
-					  </tr>  
-					</c:forEach> --%>
                 </tbody>
             </table>
 
@@ -224,7 +201,10 @@
                				$tr.append($td);
                				$td = $("<td>"+ticket.status+"</td>")
                				$tr.append($td);
-               				$td = $("<td>"+ticket.updateDate+"</td>")
+               				var timestamp = ticket.updateDate;
+               				var newDate = new Date();
+               				newDate.setTime(timestamp);
+               				$td = $("<td>"+newDate.toLocaleString()+"</td>")
                				$tr.append($td);
                				$td = $("<td>"+ticket.submitUser+"</td>")
                				$tr.append($td);

@@ -1,7 +1,11 @@
+<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>   
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>  
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
+<%@ page import="java.util.List" %>
+<%@ page import="evdc.vianet.auth.entity.UserRole" %>
+<%@ page import="evdc.vianet.auth.entity.Authority" %>
 <!DOCTYPE html>
 <html>
     
@@ -46,21 +50,17 @@
 										  <td colspan="4">无可用权限</td>
 										</tr>   
 										</c:if> 
-						
-										<c:forEach items="${authoritys}" var="item" varStatus="status">  
-											
-											<c:choose>
-												<c:when test="${userRole.authValue%item.authValue==0}">
-													<input name="id[]" type="checkbox" value="2" authValue="${item.authValue }" checked="checked"> ${item.authName }	
-												</c:when>
-												<c:otherwise>
-													<input name="id[]" type="checkbox" value="2" authValue="${item.authValue }"> ${item.authName }	
-												</c:otherwise>	
-											</c:choose>		
-										  <c:if test="${status.count%5==0}">
-										  	<br/>
-										  </c:if>
-										</c:forEach>
+										<%List<Authority> authoritys = (List<Authority>)request.getAttribute("authoritys");%>
+										<%UserRole userRole = (UserRole)request.getAttribute("userRole");%>
+										<%for(Authority authority : authoritys){ 
+											if((userRole.getAuthValue()&authority.getAuthValue())>0){
+											%>		
+										<input name="id[]" type="checkbox" value="2" authValue="<%=authority.getAuthName() %>" checked="checked"> <%=authority.getAuthName() %>
+											<%}else{ %>
+										<input name="id[]" type="checkbox" value="2" authValue="<%=authority.getAuthName() %>"> <%=authority.getAuthName() %>
+											<%} %>
+										<%} %>
+										
                                     </div>
                                 </td>
                             </tr>
@@ -98,10 +98,10 @@
     			but.addEventListener("click", function(){
             		 //发异步，把数据提交给php
                 	var inputs = document.getElementsByName("id[]");
-                	var authValue = 1;
+                	var authValue = 0;
                 	for(var i = 0; i < inputs.length; i++){
                 		if(inputs[i].checked){
-                			authValue = authValue*(inputs[i].getAttribute("authValue"));
+                			authValue = authValue|(inputs[i].getAttribute("authValue"));
                 		}
                 	}
                 	var roleName = document.getElementById("roleName");
