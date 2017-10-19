@@ -26,22 +26,34 @@
                         标题
                     </label>
                     <div class="layui-input-block">
-	                    <label class="layui-form-label">
-	                        ${ticket.title}
-	                    </label>
-                        <%-- <input type="text" id="L_title" name=""
-                        autocomplete="off" class="layui-input" disabled="disabled" value="${ticket.title}"> --%>
+	                    
+	                    <input type="text" id="L_title" name=""
+                        autocomplete="off" class="layui-input" disabled="disabled" value="${ticket.title}">
                     </div>
                 </div>
                 
                 <div class="layui-form-item layui-form-text">
 	                <label for="L_content" class="layui-form-label" style="top: -2px;">
 	                        描述
+	                </label>   
+                    <blockquote class="layui-elem-quote layui-quote-nm">${ticket.description}</blockquote>  
+                    <!-- <fieldset class="layui-elem-field">
+					  <legend> </legend>
+					  <div class="layui-field-box">
+					    内容区域
+					  </div>
+					</fieldset> -->
+               </div>
+               <div class="layui-form-item layui-form-text">
+	                <label for="L_content" class="layui-form-label" style="top: -2px;">
+	                        附件
 	                </label>
-                    <div class="layui-input-block">
-                        
-                        <label class="layui-form-label">${ticket.description}</label>
-                    </div>     
+                    <div class="layui-inline">
+                       <label class="layui-form-label"> <a herf="www.baidu.com">文件</a></label>
+                    </div>    
+                    <div class="layui-inline">
+                       <label class="layui-form-label"> <a herf="www.baidu.com">文件</a></label>
+                    </div>   
                </div>
                <div class="layui-form-item">
                <div class="layui-inline">
@@ -101,9 +113,22 @@
             </div>
             <!-- 评论 -->
             <div class="layui-form-item layui-form-text"> 
-                <label for="L_content" class="layui-form-label" style="top: -2px;">
-                        评论
-                    </label>
+            		<div class="layui-inline">
+	                <label class="layui-form-label">
+	                        	评论
+	                    </label>
+	                    </div>
+	                    <div id="scopes" class="layui-inline">
+		                    <div class="layui-inline">  
+		                 		<input name="scopeRadio" type="radio" value="Client" title="客户-指派组"/>
+		                 	</div> 
+		                 	<div class="layui-inline"> 
+		                 		<input name="scopeRadio" type="radio" value="Internal" title="提交组" checked/>
+		                 	</div> 
+		                 	<div class="layui-inline"> 
+		                 		<input name="scopeRadio" type="radio" value="Shared" title="支持组"/>
+		                 	</div>
+	                 	</div> 
              <div class="layui-input-block">      
              <div>
                         <textarea id="L_content" name="comment" 
@@ -130,19 +155,39 @@
             	<button id="addCommment" class="layui-btn" onclick="add_comment()" >添加评论</button>
             </div>
             </div>
+            <div class="layui-form-item layui-form-text">
+            	<c:forEach items="${ticketComments}" var="item" varStatus="status"> 
+	            	<fieldset class="layui-elem-field">
+					  <%-- <legend><p style="text-align: right; font-size:12px">${item.userName}&nbsp;${item.timestamp}</p></legend> --%>
+					  <div class="layui-field-box">
+					    ${item.message}
+					    
+                    	<p style="text-align: right; font-size:12px">${item.userName}&nbsp;${item.timestamp}</p>
+					  </div>
+					</fieldset>
+		            	<%-- <hr class="layui-bg-black">
+	                        ${item.message}
+	                    
+                    	<hr class="layui-bg-gray">
+                    	<p style="text-align: right; font-size:12px">${item.userName}&nbsp;${item.timestamp}</p> --%>
+	            </c:forEach>
+	            </div>
+	            <hr class="layui-bg-black">
+            
         </div>                   	     	
         </div>
         <script src="../static/layui/layui.js" charset="utf-8"></script>
         <script src="../static/js/x-layui.js" charset="utf-8"></script> 
         <script> 
+        //实际上传文件数
+      	var buttonNum = 0;
             layui.use(['form','layer','layedit','upload'], function(){
                 $ = layui.jquery;
               var form = layui.form
               ,layer = layui.layer
               ,layedit = layui.layedit
               ,upload = layui.upload;
-            	//实际上传文件数
-              	var buttonNum = 0;
+            	
                 /*layedit.set({
                   uploadImage: {
                     url: "./upimg.json" //接口url
@@ -173,51 +218,59 @@
 				  ,'center' //居中对齐
 				  ,'right' //右对齐
 				  ,'face' //表情
+				  
 				]
             });           
-             //监听提交
-             function add_commment(){
-                //发异步，把数据提交给php
-                console.log("data is "+data.field.serviceType);
-                var fileNameArray = new Array();
-                var serFileNameArray = new Array();
-                var fileNameInps = document.getElementsByName("fileNameArr");
-                var serFileNameInps = document.getElementsByName("serFileNameArr");
-                for(var i = 0; i < buttonNum; i++){
-                	fileNameArray[i] = fileNameInps[i].getAttribute("value");
-                	serFileNameArray[i] = serFileNameInps[i].getAttribute("value");
-                }
-                fileNameArray[buttonNum]='填充';
-                serFileNameArray[buttonNum]='填充';
-                $.ajax({  
-          	url: './addCommment', 
-              type: 'POST',  
-              dataType: 'json',
-              data: {
-              	"ticketId": "${ticket.id}", "comment": layedit.getContent(editIndex), "fileName[]": fileNameArray, "serFileName[]": serFileNameArray 
-              },
-              timeout: 1000,  
-              cache: false,     
-       		}).done(function(data) { 
-       			
-       		if(data.status==0){
+          //监听提交
+            add_comment = function commentadd(){
+               //发异步，把数据提交给php
+               var fileNameArray = new Array();
+               var serFileNameArray = new Array();
+               var fileNameInps = document.getElementsByName("fileNameArr");
+               var serFileNameInps = document.getElementsByName("serFileNameArr");
+               for(var i = 0; i < buttonNum; i++){
+               	fileNameArray[i] = fileNameInps[i].getAttribute("value");
+               	serFileNameArray[i] = serFileNameInps[i].getAttribute("value");
+               }
+               fileNameArray[buttonNum]='填充';
+               serFileNameArray[buttonNum]='填充';
+               var scopeRadio = document.getElementsByName("scopeRadio");
+               var scope;
+               for(var i=0;i<scopeRadio.length;i++){
+            	   if(scopeRadio[i].checked){
+            		   scope = scopeRadio[i].value;
+            	   }
+               }  
+               
+               $.ajax({  
+         	url: './addCommment', 
+             type: 'POST',  
+             dataType: 'json',
+             data: {
+             	"scope": scope, "ticketId": "${ticket.id}", "comment": layedit.getContent(editIndex), "fileName[]": fileNameArray, "serFileName[]": serFileNameArray 
+             },
+             timeout: 1000,  
+             cache: false,     
+      		}).done(function(data) { 
+      			
+      		if(data.status==0){
 					layer.alert("提交成功", {icon: 6},function (index) {
 						var index = parent.layer.getFrameIndex(window.name);
 	                    //刷新当前frame
-	                    parent.location.reload(); 
+	                    location.reload(); 
 						buttonNum = 0;
-               });
+              });
 				}else{
 					layer.alert("提交失败", {icon: 5},function (index) { 
 						layer.close(index);
 						buttonNum = 0;
 	                });
 				}	
-          	 });
-                return false;
-          };                  
-              //upload 为对象o              
-              var demoListView = $('#demoList')
+         	 });
+               return false;
+         };               
+         //upload 为对象o              
+         var demoListView = $('#demoList')
 		  ,uploadListIns = upload.render({
 		    elem: '#addFileList'
 		    ,url: './uploadTicketFile'
@@ -301,6 +354,8 @@
            	 console.log(argument);
            	 x_admin_show('工单订阅','./ticketSubcribePage?ticketId=${ticket.id}','500','400');
             };
+       
+          
         </script>
         <script>
         var _hmt = _hmt || [];
@@ -310,6 +365,7 @@
           var s = document.getElementsByTagName("script")[0]; 
           s.parentNode.insertBefore(hm, s);
         })();
+        var add_comment;
         </script>
     </body>
 </html>

@@ -90,6 +90,8 @@ public class UserRoleController {
 	public String userRoleEditPage(HttpSession httpSession, HttpServletRequest request, String id, Model m) {
 		u = (User)httpSession.getAttribute("user");
 		List<Authority> teamAuths = teamService.getTeamAuthsById(u.getTeamId());
+		request.setAttribute("authoritys", teamAuths);
+		request.setAttribute("userRole", userRoleService.findUserRoleById(Long.parseLong(id)));
 		m.addAttribute("authoritys", teamAuths);
 		m.addAttribute("userRole", userRoleService.findUserRoleById(Long.parseLong(id)));
 		return "auth/TeamManagement/userRoleEdit";

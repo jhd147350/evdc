@@ -38,7 +38,9 @@ import evdc.vianet.auth.service.UserRoleService;
 import evdc.vianet.auth.service.UserService;
 
 import evdc.vianet.ticket.entity.Ticket;
+import evdc.vianet.ticket.entity.TicketMessageView;
 import evdc.vianet.ticket.service.TicketAttachmentService;
+import evdc.vianet.ticket.service.TicketCommentService;
 import evdc.vianet.ticket.service.TicketSerService;
 import evdc.vianet.ticket.service.TicketService;
 import evdc.vianet.ticket.service.TicketSubscribeTeamService;
@@ -90,6 +92,9 @@ public class TicketController {
 	@Autowired
 	@Qualifier("ticketSubscribeTeamService")
 	TicketSubscribeTeamService ticketSubscribeTeamService;
+	@Autowired
+	@Qualifier("ticketCommentService")
+	TicketCommentService ticketCommentService;
 	
 	private User u ;
 	//权限判断
@@ -294,66 +299,35 @@ public class TicketController {
 	@RequestMapping(value="/ticketShowPage",method=RequestMethod.GET)
 	public String ticketShowPage(HttpSession httpSession, Model m, String ticketId) {
 		u = (User) httpSession.getAttribute("user");
-		List<Authority> ticketFindAuthoritys = authorityService.findAuthoritysByType("ticketFind");
-		List<Authority> authoritys = new ArrayList<Authority>();
-		for (Authority authority : ticketFindAuthoritys) {
-			if((userRoleService.findUserRoleById(u.getRole()).getAuthValue()&authority.getAuthValue())>0) {
-				authoritys.add(authority);
-			}
+		List<Ticket> tickets = ticketService.findAllTicketsByKeyword(".*", ".*", ".*", ticketId);
+		m.addAttribute("ticketServices", ticketSerService.findAllTicketService());
+		m.addAttribute("ticket", tickets.get(0));
+		String changeTicketStatus = "";
+		String changeTicketStatusPath = "";
+		switch (tickets.get(0).getStatus()) {
+		case "New":
+			changeTicketStatus = "受理";
+			break;
+		case "In_Process":
+			changeTicketStatus = "解决";
+			break;
+		case "Resolved":
+			changeTicketStatus = "关闭";
+			break;
+		case "Closed":
+			changeTicketStatus = "重开";
+			break;
+		default:
+			break;
 		}
-		
-		int methods = authoritys.size();
-		if(methods==1) {
-			List<Ticket> tickets = ticketService.findAllTicketsByKeyword(".*", ".*", ".*", ticketId);
-			m.addAttribute("ticketServices", ticketSerService.findAllTicketService());
-			m.addAttribute("ticket", tickets.get(0));
-			String changeTicketStatus = "";
-			String changeTicketStatusPath = "";
-			switch (tickets.get(0).getStatus()) {
-			case "NEW":
-				changeTicketStatus = "受理";
-				break;
-			case "In_Process":
-				changeTicketStatus = "解决";
-				break;
-			case "Resolved":
-				changeTicketStatus = "关闭";
-				break;
-			case "Closed":
-				changeTicketStatus = "重开";
-				break;
-			default:
-				break;
-			}
-			m.addAttribute("changeTicketStatus", changeTicketStatus);
-			m.addAttribute("changeTicketStatusPath", changeTicketStatusPath);
-			return "ticket/ticketShowCustomer";
-		}else {
-			List<Ticket> tickets = ticketService.findAllTicketsByKeyword(".*", ".*", ".*", ticketId);
-			m.addAttribute("ticketServices", ticketSerService.findAllTicketService());
-			m.addAttribute("ticket", tickets.get(0));
-			String changeTicketStatus = "";
-			String changeTicketStatusPath = "";
-			switch (tickets.get(0).getStatus()) {
-			case "New":
-				changeTicketStatus = "受理";
-				break;
-			case "In_Process":
-				changeTicketStatus = "解决";
-				break;
-			case "Resolved":
-				changeTicketStatus = "关闭";
-				break;
-			case "Closed":
-				changeTicketStatus = "重开";
-				break;
-			default:
-				break;
-			}
-			m.addAttribute("changeTicketStatus", changeTicketStatus);
-			m.addAttribute("changeTicketStatusPath", changeTicketStatusPath);
-			return "ticket/ticketShow";
-		}
+		List<TicketMessageView> ticketComments = new ArrayList<>();
+		ticketComments.addAll(ticketCommentService.getCommentsByTicketIdAndScope(Long.parseLong(ticketId), "Client"));
+		ticketComments.addAll(ticketCommentService.getCommentsByTicketIdAndScope(Long.parseLong(ticketId), "Shared"));
+		ticketComments.addAll(ticketCommentService.getCommentsByTicketIdAndteamIdAndScope(Long.parseLong(ticketId), u.getTeamId(), "Internal"));
+		m.addAttribute("changeTicketStatus", changeTicketStatus);
+		m.addAttribute("changeTicketStatusPath", changeTicketStatusPath);
+		m.addAttribute("ticketComments", ticketComments);
+		return "ticket/ticketShow";	
 	}
 	@RequestMapping(value="/ticketSubcribePage",method=RequestMethod.GET)
 	public String ticketSubcribePage(HttpSession httpSession, Model m, String ticketId) {
@@ -380,6 +354,19 @@ public class TicketController {
 			for (int i = 1; i < al; i++) {
 				ticketSubscribeTeamService.addSubscribeTeamByTicketIdAndTeamId(Long.parseLong(ticketId), Long.parseLong(addArray[i]));
 			}
+		}
+		Status status = new Status();
+		status.setStatus(0);
+		return status;
+	}
+	@RequestMapping(value="/addCommment",method=RequestMethod.POST)
+	@ResponseBody
+	public Status addCommment(HttpSession httpSession, @RequestParam(value = "fileName[]")String[] fileName, @RequestParam(value = "serFileName[]")String[] serFileName, String ticketId, String comment, String scope) {
+		u = (User) httpSession.getAttribute("user");
+		
+		long commentId = ticketCommentService.addTicketComment(Long.parseLong(ticketId), u.getId(), u.getTeamId(), comment, scope);
+		for(int i = 0; i < fileName.length-1; i++){
+			ticketAttachmentService.addTicketAttachmentService(Long.parseLong(ticketId), commentId, null, serFileName[i], fileName[i]);
 		}
 		Status status = new Status();
 		status.setStatus(0);
