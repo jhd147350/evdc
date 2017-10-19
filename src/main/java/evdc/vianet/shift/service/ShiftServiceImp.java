@@ -220,8 +220,13 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 
 			// 和循环开始日期相差多少天
 			int dayDiffToBegin = (int) ((c.getTimeInMillis() - beginDate.getTime()) / (1000 * 3600 * 24));
-			if (dayDiffToBegin < 0) {
-				break;// 跳出循环不计算这一天
+			//FIXME 这里取浮点数的目的 是因为 -0.03这种 转换成整数 会变成0
+			float dayDiffToBeginf = (float) ((c.getTimeInMillis() - beginDate.getTime()) / (1000f * 3600f * 24f));
+			System.out.println("和循环开始日期相差多少天" +dayDiffToBeginf);
+			if (dayDiffToBeginf < 0) {
+				//FIXME 之前这里是break 导致 其他天数也都忽略了  日期加一
+				c.add(Calendar.DATE, 1);
+				continue;// 跳出循环不计算这一天
 			}
 			// 计算这一天是circle的第几天根据开始日期和circle天数
 			int dayOfCircle = dayDiffToBegin % circle + 1;
@@ -253,7 +258,7 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 					myStaffP.setName(staffMapper.selectUserNameByUserId(staffP.getUserId()));
 				} else {
 					myStaffP.setId(0);
-					myStaffP.setName("");
+					myStaffP.setName("null");
 				}
 
 				myStaffsP.add(myStaffP);
@@ -265,7 +270,7 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 					myStaffS.setName(staffMapper.selectUserNameByUserId(staffS.getUserId()));
 				} else {
 					myStaffS.setId(0);
-					myStaffS.setName("");
+					myStaffS.setName("null");
 				}
 
 				myStaffsS.add(myStaffS);
@@ -294,9 +299,11 @@ public class ShiftServiceImp implements ShiftService, ShiftServiceApi {
 			boolean isPrimary) {
 		for (Staff s : staffs) {
 			if (s.getOrderOfCircle() == dayOfCircle && s.getOrderOfDay() == orderOfDay && s.isPrimary() == isPrimary) {
+				System.out.println("匹配第"+dayOfCircle+"天，第"+orderOfDay+"班次");
 				return s;
 			}
 		}
+		System.out.println("匹配第"+dayOfCircle+"天，第"+orderOfDay+"班次失败");
 		return null;
 	}
 

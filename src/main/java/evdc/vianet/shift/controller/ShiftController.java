@@ -94,7 +94,7 @@ public class ShiftController {
 		// m.addAttribute("action", "rule");
 		System.out.println(teamId);
 		shiftService.getDetailSchedulePage(teamId,true, nextWeek,"", m);
-		try {
+		/*try {
 			Calendar c=Calendar.getInstance();
 			c.set(Calendar.HOUR_OF_DAY, 20);
 			List<ViewOnDutyUser> onDutyUsersByTeamId = shiftService.getOnDutyUsersByTeamId(18,c);
@@ -104,7 +104,7 @@ public class ShiftController {
 			}
 		} catch (ScheduleException e) {
 			e.printStackTrace();
-		}
+		}*/
 		return "shift/pop/schedule-detail";
 	}
 	/**
@@ -116,7 +116,7 @@ public class ShiftController {
 		System.out.println(teamId);
 		shiftService.getDetailSchedulePage(teamId,true, nextWeek,"", m);
 		//------------这一段代码纯粹测试当前值班人员是谁---------------------
-		try {
+		/*try {
 			Calendar c=Calendar.getInstance();
 			c.set(Calendar.HOUR_OF_DAY, 20);
 			List<ViewOnDutyUser> onDutyUsersByTeamId = shiftService.getOnDutyUsersByTeamId(18,c);
@@ -126,7 +126,7 @@ public class ShiftController {
 			}
 		} catch (ScheduleException e) {
 			e.printStackTrace();
-		}
+		}*/
 		//----------------------
 		return "shift/pop/schedule-detail-week";
 	}
