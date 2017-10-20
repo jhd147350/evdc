@@ -1,19 +1,28 @@
 package evdc.vianet.ticket.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -38,6 +47,7 @@ import evdc.vianet.auth.service.UserRoleService;
 import evdc.vianet.auth.service.UserService;
 
 import evdc.vianet.ticket.entity.Ticket;
+import evdc.vianet.ticket.entity.TicketAttachment;
 import evdc.vianet.ticket.entity.TicketMessageView;
 import evdc.vianet.ticket.service.TicketAttachmentService;
 import evdc.vianet.ticket.service.TicketCommentService;
@@ -324,9 +334,26 @@ public class TicketController {
 		ticketComments.addAll(ticketCommentService.getCommentsByTicketIdAndScope(Long.parseLong(ticketId), "Client"));
 		ticketComments.addAll(ticketCommentService.getCommentsByTicketIdAndScope(Long.parseLong(ticketId), "Shared"));
 		ticketComments.addAll(ticketCommentService.getCommentsByTicketIdAndteamIdAndScope(Long.parseLong(ticketId), u.getTeamId(), "Internal"));
+		//动态按钮
 		m.addAttribute("changeTicketStatus", changeTicketStatus);
+		//动态按钮路径
 		m.addAttribute("changeTicketStatusPath", changeTicketStatusPath);
+		//评论
+		Collections.sort(ticketComments, new Comparator<TicketMessageView>() {
+			@Override
+			public int compare(TicketMessageView o1, TicketMessageView o2) {
+				// TODO Auto-generated method stub
+				return o1.getTimestamp().compareTo(o2.getTimestamp());
+			}
+		});
 		m.addAttribute("ticketComments", ticketComments);
+		//ticket附件
+		List<TicketAttachment> ticketAttachments = ticketAttachmentService.getTicketAttachmentsByTicketIdAndMessageId(Long.parseLong(ticketId), 0);
+		m.addAttribute("ticketAttachments", ticketAttachments);
+		//comment附件
+		for (TicketMessageView ticketComment : ticketComments) {
+			m.addAttribute(ticketComment.getId()+"" , ticketAttachmentService.getTicketAttachmentsByTicketIdAndMessageId(Long.parseLong(ticketId), ticketComment.getId()));
+		}
 		return "ticket/ticketShow";	
 	}
 	@RequestMapping(value="/ticketSubcribePage",method=RequestMethod.GET)
@@ -372,6 +399,27 @@ public class TicketController {
 		status.setStatus(0);
 		return status;
 	}
+	@RequestMapping(value="/ticketAttachmentDownload")
+    public ResponseEntity<byte[]> download(HttpServletRequest request,
+            String attachmentId, String attachmentName,
+            Model model)throws Exception {
+       //下载文件路径
+       String path = request.getServletContext().getRealPath("/static/");
+       System.out.println("文件目录"+path);
+       if(ftpServer.init()) {
+    	   ftpServer.execute(ftpServer.getMethod("DOWNLOAD"), attachmentId, null, path+"file/");
+       }
+       HttpHeaders headers = new HttpHeaders();  
+       //下载显示的文件名，解决中文名称乱码问题  
+       //String downloadFielName = new String(attachmentId.getBytes("UTF-8"),"iso-8859-1");
+       //通知浏览器以attachment（下载方式）打开图片
+       headers.setContentDispositionFormData("attachment", attachmentName); 
+       //application/octet-stream ： 二进制流数据（最常见的文件下载）。
+       File file = new File(path+"file/"+attachmentId);
+       headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+       return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),    
+               headers, HttpStatus.CREATED);  
+    }
 	/*
 	 *客户端显示数据
 	 *

@@ -48,12 +48,11 @@
 	                <label for="L_content" class="layui-form-label" style="top: -2px;">
 	                        附件
 	                </label>
-                    <div class="layui-inline">
-                       <label class="layui-form-label"> <a herf="www.baidu.com">文件</a></label>
-                    </div>    
-                    <div class="layui-inline">
-                       <label class="layui-form-label"> <a herf="www.baidu.com">文件</a></label>
-                    </div>   
+                    <c:forEach items="${ticketAttachments}" var="item" varStatus="status">  
+						<div class="layui-inline">
+                       		<label class="layui-form-label"> <a href="./ticketAttachmentDownload?attachmentId=${item.src}&attachmentName=${item.name}">${item.name}</a></label>
+                    	</div> 
+					</c:forEach> 									 
                </div>
                <div class="layui-form-item">
                <div class="layui-inline">
@@ -164,6 +163,16 @@
 					    
                     	<p style="text-align: right; font-size:12px">${item.userName}&nbsp;${item.timestamp}</p>
 					  </div>
+					  
+					  <c:set var="comment" value="K${item.id}"/>
+					  <c:if test='${fn:length(requestScope[fn:substringAfter(comment,"K")]) != 0}'> 
+					  	<hr class="layui-bg-gray">
+					  	<c:forEach items='${requestScope[fn:substringAfter(comment,"K")]}' var="att" varStatus="status">  
+						<div class="layui-inline">
+                       		<label class="layui-form-label"> <a href="./ticketAttachmentDownload?attachmentId=${att.src}&attachmentName=${att.name}">${att.name}</a></label>
+                    	</div> 
+						</c:forEach>
+					   </c:if>
 					</fieldset>
 		            	<%-- <hr class="layui-bg-black">
 	                        ${item.message}

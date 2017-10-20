@@ -21,7 +21,7 @@ public interface TicketMapper {
 			+ " (`source`,`title`,`description`,`severity`,`status`,`serviceId`,`submitUserId`,`submitTeamId`,`assignUserId`,`assignTeamId`,`satisfation`,`updateUserId`,`updateDate`)"
 			+ " values(#{t.source},#{t.title},#{t.description},#{t.severity},#{t.status},#{t.serviceId},#{t.submitUserId},#{t.submitTeamId},#{t.assignUserId},#{t.assignTeamId},#{t.satisfation},#{t.submitUserId},#{t.submitDate})")
 	@Options(useGeneratedKeys = true, keyProperty = "t.id")
-	int insertTicket(@Param("t") Ticket t);
+	void insertTicket(@Param("t") Ticket t);
 	
 	//根据提交组及关键字查询工单
 	@Select("select * from "
