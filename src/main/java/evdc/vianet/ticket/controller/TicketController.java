@@ -317,15 +317,18 @@ public class TicketController {
 		switch (tickets.get(0).getStatus()) {
 		case "New":
 			changeTicketStatus = "受理";
+			changeTicketStatusPath = "./changeTicketPage?method=ack&ticketId="+ticketId;
 			break;
 		case "In_Process":
 			changeTicketStatus = "解决";
+			changeTicketStatusPath = "./changeTicketPage?method=solve&ticketId="+ticketId;
 			break;
 		case "Resolved":
 			changeTicketStatus = "关闭";
 			break;
 		case "Closed":
 			changeTicketStatus = "重开";
+			changeTicketStatusPath = "./changeTicketPage?method=reopen&ticketId="+ticketId;
 			break;
 		default:
 			break;
@@ -419,6 +422,38 @@ public class TicketController {
        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),    
                headers, HttpStatus.CREATED);  
+    }
+    @RequestMapping(value="/changeTicketPage",method=RequestMethod.GET)
+	public String changeTicketPage(HttpSession httpSession, Model m, String ticketId, String method ) {
+		u = (User) httpSession.getAttribute("user");
+		String setStatus = "";
+		switch (method) {
+		case "ack":
+			setStatus = "In_Process";
+			break;
+		case "solve":
+			setStatus = "Resolved";
+			break;
+		case "reopen":
+			setStatus = "In_Process";
+			break;
+		default:
+			break;
+		}
+		m.addAttribute("ticketId", ticketId);
+		m.addAttribute("setStatus", setStatus);
+		return "ticket/changeTicketPage";
+	}
+    @RequestMapping(value="/changeTicketStatus",method=RequestMethod.POST)
+	@ResponseBody
+	public Status changeTicketStatus(HttpSession httpSession, String ticketId, String setStatus, String comment ) {
+		u = (User) httpSession.getAttribute("user");
+		
+		long commentId = ticketCommentService.addTicketComment(Long.parseLong(ticketId), u.getId(), u.getTeamId(), comment, "Shared");
+		ticketService.changeTicketStatus(setStatus, Long.parseLong(ticketId));
+		Status status = new Status();
+		status.setStatus(0);
+		return status;
     }
 	/*
 	 *客户端显示数据

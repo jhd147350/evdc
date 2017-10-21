@@ -6,7 +6,9 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
+import evdc.vianet.auth.entity.User;
 import evdc.vianet.ticket.entity.Ticket;
 import evdc.vianet.ticket.entity.TicketSubscribeTeam;
 
@@ -47,4 +49,8 @@ public interface TicketMapper {
 			+ "( select * from "+Ticket.TABLE_NAME+" where status regexp #{status} and severity regexp #{severity} and serviceId regexp #{service}) ticket_a "
 					+ "where ticket_a.id like '${keyword}' or ticket_a.title like '${keyword}' or ticket_a.description like '${keyword}'")
 	List<Ticket> findAllTicketsByKeyword(@Param("service") String service, @Param("status") String status, @Param("severity") String severity, @Param("keyword") String keyword);
+	
+	@Update("update " + Ticket.TABLE_NAME
+			+ " set `status`=#{status} where `id`=#{ticketId}")
+	void updateTicketStatus(@Param("status") String status, @Param("ticketId") long ticketId);
 }

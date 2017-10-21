@@ -104,7 +104,7 @@
             <div class="layui-form layui-form-pane">
             <div class="layui-form-item"> 
             <div class="layui-inline">
-            	<button id="changeTicketStatus" class="layui-btn" lay-filter="changeTicketStatus">${changeTicketStatus}</button>
+            	<button id="changeTicketStatus" class="layui-btn" onclick="ticket_change(this)">${changeTicketStatus}</button>
             </div>
             <div class="layui-inline">
             	<button id="subscribeTicket" class="layui-btn" lay-filter="subscribeTicket" onclick="ticket_subscribe(this)">订阅</button>          
@@ -363,7 +363,11 @@
            	 console.log(argument);
            	 x_admin_show('工单订阅','./ticketSubcribePage?ticketId=${ticket.id}','500','400');
             };
-       
+          //修改ticket状态
+            function ticket_change (argument) {
+           	 console.log(argument);
+           	 x_admin_show('工单订阅','${changeTicketStatusPath}','500','400');
+            };
           
         </script>
         <script>
