@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import evdc.vianet.ticket.entity.TicketMessage;
-import evdc.vianet.ticket.entity.TicketMessageView;
+import evdc.vianet.ticket.entity.view.TicketMessageView;
 import evdc.vianet.ticket.mapper.TicketMessageMapper;
 
 /**

@@ -2,7 +2,7 @@ package evdc.vianet.ticket.service;
 
 import java.util.List;
 
-import evdc.vianet.ticket.entity.TicketMessageView;
+import evdc.vianet.ticket.entity.view.TicketMessageView;
 
 public interface TicketCommentService {
 	public long addTicketComment(long ticketId, long userId, long teamId, String message, String scope);

@@ -13,16 +13,15 @@ public class Authority {
 	private String path;
 	private long authValue;
 	private String describe;
+	private String type;
 	public Authority() {
 		super();
 	}
-	public Authority(long id, String authName, String path, long authValue, String describe) {
-		super();
-		this.id = id;
-		this.authName = authName;
-		this.path = path;
-		this.authValue = authValue;
-		this.describe = describe;
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 	public long getId() {
 		return id;

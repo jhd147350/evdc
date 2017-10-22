@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Select;
 
 import evdc.vianet.ticket.entity.Ticket;
 import evdc.vianet.ticket.entity.TicketMessage;
-import evdc.vianet.ticket.entity.TicketMessageView;
+import evdc.vianet.ticket.entity.view.TicketMessageView;
 
 /**
 

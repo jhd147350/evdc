@@ -11,7 +11,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -25,7 +24,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,14 +39,12 @@ import evdc.vianet.auth.entity.Team;
 import evdc.vianet.auth.entity.User;
 import evdc.vianet.auth.service.AuthorityService;
 import evdc.vianet.auth.service.ClientConfigService;
-
 import evdc.vianet.auth.service.TeamService;
 import evdc.vianet.auth.service.UserRoleService;
 import evdc.vianet.auth.service.UserService;
-
 import evdc.vianet.ticket.entity.Ticket;
 import evdc.vianet.ticket.entity.TicketAttachment;
-import evdc.vianet.ticket.entity.TicketMessageView;
+import evdc.vianet.ticket.entity.view.TicketMessageView;
 import evdc.vianet.ticket.service.TicketAttachmentService;
 import evdc.vianet.ticket.service.TicketCommentService;
 import evdc.vianet.ticket.service.TicketSerService;
@@ -403,7 +399,7 @@ public class TicketController {
 		return status;
 	}
 	@RequestMapping(value="/ticketAttachmentDownload")
-    public ResponseEntity<byte[]> download(HttpServletRequest request,
+    public ResponseEntity<byte[]> ticketAttachmentDownload(HttpServletRequest request,
             String attachmentId, String attachmentName,
             Model model)throws Exception {
        //下载文件路径

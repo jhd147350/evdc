@@ -13,6 +13,7 @@ http://www.springframework.org/schema/task/spring-task-4.3.xsd ">
 	<context:component-scan base-package="evdc.vianet.ticket" />
 	<context:component-scan base-package="evdc.vianet.test" />
 	<context:component-scan base-package="evdc.vianet.shift" />
+	<context:component-scan base-package="evdc.vianet.report" />
 	<mvc:annotation-driven>
 		<!-- 序列化为json -->
 		<mvc:message-converters>

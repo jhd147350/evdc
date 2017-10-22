@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import evdc.vianet.auth.entity.User;
 import evdc.vianet.ticket.entity.Ticket;
 import evdc.vianet.ticket.entity.TicketSubscribeTeam;
 
