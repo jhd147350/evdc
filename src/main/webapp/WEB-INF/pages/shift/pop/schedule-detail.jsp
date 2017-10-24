@@ -78,7 +78,7 @@
 		
 		function nextWeekQuery() {
 			var $ = layui.jquery;
-			var teamId=18;
+			var teamId='${teamId}';
 			var index = layer.load(1, {shade: [0.3]});//显示加载图标 shade遮罩透明度为0.3
 			$.ajax({
 				url : 'detail/week?teamId=' + teamId + '&nextWeek=' + nextWeek,

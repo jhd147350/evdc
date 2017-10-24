@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -17,13 +18,13 @@ public interface EmailMapper {
 	int insertEmail(Email e);
 
 	// TODO long 类型默认为0
-	@Select("select * from " + Email.TABLE_NAME + " where ticketId=0 limit #{arg0},#{arg1}")
+	@Select("select * from " + Email.TABLE_NAME + " where ticketId=0 and `delete`=false limit #{arg0},#{arg1}")
 	List<Email> selectAllUnhandledEmail(long rowsOffset, long limit);
 	
 	@Select("select * from " + Email.TABLE_NAME + " where ticketId=#{id}")
 	List<Email> selectAllEmailsByTicketId(long id);
 
-	@Select("SELECT count(*) FROM " + Email.TABLE_NAME + " where ticketId=0")
+	@Select("SELECT count(*) FROM " + Email.TABLE_NAME + " where ticketId=0 and `delete`=false")
 	long countAllUnhandledEmail();
 
 	@Select("select * from " + Email.TABLE_NAME + " where id=#{id}")
@@ -45,6 +46,8 @@ public interface EmailMapper {
 	//------------email_ticket-----------------
 	
 
+	//TODO 参考链接http://blog.csdn.net/u012325167/article/details/52403631
+	@Options(useGeneratedKeys=true, keyProperty="id")
 	@Insert("insert into " + EmailTicket.TABLE_NAME
 			+ " (`title`,`client`,`status`,`timestamp`,`service`) values(#{title},#{client},#{status},#{timestamp},#{service})")
 	int insertEmailTicket(EmailTicket e);
@@ -58,4 +61,11 @@ public interface EmailMapper {
 	
 	@Select("select * from " + EmailTicket.TABLE_NAME + " where id=#{id}")
 	EmailTicket selectEmailTicketById(long id);
+	
+	
+	@Update("update " + Email.TABLE_NAME + " set `note`=#{arg0}, `ticketId`=#{arg1}  where `id`=#{arg2}")
+	int updateNoteById(String note, long ticketId, long emailId);
+	
+	@Update("update " + Email.TABLE_NAME + " set `delete`=#{arg0}  where `id`=#{arg1}")
+	int updateDeleteById(boolean delete, long id);
 }

@@ -128,14 +128,31 @@
 					window.open("detail?id=" + data.id);
 				} else if (obj.event === 'del') {
 					layer.confirm('真的删除行么', function(index) {
-						obj.del();
-						//var teamId = data.id;
-						//deleteSchedule($, teamId);
+						//obj.del();
+						var id = data.id;
+						deleteEmail($, id, obj);
 						layer.close(index);
 					});
 				}
 			});
 		}();
+		
+		function deleteEmail($, id, obj) {
+			$.ajax({
+				url : 'deletemail?id=' + id,
+				type : 'DELETE',
+				success : function(result) {
+					console.log(result);
+					var data = JSON.parse(result);
+					
+					console.log(data);
+					if (data.code === 200) {
+						layer.msg("删除成功");
+						obj.del();
+					}
+				}
+			});
+		}
 
 		function search() {
 			console.log('search');

@@ -27,7 +27,7 @@
 	<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
 	</script>
 	
-		<script src="${ctx}/static/layui/layui.all.js"></script>
+	<script src="${ctx}/static/layui/layui.all.js"></script>
 	<script>
 		//由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
 		;

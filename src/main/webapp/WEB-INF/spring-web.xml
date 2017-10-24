@@ -13,6 +13,8 @@ http://www.springframework.org/schema/task/spring-task-4.3.xsd ">
 	<context:component-scan base-package="evdc.vianet.ticket" />
 	<context:component-scan base-package="evdc.vianet.test" />
 	<context:component-scan base-package="evdc.vianet.shift" />
+	<!-- 扫描任务 -->
+    <context:component-scan base-package="evdc.vianet.emailticket.task" />
 	<mvc:annotation-driven>
 		<!-- 序列化为json -->
 		<mvc:message-converters>
@@ -46,7 +48,6 @@ http://www.springframework.org/schema/task/spring-task-4.3.xsd ">
 	
 	<!-- 定时任务相关 -->
 	<task:annotation-driven />
-	<!-- 扫描任务 -->
-    <context:component-scan base-package="evdc.vianet.emailticket.task" />
+	
 	
 </beans>

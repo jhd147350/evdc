@@ -1,13 +1,9 @@
 package evdc.vianet.shift.controller;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -16,12 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import evdc.vianet.auth.entity.Team;
-import evdc.vianet.constant.ScheduleException;
-import evdc.vianet.shift.entity.Shift;
-import evdc.vianet.shift.entity.jo.TableData;
-import evdc.vianet.shift.entity.view.ViewOnDutyUser;
 import evdc.vianet.shift.service.ShiftService;
 
 /**
@@ -94,6 +84,7 @@ public class ShiftController {
 		// m.addAttribute("action", "rule");
 		System.out.println(teamId);
 		shiftService.getDetailSchedulePage(teamId,true, nextWeek,"", m);
+		m.addAttribute("teamId", teamId);
 		/*try {
 			Calendar c=Calendar.getInstance();
 			c.set(Calendar.HOUR_OF_DAY, 20);

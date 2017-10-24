@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.catalina.core.ApplicationContext;
+
 import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.PropertySet;
 import microsoft.exchange.webservices.data.core.enumeration.misc.ExchangeVersion;
@@ -57,7 +59,7 @@ public class ExchangeMailbox {
 	private IsGreaterThan isGreaterThan;// 搜索条件
 
 	private Date latestDate;
-	
+
 	private Date searchDate;
 
 	public Date getLatestDate() {
@@ -66,7 +68,7 @@ public class ExchangeMailbox {
 
 	public void setLatestDate(Date d) {
 		this.latestDate = d;
-		this.searchDate=(Date) d.clone();
+		this.searchDate = (Date) d.clone();
 	}
 
 	PropertySet ps;// 属性集
@@ -135,7 +137,7 @@ public class ExchangeMailbox {
 	}
 
 	private List<Email> getResultItems(WellKnownFolderName folderName) {
-		//latestDate = d;
+		// latestDate = d;
 		if (folderName == WellKnownFolderName.SentItems) {
 			// TODO https://github.com/OfficeDev/ews-java-api/issues/630 大于的效果不对
 			isGreaterThan = new SearchFilter.IsGreaterThan(ItemSchema.DateTimeSent, searchDate);
@@ -192,7 +194,9 @@ public class ExchangeMailbox {
 					e.setCc(ccStr.toString());
 
 					MessageBody body = email.getBody();
-					e.setBody(body.toString());
+					
+					String bodyStr=body.toString();
+					
 
 					List<Attachment> items = email.getAttachments().getItems();
 					// System.out.println(email.getHasAttachments());
@@ -201,15 +205,31 @@ public class ExchangeMailbox {
 						if (temp instanceof FileAttachment) {
 							// System.out.println("file :" + temp.getClass());
 							// TODO 附件和内嵌图片先不处理
-							/*
-							 * FileAttachment fa = (FileAttachment) temp; File tempZip = new
-							 * File("F:\\temp\\" + email.getId() + "\\" + fa.getName()); if
-							 * (!tempZip.exists()) { tempZip.getParentFile().mkdir();
-							 * tempZip.createNewFile(); } fa.load(tempZip.getPath());
-							 */
+							
+							
+
+							//TODO (?<=(<img src="))cid:.*?(?=") 处理cid 图片url
+							
+							
+							FileAttachment fa = (FileAttachment) temp;
+							String url="F:\\temp\\" + email.getId() + "\\" + fa.getName();
+							File tempZip = new File(url);
+							if (!tempZip.exists()) {
+								tempZip.getParentFile().mkdir();
+								tempZip.createNewFile();
+							}
+							fa.load(tempZip.getPath());
+							
+							
+							
+							String cid = temp.getContentId();
+							
+							bodyStr = bodyStr.replace("cid:"+cid, url);
+
 						} else if (temp instanceof ItemAttachment) {
 							System.out.println("item     :" + temp.getClass());
 						}
+						
 						/*
 						 * System.out.println("class    :" + temp.getClass());
 						 * System.out.println("cid      :" + temp.getContentId());
@@ -218,6 +238,8 @@ public class ExchangeMailbox {
 						 * System.out.println("isInline :" + temp.getIsInline());
 						 */
 					}
+					
+					e.setBody(bodyStr);
 
 					if (email.getHasAttachments() || email.getAttachments().getItems().size() > 0) {
 						// System.err.println("有附件哦");
@@ -233,7 +255,7 @@ public class ExchangeMailbox {
 	}
 
 	public List<Email> getInboxMail() {
-		
+
 		List<Email> emails = getResultItems(WellKnownFolderName.Inbox);
 
 		return emails;

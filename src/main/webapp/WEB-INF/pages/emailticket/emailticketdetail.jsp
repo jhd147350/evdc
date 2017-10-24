@@ -13,7 +13,7 @@
 		<ul class="space"></ul>
 		<div class="ticketTop">
 			<div class="ticketId">${ticket.id}</div>
-			<div class="ticketTitle">${ticket.title}</div>
+			<div class="ticketTitle">(${ticket.status})${ticket.title}</div>
 		</div>
 		<c:forEach items="${emails}" var="email">
 			<div class="email">
@@ -32,9 +32,11 @@
 							<div class="emailHeaderName">To:</div>
 							<div class="emailHeaderValue">${email.to}</div>
 							<div class="emailHeaderName">Cc:</div>
-							<div class="emailHeaderValue">${email.cc}</div>
+							<div class="emailHeaderValue">${email.cc}</div><br>
 							<div class="emailHeaderName">Subject:</div>
 							<div class="emailHeaderValue">${email.subject}</div>
+							<div class="emailHeaderName">Note:</div>
+							<div class="emailHeaderValue">${email.note}</div>
 						</div>
 						<div class="emailBody">
 							<pre>${email.body}</pre>
