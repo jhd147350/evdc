@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import evdc.vianet.ticket.entity.TicketMessage;
-import evdc.vianet.ticket.entity.TicketMessageView;
+import evdc.vianet.ticket.entity.view.TicketMessageView;
 import evdc.vianet.ticket.mapper.TicketMessageMapper;
 
 /**
@@ -27,7 +27,7 @@ public class TicketCommentServiceImp implements TicketCommentService {
 	private TicketMessageMapper ticketMessageMapper;
 	
 	@Override
-	public int addTicketComment(long ticketId, long userId, long teamId, String message, String scope) {
+	public long addTicketComment(long ticketId, long userId, long teamId, String message, String scope) {
 		// TODO Auto-generated method stub
 		TicketMessage t = new TicketMessage();
 		t.setTicketId(ticketId);
@@ -35,7 +35,8 @@ public class TicketCommentServiceImp implements TicketCommentService {
 		t.setTeamId(teamId);
 		t.setMessage(message);
 		t.setScope(scope);
-		return ticketMessageMapper.insertTicket(t);
+		ticketMessageMapper.insertTicketMessage(t);
+		return t.getId();
 	}
 
 	@Override

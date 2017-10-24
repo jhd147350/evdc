@@ -59,7 +59,7 @@
 										<input name="id[]" type="checkbox" value="2" authValue="<%=authority.getAuthName() %>"> <%=authority.getAuthName() %>
 											<%} %>
 										<%} %>
-										<c:forEach items="${authoritys}" var="item" varStatus="status">  
+										<%-- <c:forEach items="${authoritys}" var="item" varStatus="status">  
 											
 											<c:choose>
 												<c:when test="${teamRole.authValue&&item.authValue>0}">
@@ -72,7 +72,7 @@
 										  <c:if test="${status.count%5==0}">
 										  	<br/>
 										  </c:if>
-										</c:forEach>
+										</c:forEach> --%>
                                     </div>
                                 </td>
                             </tr>

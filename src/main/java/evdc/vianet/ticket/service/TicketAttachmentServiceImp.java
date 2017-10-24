@@ -1,5 +1,7 @@
 package evdc.vianet.ticket.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,16 @@ public class TicketAttachmentServiceImp implements TicketAttachmentService {
 		ticketAttachment.setSrc(src);
 		ticketAttachment.setName(name);
 		return ticketAttachmentMapper.insertTicketAttachment(ticketAttachment);
+	}
+	@Override
+	public List<TicketAttachment> getTicketAttachmentsByTicketIdAndMessageId(long ticketId, long messageId) {
+		// TODO Auto-generated method stub
+		return ticketAttachmentMapper.findTicketAttachmentsByTicketIdAndMessageId(ticketId, messageId);
+	}
+	@Override
+	public List<TicketAttachment> getTicketMessagesByTicketId(long ticketId) {
+		// TODO Auto-generated method stub
+		return ticketAttachmentMapper.findTicketMessagesByTicketId(ticketId);
 	}
 
 }

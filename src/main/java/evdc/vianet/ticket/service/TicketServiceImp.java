@@ -117,6 +117,12 @@ public class TicketServiceImp implements TicketService {
 		return ticketMapper.findAllTicketsByKeyword(service, status, severity, keyword);
 	}
 
+	@Override
+	public void changeTicketStatus(String status, long ticketId) {
+		// TODO Auto-generated method stub
+		ticketMapper.updateTicketStatus(status, ticketId);
+	}
+
 	
 
 }

@@ -15,6 +15,7 @@ http://www.springframework.org/schema/task/spring-task-4.3.xsd ">
 	<context:component-scan base-package="evdc.vianet.shift" />
 	<!-- 扫描任务 -->
     <context:component-scan base-package="evdc.vianet.emailticket.task" />
+	<context:component-scan base-package="evdc.vianet.report" />
 	<mvc:annotation-driven>
 		<!-- 序列化为json -->
 		<mvc:message-converters>

@@ -11,4 +11,5 @@ public interface TicketService {
 	public List<Ticket> findAllTicketsByAssignTeamAndKeyword(long assignTeamId, String service, String status, String severity, String keyword);
 	public List<Ticket> findAllTicketsBySubscribeTeamAndKeyword(long subscribeTeamId, String service, String status, String severity, String keyword);
 	public List<Ticket> findAllTicketsByKeyword(String service, String status, String severity, String keyword);
+	public void changeTicketStatus(String status, long ticketId); 
 }

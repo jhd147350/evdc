@@ -1,22 +1,29 @@
 package evdc.vianet.ticket.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,13 +39,12 @@ import evdc.vianet.auth.entity.Team;
 import evdc.vianet.auth.entity.User;
 import evdc.vianet.auth.service.AuthorityService;
 import evdc.vianet.auth.service.ClientConfigService;
-
 import evdc.vianet.auth.service.TeamService;
 import evdc.vianet.auth.service.UserRoleService;
 import evdc.vianet.auth.service.UserService;
-
 import evdc.vianet.ticket.entity.Ticket;
-import evdc.vianet.ticket.entity.TicketMessageView;
+import evdc.vianet.ticket.entity.TicketAttachment;
+import evdc.vianet.ticket.entity.view.TicketMessageView;
 import evdc.vianet.ticket.service.TicketAttachmentService;
 import evdc.vianet.ticket.service.TicketCommentService;
 import evdc.vianet.ticket.service.TicketSerService;
@@ -307,15 +313,18 @@ public class TicketController {
 		switch (tickets.get(0).getStatus()) {
 		case "New":
 			changeTicketStatus = "受理";
+			changeTicketStatusPath = "./changeTicketPage?method=ack&ticketId="+ticketId;
 			break;
 		case "In_Process":
 			changeTicketStatus = "解决";
+			changeTicketStatusPath = "./changeTicketPage?method=solve&ticketId="+ticketId;
 			break;
 		case "Resolved":
 			changeTicketStatus = "关闭";
 			break;
 		case "Closed":
 			changeTicketStatus = "重开";
+			changeTicketStatusPath = "./changeTicketPage?method=reopen&ticketId="+ticketId;
 			break;
 		default:
 			break;
@@ -324,9 +333,26 @@ public class TicketController {
 		ticketComments.addAll(ticketCommentService.getCommentsByTicketIdAndScope(Long.parseLong(ticketId), "Client"));
 		ticketComments.addAll(ticketCommentService.getCommentsByTicketIdAndScope(Long.parseLong(ticketId), "Shared"));
 		ticketComments.addAll(ticketCommentService.getCommentsByTicketIdAndteamIdAndScope(Long.parseLong(ticketId), u.getTeamId(), "Internal"));
+		//动态按钮
 		m.addAttribute("changeTicketStatus", changeTicketStatus);
+		//动态按钮路径
 		m.addAttribute("changeTicketStatusPath", changeTicketStatusPath);
+		//评论
+		Collections.sort(ticketComments, new Comparator<TicketMessageView>() {
+			@Override
+			public int compare(TicketMessageView o1, TicketMessageView o2) {
+				// TODO Auto-generated method stub
+				return o1.getTimestamp().compareTo(o2.getTimestamp());
+			}
+		});
 		m.addAttribute("ticketComments", ticketComments);
+		//ticket附件
+		List<TicketAttachment> ticketAttachments = ticketAttachmentService.getTicketAttachmentsByTicketIdAndMessageId(Long.parseLong(ticketId), 0);
+		m.addAttribute("ticketAttachments", ticketAttachments);
+		//comment附件
+		for (TicketMessageView ticketComment : ticketComments) {
+			m.addAttribute(ticketComment.getId()+"" , ticketAttachmentService.getTicketAttachmentsByTicketIdAndMessageId(Long.parseLong(ticketId), ticketComment.getId()));
+		}
 		return "ticket/ticketShow";	
 	}
 	@RequestMapping(value="/ticketSubcribePage",method=RequestMethod.GET)
@@ -372,6 +398,59 @@ public class TicketController {
 		status.setStatus(0);
 		return status;
 	}
+	@RequestMapping(value="/ticketAttachmentDownload")
+    public ResponseEntity<byte[]> ticketAttachmentDownload(HttpServletRequest request,
+            String attachmentId, String attachmentName,
+            Model model)throws Exception {
+       //下载文件路径
+       String path = request.getServletContext().getRealPath("/static/");
+       System.out.println("文件目录"+path);
+       if(ftpServer.init()) {
+    	   ftpServer.execute(ftpServer.getMethod("DOWNLOAD"), attachmentId, null, path+"file/");
+       }
+       HttpHeaders headers = new HttpHeaders();  
+       //下载显示的文件名，解决中文名称乱码问题  
+       //String downloadFielName = new String(attachmentId.getBytes("UTF-8"),"iso-8859-1");
+       //通知浏览器以attachment（下载方式）打开图片
+       headers.setContentDispositionFormData("attachment", attachmentName); 
+       //application/octet-stream ： 二进制流数据（最常见的文件下载）。
+       File file = new File(path+"file/"+attachmentId);
+       headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+       return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),    
+               headers, HttpStatus.CREATED);  
+    }
+    @RequestMapping(value="/changeTicketPage",method=RequestMethod.GET)
+	public String changeTicketPage(HttpSession httpSession, Model m, String ticketId, String method ) {
+		u = (User) httpSession.getAttribute("user");
+		String setStatus = "";
+		switch (method) {
+		case "ack":
+			setStatus = "In_Process";
+			break;
+		case "solve":
+			setStatus = "Resolved";
+			break;
+		case "reopen":
+			setStatus = "In_Process";
+			break;
+		default:
+			break;
+		}
+		m.addAttribute("ticketId", ticketId);
+		m.addAttribute("setStatus", setStatus);
+		return "ticket/changeTicketPage";
+	}
+    @RequestMapping(value="/changeTicketStatus",method=RequestMethod.POST)
+	@ResponseBody
+	public Status changeTicketStatus(HttpSession httpSession, String ticketId, String setStatus, String comment ) {
+		u = (User) httpSession.getAttribute("user");
+		
+		long commentId = ticketCommentService.addTicketComment(Long.parseLong(ticketId), u.getId(), u.getTeamId(), comment, "Shared");
+		ticketService.changeTicketStatus(setStatus, Long.parseLong(ticketId));
+		Status status = new Status();
+		status.setStatus(0);
+		return status;
+    }
 	/*
 	 *客户端显示数据
 	 *

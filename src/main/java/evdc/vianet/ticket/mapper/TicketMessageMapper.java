@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Select;
 
 import evdc.vianet.ticket.entity.Ticket;
 import evdc.vianet.ticket.entity.TicketMessage;
-import evdc.vianet.ticket.entity.TicketMessageView;
+import evdc.vianet.ticket.entity.view.TicketMessageView;
 
 /**
 
@@ -41,7 +41,7 @@ public interface TicketMessageMapper {
 			+ " (`ticketId`,`userId`,`teamId`,`message`,`scope`)"
 			+ " values(#{t.ticketId},#{t.userId},#{t.teamId},#{t.message},#{t.scope})")
 	@Options(useGeneratedKeys = true, keyProperty = "t.id")
-	int insertTicket(@Param("t") TicketMessage t);
+	void insertTicketMessage(@Param("t") TicketMessage t);
 	
 	@Select("select * from " + TicketMessageView.TABLE_NAME + " where `ticketId`=#{ticketId} and `scope`=#{scope}")
 	List<TicketMessageView> findCommentsByTicketIdAndScope(@Param("ticketId") long ticketId, @Param("scope") String scope);

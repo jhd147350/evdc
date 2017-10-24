@@ -23,6 +23,8 @@ import evdc.vianet.auth.entity.UserRole;
 import evdc.vianet.auth.service.AuthorityService;
 import evdc.vianet.auth.service.UserRoleService;
 import evdc.vianet.auth.service.UserService;
+import evdc.vianet.ticket.entity.TicketChangeRecord;
+import evdc.vianet.ticket.service.TicketChangeRecordService;
 
 /**
  * @author jaden
@@ -37,6 +39,9 @@ public class EvdcAuthFilter extends AuthFilter {
 	@Autowired
 	@Qualifier("userRoleService")
 	private UserRoleService userRoleService;
+	@Autowired
+	@Qualifier("ticketChangeRecordService")
+	private TicketChangeRecordService ticketChangeRecordService;
 	@Override
 	protected int haveAuth(User u, HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
@@ -50,6 +55,36 @@ public class EvdcAuthFilter extends AuthFilter {
 		if(authoritys.size()>=1){
 			System.out.println("权限值要求为："+authoritys.get(0).getAuthValue());
 			if(userRole.getAuthValue()==1||(userRole.getAuthValue()&authoritys.get(0).getAuthValue())>0){
+				TicketChangeRecord ticketChangeRecord  = new TicketChangeRecord();
+				if(authoritys.get(0).getType()!=null){
+					switch (authoritys.get(0).getType()) {
+					case "ticketSubcribe":
+						
+						ticketChangeRecord.setTicketId(Long.parseLong(request.getParameter("ticketId")));
+						ticketChangeRecord.setUserId(u.getId());
+						ticketChangeRecord.setFiled(authoritys.get(0).getAuthName());
+						ticketChangeRecord.setNewValue("+: "+(request.getParameterValues("addArray[]").toString())+"/n-: "+(request.getParameterValues("reduceArray[]").toString()));
+						ticketChangeRecordService.addNewRecord(ticketChangeRecord);
+						break;
+					case "ticketComment":
+						ticketChangeRecord.setTicketId(Long.parseLong(request.getParameter("ticketId")));
+						ticketChangeRecord.setUserId(u.getId());
+						ticketChangeRecord.setFiled(authoritys.get(0).getAuthName());
+						ticketChangeRecord.setNewValue(request.getParameter("comment"));
+						ticketChangeRecordService.addNewRecord(ticketChangeRecord);
+						break;
+					case "ticketStatusChange":
+						ticketChangeRecord.setTicketId(Long.parseLong(request.getParameter("ticketId")));
+						ticketChangeRecord.setUserId(u.getId());
+						ticketChangeRecord.setFiled(authoritys.get(0).getAuthName()+": "+request.getParameter("setStatus"));
+						ticketChangeRecord.setNewValue(request.getParameter("comment"));
+						ticketChangeRecordService.addNewRecord(ticketChangeRecord);
+						break;
+					default:
+						break;
+					}
+				}
+				
 				return 0;
 			}else{
 				return 2;

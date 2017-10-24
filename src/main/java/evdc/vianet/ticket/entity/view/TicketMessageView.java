@@ -1,4 +1,4 @@
-package evdc.vianet.ticket.entity;
+package evdc.vianet.ticket.entity.view;
 
 import java.sql.Timestamp;
 

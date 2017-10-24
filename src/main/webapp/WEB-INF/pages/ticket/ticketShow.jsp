@@ -48,12 +48,11 @@
 	                <label for="L_content" class="layui-form-label" style="top: -2px;">
 	                        附件
 	                </label>
-                    <div class="layui-inline">
-                       <label class="layui-form-label"> <a herf="www.baidu.com">文件</a></label>
-                    </div>    
-                    <div class="layui-inline">
-                       <label class="layui-form-label"> <a herf="www.baidu.com">文件</a></label>
-                    </div>   
+                    <c:forEach items="${ticketAttachments}" var="item" varStatus="status">  
+						<div class="layui-inline">
+                       		<label class="layui-form-label"> <a href="./ticketAttachmentDownload?attachmentId=${item.src}&attachmentName=${item.name}">${item.name}</a></label>
+                    	</div> 
+					</c:forEach> 									 
                </div>
                <div class="layui-form-item">
                <div class="layui-inline">
@@ -105,7 +104,7 @@
             <div class="layui-form layui-form-pane">
             <div class="layui-form-item"> 
             <div class="layui-inline">
-            	<button id="changeTicketStatus" class="layui-btn" lay-filter="changeTicketStatus">${changeTicketStatus}</button>
+            	<button id="changeTicketStatus" class="layui-btn" onclick="ticket_change(this)">${changeTicketStatus}</button>
             </div>
             <div class="layui-inline">
             	<button id="subscribeTicket" class="layui-btn" lay-filter="subscribeTicket" onclick="ticket_subscribe(this)">订阅</button>          
@@ -164,6 +163,16 @@
 					    
                     	<p style="text-align: right; font-size:12px">${item.userName}&nbsp;${item.timestamp}</p>
 					  </div>
+					  
+					  <c:set var="comment" value="K${item.id}"/>
+					  <c:if test='${fn:length(requestScope[fn:substringAfter(comment,"K")]) != 0}'> 
+					  	<hr class="layui-bg-gray">
+					  	<c:forEach items='${requestScope[fn:substringAfter(comment,"K")]}' var="att" varStatus="status">  
+						<div class="layui-inline">
+                       		<label class="layui-form-label"> <a href="./ticketAttachmentDownload?attachmentId=${att.src}&attachmentName=${att.name}">${att.name}</a></label>
+                    	</div> 
+						</c:forEach>
+					   </c:if>
 					</fieldset>
 		            	<%-- <hr class="layui-bg-black">
 	                        ${item.message}
@@ -354,7 +363,11 @@
            	 console.log(argument);
            	 x_admin_show('工单订阅','./ticketSubcribePage?ticketId=${ticket.id}','500','400');
             };
-       
+          //修改ticket状态
+            function ticket_change (argument) {
+           	 console.log(argument);
+           	 x_admin_show('工单订阅','${changeTicketStatusPath}','500','400');
+            };
           
         </script>
         <script>

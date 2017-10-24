@@ -1,9 +1,9 @@
-package evdc.vianet.ticket.entity;
+package evdc.vianet.ticket.entity.view;
 
 import java.sql.Timestamp;
 
-public class TicketChangeRecord {
-	static final public String TABLE_NAME = "ticket_change_record";
+public class TicketChangeRecordView {
+	static final public String TABLE_NAME = "view_ticketChangeRecord";
 	private long id;
 	private long ticketId;
 	private long userId;
@@ -11,6 +11,19 @@ public class TicketChangeRecord {
 	private String oldValue;
 	private String newValue;
 	private Timestamp timestamp;
+	private String name;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public static String getTableName() {
+		return TABLE_NAME;
+	}
 
 	public long getId() {
 		return id;
@@ -67,11 +80,4 @@ public class TicketChangeRecord {
 	public void setTimestamp(Timestamp timestamp) {
 		this.timestamp = timestamp;
 	}
-
-	@Override
-	public String toString() {
-		return "TicketChangeRecord [id=" + id + ", ticketId=" + ticketId + ", userId=" + userId + ", filed=" + filed
-				+ ", oldValue=" + oldValue + ", newValue=" + newValue + ", timestamp=" + timestamp + "]";
-	}
-
 }
