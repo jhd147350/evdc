@@ -22,22 +22,19 @@
 				<div class="layui-input-block">
 					<select id="status" lay-verify="required" name="cid">
 						<option value="all">所有</option>
-						<option value="open"> open</option>
-						<option value="close"> close</option>
+						<option value="open">open</option>
+						<option value="close">close</option>
 					</select>
 				</div>
 			</div>
 			<div class="layui-inline">
 				<label class="layui-form-label"> 服务 </label>
 				<div class="layui-input-block">
-					<select id="serviceType" lay-verify="required" name="cid">
-						<option value=".*">所有</option>
-						<option value="^1$"> bluemix</option>
-						<option value="^2$"> iot</option>
-						<option value="^3$"> cloudant</option>
-						<option value="^4$"> evdc</option>
-						<option value="^5$"> bluebox</option>
-						<option value="^6$"> sso</option>
+					<select id="service" lay-verify="required" name="cid">
+						<option value="all">所有</option>
+						<c:forEach items="${services}" var="service">
+							<option value="${service.name}">${service.name}</option>
+						</c:forEach>
 					</select>
 				</div>
 			</div>
@@ -50,12 +47,12 @@
 		</div>
 	</div>
 	<table class="layui-table"
-		lay-data="{url:'ticketdata', id:'ticket',response : {statusCode : 200}, page:true, limits:[20,30,40,50,60], limit:20}"
+		lay-data="{url:'ticketdata', id:'ticket',response : {statusCode : 200}, page:true, limits:[20,30,40,50,60], limit:10}"
 		lay-filter="ticket">
 		<thead>
 			<tr>
 				<th lay-data="{field:'id', width:80, sort: true}">ID</th>
-				<th lay-data="{field:'title', width:300}">标题</th>
+				<th lay-data="{field:'title', width:550}">标题</th>
 				<th lay-data="{field:'status', width:100}">状态</th>
 				<th lay-data="{field:'client', width:100}">客户</th>
 				<th lay-data="{field:'service', width:100}">服务</th>
@@ -73,8 +70,8 @@
 		<thead>
 			<tr>
 				<th lay-data="{field:'id', width:80, sort: true}">ID</th>
+				<th lay-data="{field:'subject', width:550}">主题</th>
 				<th lay-data="{field:'fromInbox', width:80}">收件</th>
-				<th lay-data="{field:'subject', width:600}">主题</th>
 
 				<th
 					lay-data="{fixed: 'right', width:160, align:'center', toolbar: '#emailToolbar'}"></th>
@@ -112,6 +109,7 @@
 						obj.del();
 						//var teamId = data.id;
 						//deleteSchedule($, teamId);
+						deleteTicket($, data.id, obj);
 						layer.close(index);
 					});
 				}
@@ -136,7 +134,7 @@
 				}
 			});
 		}();
-		
+
 		function deleteEmail($, id, obj) {
 			$.ajax({
 				url : 'deletemail?id=' + id,
@@ -144,7 +142,24 @@
 				success : function(result) {
 					console.log(result);
 					var data = JSON.parse(result);
-					
+
+					console.log(data);
+					if (data.code === 200) {
+						layer.msg("删除成功");
+						obj.del();
+					}
+				}
+			});
+		}
+
+		function deleteTicket($, id, obj) {
+			$.ajax({
+				url : 'deleteticket?id=' + id,
+				type : 'DELETE',
+				success : function(result) {
+					console.log(result);
+					var data = JSON.parse(result);
+
 					console.log(data);
 					if (data.code === 200) {
 						layer.msg("删除成功");
@@ -161,20 +176,29 @@
 
 			var idOrKey = $("#key").val();
 			var status = $("#status").val();
-			var service = 'all';
-			var myurl;
-			console.log(idOrKey);
-			if (idOrKey.length == 0) {
-				myurl = 'ticketdata?status=' + status + '&service=' + service;
-			} else {
-				myurl = 'ticketdata?idorkey=' + idOrKey + '&status=' + status
-						+ '&service=' + service;
-			}
+
+			var service = $("#service").val();
+
+			var myurl = 'ticketdata?idorkey=' + idOrKey + '&status=' + status
+					+ '&service=' + service;
 
 			table.reload('ticket', {
 				url : myurl
 			});
 		}
+
+		function jointParam() {
+
+		}
+		
+		//给被打开页面使用的
+		var test = 'ceshi';
+		function myrefresh()
+		{
+			window.location.reload();//刷新浏览器
+		}
+		
+		
 	</script>
 
 </body>

@@ -35,9 +35,11 @@ public class EmailTicketService {
 
 	}
 
-	public String getEmailTicketJson(long page, long limit) {
-		List<EmailTicket> emails = mapper.selectAllEmailTicket((page - 1) * limit, limit);
-		long count = mapper.countAllEmailTicket();
+	public String getEmailTicketJson(long page, long limit, String idorkey, String status, String service) {
+		// List<EmailTicket> emails = mapper.selectAllEmailTicket((page - 1) * limit,
+		// limit);
+		List<EmailTicket> emails = mapper.searchEmailTicket((page - 1) * limit, limit, idorkey, status, service);
+		long count = mapper.countSearchEmailTicket(idorkey, status, service);
 		TableData<EmailTicket> jsonData = new TableData<>();
 		jsonData.setCode(200);
 		jsonData.setCount(count);
@@ -83,13 +85,13 @@ public class EmailTicketService {
 
 		mapper.insertEmailTicket(et);
 
-		System.out.println("自动生成的id："+et.getId());
-		addNote2Email(note,et.getId(), emailId);
+		System.out.println("自动生成的id：" + et.getId());
+		addNote2Email(note, et.getId(), emailId);
 
 		return JsonResult.SUC.toString();
 
 	}
-	
+
 	public String mergeEmailTicket(String json) {
 		JSONObject jo = new JSONObject(json);
 		String emailId = jo.getString("emailId");
@@ -97,7 +99,7 @@ public class EmailTicketService {
 		String note = jo.getString("note");
 		long idL = Long.parseLong(ticketId);
 		EmailTicket ticket = mapper.selectEmailTicketById(idL);
-		if(ticket==null) {
+		if (ticket == null) {
 			return JsonResult.FAILED.toString();
 		}
 		addNote2Email(note, idL, emailId);
@@ -108,9 +110,30 @@ public class EmailTicketService {
 		long idL = Long.parseLong(id);
 		mapper.updateNoteById(note, ticketId, idL);
 	}
-	
-	public void deleteMail(Long ticketId){
+
+	public void deleteMail(Long ticketId) {
 		mapper.updateDeleteById(true, ticketId);
+	}
+
+	public void resetMail(Long id) {
+		mapper.updateTicketId0ById(id);
+	}
+
+	@Transactional
+	public int deleteEmailTicket(Long id) {
+
+		mapper.updateTicketId0ByTicketId(id);
+
+		return mapper.deleteEmailTicketById(id);
+
+	}
+
+	public void closeEmailTicket(Long id) {
+		mapper.updateStatusByTicketId("close", id);
+	}
+
+	public void reopenEmailTicket(Long id) {
+		mapper.updateStatusByTicketId("open", id);
 	}
 
 }

@@ -39,6 +39,7 @@
     color: #3a4961;
     font-weight: bold;
     margin-left: 192px;
+    margin-right: 100px;
 }
 
 .email{
@@ -93,4 +94,9 @@
     background-color: #fff;
     margin-left: -9px;
     margin-right: -9px;
+}
+
+.deleteButton, .closeButton{
+    float: right;
+    margin-right: 10px;
 }

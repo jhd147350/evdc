@@ -5,8 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>邮件详情</title>
-<link rel="stylesheet"
-	href="${ctx}/static/css/emailticketdetail.css">
+<link rel="stylesheet" href="${ctx}/static/css/emailticketdetail.css">
 </head>
 <body>
 	<div class="ticketContainer">
@@ -14,12 +13,21 @@
 		<div class="ticketTop">
 			<div class="ticketId">${ticket.id}</div>
 			<div class="ticketTitle">(${ticket.status})${ticket.title}</div>
+			<button class="closeButton"><c:choose>
+					<c:when test="${ticket.status=='close'}">重开</c:when>
+					<c:otherwise>关闭</c:otherwise>
+				</c:choose>
+			</button>		
 		</div>
 		<c:forEach items="${emails}" var="email">
 			<div class="email">
 				<div class="event">
-					<span class="action">Received</span> 
-					<span class="date">2017/6/26 上午 07:44</span>
+					<span class="action"><c:choose>
+					<c:when test="${email.fromInbox==true}">Received</c:when>
+					<c:otherwise>Sent</c:otherwise>
+					</c:choose></span> 
+					<span class="date">${email.cdate}</span>
+					<button class="deleteButton" id="${email.id}">删除</button>
 				</div>
 
 				<div>
@@ -32,7 +40,8 @@
 							<div class="emailHeaderName">To:</div>
 							<div class="emailHeaderValue">${email.to}</div>
 							<div class="emailHeaderName">Cc:</div>
-							<div class="emailHeaderValue">${email.cc}</div><br>
+							<div class="emailHeaderValue">${email.cc}</div>
+							<br>
 							<div class="emailHeaderName">Subject:</div>
 							<div class="emailHeaderValue">${email.subject}</div>
 							<div class="emailHeaderName">Note:</div>
@@ -46,6 +55,93 @@
 			</div>
 		</c:forEach>
 	</div>
+
+
+	<script src="${ctx}/static/layui/layui.all.js"></script>
+	<script>
+		//由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
+		;
+		!function() {
+			var $ = layui.jquery;
+
+			$("button.deleteButton").click(function() {
+				var id = $(this).attr("id");
+				console.log(id);
+				deleteMail(id,this);
+
+			});
+
+			$("button.closeButton").click(function() {
+				var text = $(this).text();
+				
+				if(text == "关闭"){
+					console.log("shi");
+					closeTicket();
+				}else{
+					reopenTicket();
+				}
+
+				console.log(text);
+
+			});
+
+		}();
+
+		function deleteMail(id,thiss) {
+			var $ = layui.$;
+			$.ajax({
+				url : 'reset?id=' + id,
+				type : 'DELETE',
+				success : function(result) {
+					var data = JSON.parse(result);
+					console.log(result);
+					console.log(data);
+					if (data.code === 200) {
+						layer.msg("删除成功");
+						$(thiss).parent().parent().remove();
+					}
+				}
+			});
+
+		}
+
+		function closeTicket() {
+			var $ = layui.$;
+			var ticketId = '${ticket.id}';
+			$.ajax({
+				url : 'closeticket?id=' + ticketId,
+				type : 'DELETE',
+				success : function(result) {
+					var data = JSON.parse(result);
+					console.log(result);
+					console.log(data);
+					if (data.code === 200) {
+						layer.msg('关单成功，即将关闭本页面' + data.info, function() {
+							window.close();
+						});
+					}
+				}
+			});
+		}
+		
+		function reopenTicket() {
+			var $ = layui.$;
+			var ticketId = '${ticket.id}';
+			$.ajax({
+				url : 'reopenticket?id=' + ticketId,
+				type : 'DELETE',
+				success : function(result) {
+					var data = JSON.parse(result);
+					console.log(result);
+					console.log(data);
+					if (data.code === 200) {
+						layer.msg('重开成功');
+					}
+				}
+			});
+		}
+		
+	</script>
 
 </body>
 </html>

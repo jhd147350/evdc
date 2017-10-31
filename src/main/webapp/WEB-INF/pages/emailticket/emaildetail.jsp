@@ -22,8 +22,11 @@
 </head>
 <body>
 	<div>
-		<button id="merge" class="layui-btn">合并到已有工单</button>
-		<button id="new" class="layui-btn">新建工单</button>
+		<!-- 合并过后 ticketId肯定不为0 所以也不需要显示了-->
+		<c:if test="${m.ticketId == 0}">
+			<button id="merge" class="layui-btn">合并到已有工单</button>
+			<button id="new" class="layui-btn">新建工单</button>
+		</c:if>
 	</div>
 
 	<div>时间：${m.cdate}</div>
@@ -36,6 +39,10 @@
 		<pre>${m.body}</pre>
 	</div>
 
+
+
+
+	<!--<script src="${ctx}/static/layui/layui.all.js"></script>  -->
 	<script src="${ctx}/static/layui/layui.all.js"></script>
 
 	<script>
@@ -43,6 +50,9 @@
 		;
 		!function() {
 			var $ = layui.jquery;
+			//var form = layui.form;
+			//form.render();
+			var element = layui.element;
 
 			$("#merge").click(function() {
 				openLayer(true);
@@ -69,7 +79,9 @@
 			} else {
 				title = '新建';
 				closeBtnStr = '新建';
-				contentHtml = $('#ticketInfo').html() + $('#onlyNote').html();
+				contentHtml = $('#myform').html() + $('#onlyNote').html()
+						+ $('#mys').html();
+				//contentHtml = '<div id="mydiv"></div>' //使用模板 可以后续渲染内容
 			}
 
 			layer.open({
@@ -97,6 +109,15 @@
 					console.log('iframe end');
 				}
 			});
+
+			//可以使用模板引擎渲染
+			//var laytpl = layui.laytpl;
+			//var gettpl = $('#myform').html() + $('#onlyNote').html();
+			//var view = document.getElementById('mydiv');
+			//laytpl(gettpl).render({}, function(html) {
+			//	view.innerHTML = html;
+			//});
+
 		}
 		function mergeEmailTicket(emailId, ticketId) {
 			var $ = layui.$;
@@ -118,6 +139,9 @@
 				console.log(data, status);
 				if (data.code == 200) {
 					layer.msg('合并成功,即将关闭本页面' + data.info, function() {
+						
+						console.log(opener.test);
+						opener.myrefresh();
 						window.close();
 					});
 
@@ -138,6 +162,11 @@
 			var service = $("#service").val();
 			var note = $("#note").val();
 
+			console.log(title);
+			console.log(client);
+			console.log(service);
+			console.log(note);
+
 			var json = {};
 			json.emailId = emailId;
 			json.timestamp = timestamp;
@@ -155,6 +184,8 @@
 				console.log(data, status);
 				if (data.code == 200) {
 					layer.msg('创建成功，即将关闭本页面' + data.info, function() {
+						console.log(opener.test);
+						opener.myrefresh();//opener是打开这个页面的那个页面 刷新原有页面
 						window.close();
 					});
 				} else {
@@ -166,6 +197,47 @@
 	</script>
 
 </body>
+
+<script id="myform" type="text/html">
+	<form class="layui-form" action="">
+			<div class="layui-form-item" style="margin-top: 15px">
+				<label class="layui-form-label merge">标题</label>
+				<div class="layui-input-block block">
+					<input id="title" type="text" name="title" required
+						lay-verify="required" placeholder="请输入标题" autocomplete="off"
+						class="layui-input" value="${m.subject}">
+				</div>
+			</div>
+			<div class="layui-form-item" style="margin-top: 15px">
+				<label class="layui-form-label merge">客户</label>
+				<div class="layui-input-block block">
+					<input id="client" type="text" name="title" required
+						lay-verify="required" placeholder="请输入客户" autocomplete="off"
+						class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item" style="margin-top: 15px">
+				<label class="layui-form-label merge">服务</label>
+				<div class="layui-input-block block">
+					<select id="service" lay-verify="required" name="cid">
+						<option value="">无</option>
+						<c:forEach items="${services}" var="service">
+							<option value="${service.name}">${service.name}</option>
+						</c:forEach>
+					</select>
+				</div>
+			</div>
+	</form>		
+</script>
+<div style="display: none" id="mys">
+	<script type="text/javascript">
+		;
+		!function() {
+			var form = layui.form;
+			form.render();
+		}();
+	</script>
+</div>
 <script id="onlyId" type="text/html">
 	<div class="layui-form-item" style="margin-top: 15px">
 		<label class="layui-form-label merge">ID</label>
@@ -176,29 +248,7 @@
 	</div>
 </script>
 
-<script id="ticketInfo" type="text/html">
-	<div class="layui-form-item" style="margin-top: 15px">
-		<label class="layui-form-label merge">标题</label>
-		<div class="layui-input-block block">
-			<input id="title" type="text" name="title" required lay-verify="required"
-				placeholder="请输入标题" autocomplete="off" class="layui-input" value="${m.subject}">
-		</div>
-	</div>
-	<div class="layui-form-item" style="margin-top: 15px">
-		<label class="layui-form-label merge">客户</label>
-		<div class="layui-input-block block">
-			<input id="client" type="text" name="title" required lay-verify="required"
-				placeholder="请输入客户" autocomplete="off" class="layui-input">
-		</div>
-	</div>
-	<div class="layui-form-item" style="margin-top: 15px">
-		<label class="layui-form-label merge">服务</label>
-		<div class="layui-input-block block">
-			<input id="service" type="text" name="title" required lay-verify="required"
-				placeholder="请输入服务" autocomplete="off" class="layui-input">
-		</div>
-	</div>
-</script>
+
 
 <script id="onlyNote" type="text/html">
 	<div class="layui-form-item layui-form-text" style="margin-top: 15px">

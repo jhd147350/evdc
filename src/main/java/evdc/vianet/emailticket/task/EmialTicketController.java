@@ -3,6 +3,7 @@ package evdc.vianet.emailticket.task;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.ParseException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import evdc.vianet.shift.entity.jo.JsonResult;
+import evdc.vianet.ticket.entity.TicketSer;
+import evdc.vianet.ticket.service.TicketSerService;
+import evdc.vianet.ticket.service.TicketSerServiceImp;
 
 @Controller
 @RequestMapping("/emailticket")
@@ -26,6 +30,10 @@ public class EmialTicketController {
 	@Autowired
 	@Qualifier("emailTicketService")
 	EmailTicketService service;
+
+	@Autowired
+	@Qualifier("ticketSerService")
+	TicketSerService tss;
 
 	@RequestMapping(value = "/emaildata", produces = "application/json; charset=utf-8")
 	@ResponseBody
@@ -38,10 +46,16 @@ public class EmialTicketController {
 
 	@RequestMapping(value = "/ticketdata", produces = "application/json; charset=utf-8")
 	@ResponseBody
-	public String getEmailTicketData(HttpServletResponse response, Long page, Long limit) {
+	public String getEmailTicketData(HttpServletResponse response, Long page, Long limit, String status, String service,
+			String idorkey) {
 		response.setCharacterEncoding("utf-8");
 		// System.out.println("data:--------" + service.getEmailTicketJson());
-		return service.getEmailTicketJson(page, limit);
+
+		System.out.println(status);
+		System.out.println(service);
+		System.out.println(idorkey);
+
+		return this.service.getEmailTicketJson(page, limit, idorkey, status, service);
 
 	}
 
@@ -52,7 +66,9 @@ public class EmialTicketController {
 	}
 
 	@RequestMapping("/console")
-	public String getEmailTicketConsolePage() {
+	public String getEmailTicketConsolePage(Model m) {
+		List<TicketSer> allServices = tss.findAllTicketService();
+		m.addAttribute("services", allServices);
 		return "emailticket/console";
 
 	}
@@ -61,6 +77,9 @@ public class EmialTicketController {
 	public String getEmailDetailPage(Long id, Model m) {
 		service.getEmailDetail(id, m);
 		m.addAttribute("emailId", id);
+
+		List<TicketSer> allServices = tss.findAllTicketService();
+		m.addAttribute("services", allServices);
 		return "emailticket/emaildetail";
 
 	}
@@ -78,7 +97,7 @@ public class EmialTicketController {
 		response.setCharacterEncoding("utf-8");
 
 		System.out.println(json);
-		
+
 		try {
 			return service.createEmailTicket(json);
 		} catch (ParseException e) {
@@ -86,7 +105,7 @@ public class EmialTicketController {
 		}
 		return "err";
 	}
-	
+
 	@RequestMapping(value = "/merge", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseBody
 	String mergeEmailTicket(@RequestBody String json, HttpServletResponse response) {
@@ -94,15 +113,51 @@ public class EmialTicketController {
 		System.out.println(json);
 		return service.mergeEmailTicket(json);
 	}
-	
-	//JNOTE http://blog.csdn.net/dxmgood/article/details/52881642 produces = "application/json; charset=utf-8" 会把使返回数据直接就是json对象，所以无需在ajax函数中转换var data = JSON.parse(result);
-	//TODO produces = "application/json; charset=utf-8" 会把使返回数据直接就是json对象，所以无需在ajax函数中转换var data = JSON.parse(result);
-	//@RequestMapping(value = "/deletemail", method = RequestMethod.DELETE, produces = "application/json; charset=utf-8")
+
+	// JNOTE http://blog.csdn.net/dxmgood/article/details/52881642 produces =
+	// "application/json; charset=utf-8" 会把使返回数据直接就是json对象，所以无需在ajax函数中转换var data =
+	// JSON.parse(result);
+	// TODO produces = "application/json; charset=utf-8"
+	// 会把使返回数据直接就是json对象，所以无需在ajax函数中转换var data = JSON.parse(result);
+	// @RequestMapping(value = "/deletemail", method = RequestMethod.DELETE,
+	// produces = "application/json; charset=utf-8")
 	@RequestMapping(value = "/deletemail", method = RequestMethod.DELETE)
 	@ResponseBody
 	String deleteEmail(Long id, HttpServletResponse response) {
 		response.setCharacterEncoding("utf-8");
 		service.deleteMail(id);
+		return JsonResult.SUC.toString();
+	}
+
+	@RequestMapping(value = "/deleteticket", method = RequestMethod.DELETE)
+	@ResponseBody
+	String deleteEmailTicket(Long id, Model m) {
+		int i = service.deleteEmailTicket(id);
+		if (i <= 0) {
+			return JsonResult.FAILED.toString();
+		}
+		return JsonResult.SUC.toString();
+	}
+
+	@RequestMapping(value = "/reset", method = RequestMethod.DELETE)
+	@ResponseBody
+	String resetEmail(Long id, HttpServletResponse response) {
+		response.setCharacterEncoding("utf-8");
+		service.resetMail(id);
+		return JsonResult.SUC.toString();
+	}
+
+	@RequestMapping(value = "/closeticket", method = RequestMethod.DELETE)
+	@ResponseBody
+	String closeEmailTicket(Long id) {
+		service.closeEmailTicket(id);
+		return JsonResult.SUC.toString();
+	}
+
+	@RequestMapping(value = "/reopenticket", method = RequestMethod.DELETE)
+	@ResponseBody
+	String reopenEmailTicket(Long id) {
+		service.reopenEmailTicket(id);
 		return JsonResult.SUC.toString();
 	}
 
