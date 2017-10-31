@@ -48,7 +48,9 @@
 							<div class="emailHeaderValue">${email.note}</div>
 						</div>
 						<div class="emailBody">
-							<pre>${email.body}</pre>
+							<div>备注：${email.note}</div>
+							<button class="flip">展开邮件内容</button>
+							<pre style="display: none">${email.body}</pre>
 						</div>
 					</div>
 				</div>
@@ -60,6 +62,8 @@
 	<script src="${ctx}/static/layui/layui.all.js"></script>
 	<script>
 		//由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
+		
+		var flip = false;
 		;
 		!function() {
 			var $ = layui.jquery;
@@ -83,6 +87,18 @@
 
 				console.log(text);
 
+			});
+			
+			//动画
+			$(".flip").click(function(){
+				if(flip){
+					$(this).text("展开邮件内容");
+				}else{
+					$(this).text("隐藏邮件内容");
+				}
+				flip = !flip;
+				//jquery的动画
+				$(this).next().slideToggle("slow");
 			});
 
 		}();
