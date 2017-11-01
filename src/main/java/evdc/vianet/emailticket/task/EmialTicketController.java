@@ -2,7 +2,10 @@ package evdc.vianet.emailticket.task;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.sql.Date;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -47,7 +50,7 @@ public class EmialTicketController {
 	@RequestMapping(value = "/ticketdata", produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String getEmailTicketData(HttpServletResponse response, Long page, Long limit, String status, String service,
-			String idorkey) {
+			String idorkey, String startdate, String enddate) {
 		response.setCharacterEncoding("utf-8");
 		// System.out.println("data:--------" + service.getEmailTicketJson());
 
@@ -55,7 +58,10 @@ public class EmialTicketController {
 		System.out.println(service);
 		System.out.println(idorkey);
 
-		return this.service.getEmailTicketJson(page, limit, idorkey, status, service);
+		System.out.println(startdate);
+		System.out.println(enddate);
+
+		return this.service.getEmailTicketJson(page, limit, idorkey, status, service, startdate, enddate);
 
 	}
 
@@ -159,6 +165,19 @@ public class EmialTicketController {
 	String reopenEmailTicket(Long id) {
 		service.reopenEmailTicket(id);
 		return JsonResult.SUC.toString();
+	}
+
+	@RequestMapping("/export")
+	public void exportProject(HttpServletResponse response, String status, String service, String idorkey,
+			String startdate, String enddate) {
+		String[] excelHeader = { "ID#id", "标题#title", "客户#client", "状态#status", "服务#service", "时间#timestamp" };
+		List<EmailTicket> projectList = this.service.getEmailTickets(idorkey, status, service, startdate, enddate);
+
+		try {
+			ExportExcelUtil.export(response, "EvDC邮件工单" + LocalDate.now().toString(), excelHeader, projectList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -40,9 +40,29 @@
 			</div>
 
 			<div class="layui-inline">
-				<button class="layui-btn" onclick="search()">
-					<i class="layui-icon">&#xe615;</i> 搜索
+				<button class="layui-btn" onclick="searchOrReport(true)">
+					<i class="layui-icon">&#xe615;</i>搜索
 				</button>
+			</div>
+			<div class="layui-inline">
+				<button class="layui-btn" onclick="searchOrReport(false)">
+					<i class="layui-icon">&#xe629;</i>报表
+				</button>
+			</div>
+		</div>
+		
+		<div class="layui-form-item">
+		 	<label class="layui-form-label">日期</label>
+			<div class="layui-input-inline" style="width: 100px;">
+				<input id="startdate" type="text" name="title" required
+					lay-verify="required" placeholder="开始日期" autocomplete="off"
+					class="layui-input">
+			</div>
+			<div class="layui-form-mid">-</div>
+			<div class="layui-input-inline" style="width: 100px;">
+				<input id="enddate" type="text" name="title" required
+					lay-verify="required" placeholder="结束日期" autocomplete="off"
+					class="layui-input">
 			</div>
 		</div>
 	</div>
@@ -94,6 +114,18 @@
 		!function() {
 			var table = layui.table;
 			var $ = layui.jquery;
+			
+			var laydate = layui.laydate;
+			
+			//执行一个laydate实例
+			laydate.render({
+				elem: '#startdate' //指定元素
+			});
+			
+			laydate.render({
+				elem: '#enddate' //指定元素
+			});
+			
 			//监听工具条
 			table.on('tool(ticket)', function(obj) {
 				var data = obj.data;
@@ -169,8 +201,10 @@
 			});
 		}
 
-		function search() {
-			console.log('search');
+		//search == true 表示查询数据
+		//search == false 表示导出数据为Excel
+		function searchOrReport(search) {
+			console.log('searchOrReport');
 			var table = layui.table;
 			var $ = layui.$;
 
@@ -178,13 +212,23 @@
 			var status = $("#status").val();
 
 			var service = $("#service").val();
+			
+			var startdate = $("#startdate").val();
+			
+			var enddate = $("#enddate").val();
 
-			var myurl = 'ticketdata?idorkey=' + idOrKey + '&status=' + status
-					+ '&service=' + service;
+			var params = 'idorkey=' + idOrKey + '&status=' + status
+					+ '&service=' + service + '&startdate=' + startdate + '&enddate=' + enddate;
 
-			table.reload('ticket', {
-				url : myurl
-			});
+			console.log(params);
+			if(search){
+				table.reload('ticket', {
+					url : 'ticketdata?' + params
+				});
+			}else{
+				window.open("export?" + params);
+			}
+			
 		}
 
 		function jointParam() {

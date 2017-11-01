@@ -100,8 +100,9 @@ public interface EmailMapper {
 	 * @return
 	 */
 	@SelectProvider(type = EmailProvider.class, method = "searchEmailTicket")
-	List<EmailTicket> searchEmailTicket(@Param("page") long rowsOffset, @Param("limit") long limit,
-			@Param("idorkey") String idorkey, @Param("status") String status, @Param("service") String service);
+	List<EmailTicket> searchEmailTicket(@Param("page") Long rowsOffset, @Param("limit") Long limit,
+			@Param("idorkey") String idorkey, @Param("status") String status, @Param("service") String service,
+			@Param("startdate") String startdate, @Param("enddate") String enddate);
 
 	@SelectProvider(type = EmailProvider.class, method = "countSearchEmailTicket")
 	long countSearchEmailTicket(@Param("idorkey") String idorkey, @Param("status") String status,

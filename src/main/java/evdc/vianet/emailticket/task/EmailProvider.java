@@ -30,9 +30,28 @@ public class EmailProvider {
 				if (service != null && !service.equals("all")) {
 					WHERE("service = '" + service + "'");
 				}
+				
+				String startdate = (String) param.get("startdate");
+				if(startdate != null && !startdate.equals("")) {
+					WHERE("`timestamp` > '" + startdate + "'");
+				}
+				
+				String enddate = (String) param.get("enddate");
+				if(enddate != null && !enddate.equals("")) {
+					WHERE("`timestamp` <= '" + enddate + "'");
+				}
 			}
 		}.toString();
-		return sql + " \nlimit " + param.get("page") + "," + param.get("limit");
+		 Long page = (Long) param.get("page");
+		 Long limit = (Long) param.get("limit");
+		
+		if(limit != null) {
+			return sql + " \nlimit " + param.get("page") + "," + param.get("limit");
+		}
+		else {
+			return sql;
+		}
+		
 	}
 	
 	//TODO 这个方法和searchEmailTicket 大部分内容一样，只不过是为了计数

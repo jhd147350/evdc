@@ -35,10 +35,10 @@ public class EmailTicketService {
 
 	}
 
-	public String getEmailTicketJson(long page, long limit, String idorkey, String status, String service) {
+	public String getEmailTicketJson(long page, long limit, String idorkey, String status, String service, String startdate, String enddate) {
 		// List<EmailTicket> emails = mapper.selectAllEmailTicket((page - 1) * limit,
 		// limit);
-		List<EmailTicket> emails = mapper.searchEmailTicket((page - 1) * limit, limit, idorkey, status, service);
+		List<EmailTicket> emails = mapper.searchEmailTicket((page - 1) * limit, limit, idorkey, status, service, startdate, enddate);
 		long count = mapper.countSearchEmailTicket(idorkey, status, service);
 		TableData<EmailTicket> jsonData = new TableData<>();
 		jsonData.setCode(200);
@@ -47,6 +47,16 @@ public class EmailTicketService {
 		jsonData.setData(emails);
 		JSONObject jo = new JSONObject(jsonData);
 		return jo.toString();
+
+	}
+	
+	//导出数据就不需要分页处理了
+	public List<EmailTicket> getEmailTickets(String idorkey, String status, String service, String startdate, String enddate) {
+		// List<EmailTicket> emails = mapper.selectAllEmailTicket((page - 1) * limit,
+		// limit);
+		//(page - 1) * limit, limit
+		List<EmailTicket> emails = mapper.searchEmailTicket(null, null, idorkey, status, service, startdate, enddate);
+		return emails;
 
 	}
 
