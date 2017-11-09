@@ -11,17 +11,20 @@
 	<div class="layui-form layui-form-pane">
 		所有工单
 		<div class="layui-form-item">
-			<div class="layui-input-inline">
-				<input id="key" type="text" name="title" required
-					lay-verify="required" placeholder="ID/关键字" autocomplete="off"
-					class="layui-input">
+			<div class="layui-inline">
+				<label class="layui-form-label">ID/KEY </label>
+				<div class="layui-input-block">
+					<input id="key" type="text" name="title" required
+						lay-verify="required" placeholder="请输入id或者标题关键字" autocomplete="off"
+						class="layui-input">
+				</div>
 			</div>
 
 			<div class="layui-inline">
 				<label class="layui-form-label"> 状态 </label>
-				<div class="layui-input-block">
+				<div class="layui-input-block" style="width: 186px;">
 					<select id="status" lay-verify="required" name="cid">
-						<option value="all">所有</option>
+						<option value="">所有</option>
 						<option value="open">open</option>
 						<option value="close">close</option>
 					</select>
@@ -29,9 +32,9 @@
 			</div>
 			<div class="layui-inline">
 				<label class="layui-form-label"> 服务 </label>
-				<div class="layui-input-block">
+				<div class="layui-input-block" style="width: 186px;">
 					<select id="service" lay-verify="required" name="cid">
-						<option value="all">所有</option>
+						<option value="">所有</option>
 						<c:forEach items="${services}" var="service">
 							<option value="${service.name}">${service.name}</option>
 						</c:forEach>
@@ -39,6 +42,33 @@
 				</div>
 			</div>
 
+		</div>
+
+		<div class="layui-form-item">
+
+			<div class="layui-inline">
+				<label class="layui-form-label">客户 </label>
+				<div class="layui-input-block">
+					<input id="client" type="text" name="title" required
+						lay-verify="required" placeholder="请输入客户名称" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-inline">
+				<label class="layui-form-label">日期</label>
+				<div class="layui-input-inline" style="width: 90px;">
+					<input id="startdate" type="text" name="title" required
+						lay-verify="required" placeholder="开始日期" autocomplete="off"
+						class="layui-input">
+				</div>
+				<div class="layui-form-mid">-</div>
+				<div class="layui-input-inline" style="width: 90px;">
+					<input id="enddate" type="text" name="title" required
+						lay-verify="required" placeholder="结束日期" autocomplete="off"
+						class="layui-input">
+				</div>
+			</div>
+			
 			<div class="layui-inline">
 				<button class="layui-btn" onclick="searchOrReport(true)">
 					<i class="layui-icon">&#xe615;</i>搜索
@@ -48,21 +78,6 @@
 				<button class="layui-btn" onclick="searchOrReport(false)">
 					<i class="layui-icon">&#xe629;</i>报表
 				</button>
-			</div>
-		</div>
-		
-		<div class="layui-form-item">
-		 	<label class="layui-form-label">日期</label>
-			<div class="layui-input-inline" style="width: 100px;">
-				<input id="startdate" type="text" name="title" required
-					lay-verify="required" placeholder="开始日期" autocomplete="off"
-					class="layui-input">
-			</div>
-			<div class="layui-form-mid">-</div>
-			<div class="layui-input-inline" style="width: 100px;">
-				<input id="enddate" type="text" name="title" required
-					lay-verify="required" placeholder="结束日期" autocomplete="off"
-					class="layui-input">
 			</div>
 		</div>
 	</div>
@@ -114,18 +129,18 @@
 		!function() {
 			var table = layui.table;
 			var $ = layui.jquery;
-			
+
 			var laydate = layui.laydate;
-			
+
 			//执行一个laydate实例
 			laydate.render({
-				elem: '#startdate' //指定元素
+				elem : '#startdate' //指定元素
 			});
-			
+
 			laydate.render({
-				elem: '#enddate' //指定元素
+				elem : '#enddate' //指定元素
 			});
-			
+
 			//监听工具条
 			table.on('tool(ticket)', function(obj) {
 				var data = obj.data;
@@ -213,36 +228,36 @@
 
 			var service = $("#service").val();
 			
+			var client = $("#client").val();
+
 			var startdate = $("#startdate").val();
-			
+
 			var enddate = $("#enddate").val();
 
 			var params = 'idorkey=' + idOrKey + '&status=' + status
-					+ '&service=' + service + '&startdate=' + startdate + '&enddate=' + enddate;
+					+ '&service=' + service + '&client=' + client + '&startdate=' + startdate
+					+ '&enddate=' + enddate;
 
 			console.log(params);
-			if(search){
+			if (search) {
 				table.reload('ticket', {
 					url : 'ticketdata?' + params
 				});
-			}else{
+			} else {
 				window.open("export?" + params);
 			}
-			
+
 		}
 
 		function jointParam() {
 
 		}
-		
+
 		//给被打开页面使用的
 		var test = 'ceshi';
-		function myrefresh()
-		{
+		function myrefresh() {
 			window.location.reload();//刷新浏览器
 		}
-		
-		
 	</script>
 
 </body>

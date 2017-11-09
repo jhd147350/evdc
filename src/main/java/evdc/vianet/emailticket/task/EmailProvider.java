@@ -8,53 +8,70 @@ import org.apache.ibatis.jdbc.SQL;
 public class EmailProvider {
 	public String searchEmailTicket(Map<String, Object> param) {
 
-		// select * from " + EmailTicket.TABLE_NAME + " limit #{arg0},#{arg1}
+		//为null表示 查询 数量 计数 不分页， 为0表示导出报表所用，不分页
+		Long limit = (Long) param.getOrDefault("limit", null);
+		String idorkey = (String) param.get("idorkey");
+		String status = (String) param.getOrDefault("status", null);
+		String service = (String) param.getOrDefault("service", null);
+		String startdate = (String) param.getOrDefault("startdate", null);
+		String enddate = (String) param.getOrDefault("enddate", null);
+		String client = (String) param.getOrDefault("client", null);
+
 		String sql = new SQL() {
 			{
-				SELECT("* ");
+				if (limit == null) {
+					SELECT("count(*) ");
+				} else {
+					SELECT("* ");
+				}
+
 				FROM(EmailTicket.TABLE_NAME);
 
-				String idorkey = (String) param.get("idorkey");
-				if (idorkey != null && idorkey.length() != 0) {
+				if (notNull(idorkey)) {
 					if (isNum(idorkey)) {
 						WHERE("id =" + Long.parseLong(idorkey));
 					} else {
 						WHERE("title like '%" + idorkey + "%'");
 					}
 				}
-				String status = (String) param.get("status");
-				if (status != null && !status.equals("all")) {
+
+				if (notNull(status)) {
 					WHERE("status = '" + status + "'");
 				}
-				String service = (String) param.get("service");
-				if (service != null && !service.equals("all")) {
+
+				if (notNull(service)) {
 					WHERE("service = '" + service + "'");
 				}
-				
-				String startdate = (String) param.get("startdate");
-				if(startdate != null && !startdate.equals("")) {
+
+				if (notNull(startdate)) {
 					WHERE("`timestamp` > '" + startdate + "'");
 				}
-				
-				String enddate = (String) param.get("enddate");
-				if(enddate != null && !enddate.equals("")) {
+
+				if (notNull(enddate)) {
 					WHERE("`timestamp` <= '" + enddate + "'");
+				}
+
+				if (notNull(client)) {
+					WHERE("`client` like '%" + client + "%'");
 				}
 			}
 		}.toString();
-		 Long page = (Long) param.get("page");
-		 Long limit = (Long) param.get("limit");
-		
-		if(limit != null) {
+
+		if (limit == null || limit == 0l) {
+			return sql;
+		} else {
 			return sql + " \nlimit " + param.get("page") + "," + param.get("limit");
 		}
-		else {
-			return sql;
-		}
-		
+
 	}
 	
-	//TODO 这个方法和searchEmailTicket 大部分内容一样，只不过是为了计数
+	/**
+	 * 
+	 * @param param
+	 * @return
+	 * 合并计数到查询中
+	 */
+	@Deprecated
 	public String countSearchEmailTicket(Map<String, Object> param) {
 
 		// select * from " + EmailTicket.TABLE_NAME + " limit #{arg0},#{arg1}
@@ -93,6 +110,13 @@ public class EmailProvider {
 			System.err.println("不是数字");
 			return false;
 		}
+	}
+
+	private boolean notNull(String s) {
+		if (s == null || s.equals("")) {
+			return false;
+		}
+		return true;
 	}
 
 	public static void main(String[] args) {

@@ -50,7 +50,7 @@ public class EmialTicketController {
 	@RequestMapping(value = "/ticketdata", produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String getEmailTicketData(HttpServletResponse response, Long page, Long limit, String status, String service,
-			String idorkey, String startdate, String enddate) {
+			String idorkey, String startdate, String enddate, String client) {
 		response.setCharacterEncoding("utf-8");
 		// System.out.println("data:--------" + service.getEmailTicketJson());
 
@@ -61,7 +61,7 @@ public class EmialTicketController {
 		System.out.println(startdate);
 		System.out.println(enddate);
 
-		return this.service.getEmailTicketJson(page, limit, idorkey, status, service, startdate, enddate);
+		return this.service.getEmailTicketJson(page, limit, idorkey, status, service, startdate, enddate, client);
 
 	}
 
@@ -169,9 +169,9 @@ public class EmialTicketController {
 
 	@RequestMapping("/export")
 	public void exportProject(HttpServletResponse response, String status, String service, String idorkey,
-			String startdate, String enddate) {
+			String startdate, String enddate, String client) {
 		String[] excelHeader = { "ID#id", "标题#title", "客户#client", "状态#status", "服务#service", "时间#timestamp" };
-		List<EmailTicket> projectList = this.service.getEmailTickets(idorkey, status, service, startdate, enddate);
+		List<EmailTicket> projectList = this.service.getEmailTickets(idorkey, status, service, startdate, enddate, client);
 
 		try {
 			ExportExcelUtil.export(response, "EvDC邮件工单" + LocalDate.now().toString(), excelHeader, projectList);

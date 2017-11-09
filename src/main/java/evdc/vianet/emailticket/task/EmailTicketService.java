@@ -35,11 +35,11 @@ public class EmailTicketService {
 
 	}
 
-	public String getEmailTicketJson(long page, long limit, String idorkey, String status, String service, String startdate, String enddate) {
+	public String getEmailTicketJson(long page, long limit, String idorkey, String status, String service, String startdate, String enddate, String client) {
 		// List<EmailTicket> emails = mapper.selectAllEmailTicket((page - 1) * limit,
 		// limit);
-		List<EmailTicket> emails = mapper.searchEmailTicket((page - 1) * limit, limit, idorkey, status, service, startdate, enddate);
-		long count = mapper.countSearchEmailTicket(idorkey, status, service);
+		List<EmailTicket> emails = mapper.searchEmailTicket((page - 1) * limit, limit, idorkey, status, service, startdate, enddate, client);
+		long count = mapper.countSearchEmailTicket(idorkey, status, service, startdate, enddate, client);
 		TableData<EmailTicket> jsonData = new TableData<>();
 		jsonData.setCode(200);
 		jsonData.setCount(count);
@@ -51,11 +51,11 @@ public class EmailTicketService {
 	}
 	
 	//导出数据就不需要分页处理了
-	public List<EmailTicket> getEmailTickets(String idorkey, String status, String service, String startdate, String enddate) {
+	public List<EmailTicket> getEmailTickets(String idorkey, String status, String service, String startdate, String enddate, String client) {
 		// List<EmailTicket> emails = mapper.selectAllEmailTicket((page - 1) * limit,
 		// limit);
 		//(page - 1) * limit, limit
-		List<EmailTicket> emails = mapper.searchEmailTicket(null, null, idorkey, status, service, startdate, enddate);
+		List<EmailTicket> emails = mapper.searchEmailTicket(null, 0l, idorkey, status, service, startdate, enddate, client);
 		return emails;
 
 	}

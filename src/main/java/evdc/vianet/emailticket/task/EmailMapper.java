@@ -102,9 +102,10 @@ public interface EmailMapper {
 	@SelectProvider(type = EmailProvider.class, method = "searchEmailTicket")
 	List<EmailTicket> searchEmailTicket(@Param("page") Long rowsOffset, @Param("limit") Long limit,
 			@Param("idorkey") String idorkey, @Param("status") String status, @Param("service") String service,
-			@Param("startdate") String startdate, @Param("enddate") String enddate);
+			@Param("startdate") String startdate, @Param("enddate") String enddate, @Param("client") String client);
 
-	@SelectProvider(type = EmailProvider.class, method = "countSearchEmailTicket")
+	@SelectProvider(type = EmailProvider.class, method = "searchEmailTicket")
 	long countSearchEmailTicket(@Param("idorkey") String idorkey, @Param("status") String status,
-			@Param("service") String service);
+			@Param("service") String service, @Param("startdate") String startdate, @Param("enddate") String enddate,
+			@Param("client") String client);
 }
