@@ -404,6 +404,9 @@ public class TicketController {
             Model model)throws Exception {
        //下载文件路径
        String path = request.getServletContext().getRealPath("/static/");
+       File file = new File(path+"file/"+attachmentId);
+       file.delete();
+       file.createNewFile();
        System.out.println("文件目录"+path);
        if(ftpServer.init()) {
     	   ftpServer.execute(ftpServer.getMethod("DOWNLOAD"), attachmentId, null, path+"file/");
@@ -414,7 +417,6 @@ public class TicketController {
        //通知浏览器以attachment（下载方式）打开图片
        headers.setContentDispositionFormData("attachment", attachmentName); 
        //application/octet-stream ： 二进制流数据（最常见的文件下载）。
-       File file = new File(path+"file/"+attachmentId);
        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),    
                headers, HttpStatus.CREATED);  

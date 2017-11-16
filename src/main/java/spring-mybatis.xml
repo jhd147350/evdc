@@ -22,16 +22,10 @@
 	<!-- 支持线程池 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url"
-
-			value="jdbc:mysql://devforpaas.21vianet:7066/evdc_ss?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8" />
-
-
+		<property name="url" value="jdbc:mysql://devforpaas.21vianet:7066/evdc_ss?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8" />
 		<!-- ?useUnicode=true&amp;characterEncoding=utf8 -->
-
 		<property name="username" value="EvdcTs" />
 		<property name="password" value="qwer1234" />
-
 		<property name="maxActive" value="50" />
 		<property name="validationQuery" value="SELECT 1"/>
 		<property name="testWhileIdle" value="true"/>
