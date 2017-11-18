@@ -112,10 +112,9 @@
             </div>
             <xblock><button class="layui-btn" onclick="ticket_create('创建工单','./ticketCreatePage','600','500')"><i class="layui-icon">&#xe608;</i>创建工单</button>
             <span id="ticketNumSpan" class="x-right" style="line-height:40px">共有工单：${fn:length(tickets)} 条</span></xblock>
-            <table class="layui-table">
+            <%-- <table class="layui-table">
                 <thead>
-                    <tr>
-                        
+                    <tr>                       
                         <th>
                             TicketID
                         </th>
@@ -145,19 +144,39 @@
                 </thead>
                 <tbody id="ticketList"> 
                 </tbody>
-            </table>
-
+            </table> --%>
+			<table id="ticketList" lay-filter="ticketListFilter"></table>
             <div id="page"></div>
         </div>
         <script src="../static/layui/layui.js" charset="utf-8"></script>
         <script src="../static/js/x-layui.js" charset="utf-8"></script>
         <script>
-            layui.use(['laydate','element','layer','form'], function(){
+            layui.use(['table','laydate','element','layer','form'], function(){
                 $ = layui.jquery;//jquery
 			var form = layui.form;
               lement = layui.element;//面包导航
               layer = layui.layer;//弹出层
+              table = layui.table;
               $('#ticketSreachBut').click();
+              
+              table.render({
+            	    elem: '#ticketList'
+            	    ,height: 315
+            	    ,url: '/demo/table/user/' //数据接口
+            	    ,page: true //开启分页
+            	    ,cols: [[ //表头
+            	      {field: 'ticketId', title: 'ticketId', width:80, sort: true, fixed: 'left'}
+            	      ,{field: 'username', title: '用户名', width:80}
+            	      ,{field: 'sex', title: '性别', width:80, sort: true}
+            	      ,{field: 'city', title: '城市', width:80} 
+            	      ,{field: 'sign', title: '签名', width: 177}
+            	      ,{field: 'experience', title: '积分', width: 80, sort: true}
+            	      ,{field: 'score', title: '评分', width: 80, sort: true}
+            	      ,{field: 'classify', title: '职业', width: 80}
+            	      ,{field: 'wealth', title: '财富', width: 135, sort: true}
+            	    ]]
+            	  });
+              
             });
             
             /*查询*/
