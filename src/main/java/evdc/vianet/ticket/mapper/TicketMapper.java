@@ -25,29 +25,50 @@ public interface TicketMapper {
 	void insertTicket(@Param("t") Ticket t);
 	
 	//根据提交组及关键字查询工单
-	@Select("select * from "
+	@Select("select COUNT(*) from "
 			+ "( select * from "+Ticket.TABLE_NAME+" where submitTeamId=#{submitTeamId} and status regexp #{status} and severity regexp #{severity} and serviceId regexp #{service}) ticket_a "
 				+ "where ticket_a.id like '${keyword}' or ticket_a.title like '${keyword}' or ticket_a.description like '${keyword}'")
-	List<Ticket> findAllTicketsBySubmitTeamAndKeyword(@Param("submitTeamId") long submitTeamId, @Param("service") String service, @Param("status") String status, @Param("severity") String severity, @Param("keyword") String keyword);
+	int findAllTicketCountBySubmitTeamAndKeyword(@Param("submitTeamId") long submitTeamId, @Param("service") String service, @Param("status") String status, @Param("severity") String severity, @Param("keyword") String keyword);
+	//根据提交组及关键字分页查询工单
+	@Select("select * from " + "( select * from "
+			+ "( select * from "+Ticket.TABLE_NAME+" where submitTeamId=#{submitTeamId} and status regexp #{status} and severity regexp #{severity} and serviceId regexp #{service}) ticket_a "
+				+ "where ticket_a.id like '${keyword}' or ticket_a.title like '${keyword}' or ticket_a.description like '${keyword}') ticket_b limit #{limit1},#{limit2}")
+	List<Ticket> findAllTicketsBySubmitTeamAndKeywordANDPageANDLimit(@Param("limit1") int limit1, @Param("limit2") int limit2, @Param("submitTeamId") long submitTeamId, @Param("service") String service, @Param("status") String status, @Param("severity") String severity, @Param("keyword") String keyword);
 	
 	
 
 	//根据指派组及关键字查询工单
-	@Select("select * from "
+	@Select("select COUNT(*) from "
 			+ "( select * from "+Ticket.TABLE_NAME+" where assignTeamId=#{assignTeamId} and status regexp #{status} and severity regexp #{severity} and serviceId regexp #{service}) ticket_a "
 				+ "where ticket_a.id like '${keyword}' or ticket_a.title like '${keyword}' or ticket_a.description like '${keyword}'")
-	List<Ticket> findAllTicketsByAssignTeamAndKeyword(@Param("assignTeamId") long assignTeamId, @Param("service") String service, @Param("status") String status, @Param("severity") String severity, @Param("keyword") String keyword);
+	int findAllTicketCountByAssignTeamAndKeyword(@Param("assignTeamId") long assignTeamId, @Param("service") String service, @Param("status") String status, @Param("severity") String severity, @Param("keyword") String keyword);
+	//根据指派组及关键字分页查询工单
+	@Select("select * from " + "( select * from "
+			+ "( select * from "+Ticket.TABLE_NAME+" where assignTeamId=#{assignTeamId} and status regexp #{status} and severity regexp #{severity} and serviceId regexp #{service}) ticket_a "
+				+ "where ticket_a.id like '${keyword}' or ticket_a.title like '${keyword}' or ticket_a.description like '${keyword}') ticket_b limit #{limit1},#{limit2}")
+	List<Ticket> findAllTicketsByAssignTeamAndKeywordANDPageANDLimit(@Param("limit1") int limit1, @Param("limit2") int limit2, @Param("assignTeamId") long assignTeamId, @Param("service") String service, @Param("status") String status, @Param("severity") String severity, @Param("keyword") String keyword);	
 	
 	//根据订阅组及关键字查询工单
-	@Select("select * from "
+	@Select("select COUNT(*) from "
 			+ "(select a.* from "+Ticket.TABLE_NAME+" as a left join "+TicketSubscribeTeam.TABLE_NAME+" as b on a.id = b.ticketId where b.subscribeTeamId = #{subscribeTeamId} and a.status regexp #{status} and a.severity regexp #{severity} and a.serviceId regexp #{service}) ticket_a "
 				+ "where ticket_a.id like '${keyword}' or ticket_a.title like '${keyword}' or ticket_a.description like '${keyword}'")
-	List<Ticket> findAllTicketsBySubscribeTeamAndKeyword(@Param("subscribeTeamId") long subscribeTeamId, @Param("service") String service, @Param("status") String status, @Param("severity") String severity, @Param("keyword") String keyword);
-	//根据关键字查询工单
-	@Select("select * from "
+	int findAllTicketCountBySubscribeTeamAndKeyword(@Param("subscribeTeamId") long subscribeTeamId, @Param("service") String service, @Param("status") String status, @Param("severity") String severity, @Param("keyword") String keyword);
+	//根据订阅组及关键字分页查询工单
+	@Select("select * from " + "( select * from "
+			+ "(select a.* from "+Ticket.TABLE_NAME+" as a left join "+TicketSubscribeTeam.TABLE_NAME+" as b on a.id = b.ticketId where b.subscribeTeamId = #{subscribeTeamId} and a.status regexp #{status} and a.severity regexp #{severity} and a.serviceId regexp #{service}) ticket_a "
+				+ "where ticket_a.id like '${keyword}' or ticket_a.title like '${keyword}' or ticket_a.description like '${keyword}') ticket_b limit #{limit1},#{limit2}")
+	List<Ticket> findAllTicketsBySubscribeTeamAndKeywordANDPageANDLimit(@Param("limit1") int limit1, @Param("limit2") int limit2, @Param("subscribeTeamId") long subscribeTeamId, @Param("service") String service, @Param("status") String status, @Param("severity") String severity, @Param("keyword") String keyword);	
+	
+	//根据关键字查询工单数量
+	@Select("select COUNT(*) from "
 			+ "( select * from "+Ticket.TABLE_NAME+" where status regexp #{status} and severity regexp #{severity} and serviceId regexp #{service}) ticket_a "
 					+ "where ticket_a.id like '${keyword}' or ticket_a.title like '${keyword}' or ticket_a.description like '${keyword}'")
-	List<Ticket> findAllTicketsByKeyword(@Param("service") String service, @Param("status") String status, @Param("severity") String severity, @Param("keyword") String keyword);
+	int findAllTicketCountByKeyword(@Param("service") String service, @Param("status") String status, @Param("severity") String severity, @Param("keyword") String keyword);
+	//根据关键字分页查询工单
+	@Select("select * from " + "( select * from "
+			+ "( select * from "+Ticket.TABLE_NAME+" where status regexp #{status} and severity regexp #{severity} and serviceId regexp #{service}) ticket_a "
+					+ "where ticket_a.id like '${keyword}' or ticket_a.title like '${keyword}' or ticket_a.description like '${keyword}') ticket_b limit #{limit1},#{limit2}")
+	List<Ticket> findAllTicketsByKeywordANDPageANDLimit(@Param("limit1") int limit1, @Param("limit2") int limit2, @Param("service") String service, @Param("status") String status, @Param("severity") String severity, @Param("keyword") String keyword);
 	
 	@Update("update " + Ticket.TABLE_NAME
 			+ " set `status`=#{status} where `id`=#{ticketId}")

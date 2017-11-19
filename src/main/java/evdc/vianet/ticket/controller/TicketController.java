@@ -106,11 +106,9 @@ public class TicketController {
 	//权限判断
 	@RequestMapping("/ticketConsole")
 	public String ticketConsole(Model m, HttpSession httpSession) {
-		u = (User) httpSession.getAttribute("user");
-		
+		u = (User) httpSession.getAttribute("user");		
 		ClientConfig clientConfig = clientConfigService.getMeansByTeamRoleId((teamService.findTeamById(u.getTeamId())).getRole());
 		String[] selects = clientConfig.getTicketselectId().split(";");
-
 		List<Authority> authoritys = new ArrayList<Authority>();
 		for (String sele : selects) {
 			Authority authority = authorityService.findAuthById(Integer.parseInt(sele));
@@ -123,11 +121,15 @@ public class TicketController {
 	
 	@RequestMapping(value="/findAllTicketsByAssignTeamAndKeyword",method=RequestMethod.POST)
 	@ResponseBody
-	public List<SearchTicket> findAllTicketsByAssignTeamAndKeyword(HttpSession httpSession, String keyword, String service, String severity, String status) {
+	public SearchTicketsAndCount findAllTicketsByAssignTeamAndKeyword(HttpSession httpSession, String page, String limit, String keyword, String service, String severity, String status) {
 		u = (User) httpSession.getAttribute("user");
 		List<SearchTicket> searchTickets = new ArrayList<SearchTicket>();		
-		List<Ticket> tickets = ticketService.findAllTicketsByAssignTeamAndKeyword(u.getTeamId(), service, status, severity, keyword);
-		
+		int limitint = Integer.parseInt(limit);
+		int pageint = Integer.parseInt(page);
+		int limit1 = (pageint - 1) * limitint;
+		int limit2 = limit1 + limitint;
+		List<Ticket> tickets = ticketService.findAllTicketsByAssignTeamAndKeywordANDPageANDLimit(limit1, limit2, u.getTeamId(), service, status, severity, keyword);
+		int count = ticketService.findAllTicketCountByAssignTeamAndKeyword(u.getTeamId(), service, status, severity, keyword);
 		for (Ticket ticket : tickets) {
 			SearchTicket search = new SearchTicket();
 			search.setId(ticket.getId());
@@ -136,84 +138,107 @@ public class TicketController {
 			search.setService(ticketSerService.findTicketServiceById(ticket.getServiceId()).getName());
 			
 			search.setStatus(ticket.getStatus());
-			search.setUpdateDate(ticket.getUpdateDate());
+			search.setUpdateDate(ticket.getUpdateDate().toLocaleString());
 			search.setSubmitUser(userService.findUserById(ticket.getSubmitUserId()).getName());
 			search.setUpdateUser(userService.findUserById(ticket.getUpdateUserId()).getName());
 			search.setAssignUser(userService.findUserById(ticket.getAssignUserId()).getName());
 			searchTickets.add(search);
 		}
-		return searchTickets;	
+		SearchTicketsAndCount andCount = new SearchTicketsAndCount();
+		andCount.setCount(count);
+		andCount.setSearchTicketList(searchTickets);
+		andCount.setCode(200);
+		return andCount;	
 	}
 	@RequestMapping(value="/findAllTicketsBySubmitTeamAndKeyword",method=RequestMethod.POST)
 	@ResponseBody
-	public List<SearchTicket> findAllTicketsBySubmitTeamAndKeyword(HttpSession httpSession, String keyword, String service, String severity, String status) {
+	public SearchTicketsAndCount findAllTicketsBySubmitTeamAndKeyword(HttpSession httpSession, String page, String limit, String keyword, String service, String severity, String status) {
 		u = (User) httpSession.getAttribute("user");
-		List<SearchTicket> searchTickets = new ArrayList<SearchTicket>();		
-		List<Ticket> tickets = ticketService.findAllTicketsBySubmitTeamAndKeyword(u.getTeamId(), service, status, severity, keyword);
-		
+		List<SearchTicket> searchTickets = new ArrayList<SearchTicket>();
+		int limitint = Integer.parseInt(limit);
+		int pageint = Integer.parseInt(page);
+		int limit1 = (pageint - 1) * limitint;
+		int limit2 = limit1 + limitint;
+		List<Ticket> tickets = ticketService.findAllTicketsBySubmitTeamAndKeywordANDPageANDLimit(limit1, limit2, u.getTeamId(), service, status, severity, keyword);
+		int count = ticketService.findAllTicketCountBySubmitTeamAndKeyword(u.getTeamId(), service, status, severity, keyword);
 		for (Ticket ticket : tickets) {
 			SearchTicket search = new SearchTicket();
 			search.setId(ticket.getId());
 			search.setTitle(ticket.getTitle());
 			search.setSeverity(ticket.getSeverity());
-			search.setService(ticketSerService.findTicketServiceById(ticket.getServiceId()).getName());
-			
+			search.setService(ticketSerService.findTicketServiceById(ticket.getServiceId()).getName());	
 			search.setStatus(ticket.getStatus());
-			search.setUpdateDate(ticket.getUpdateDate());
+			search.setUpdateDate(ticket.getUpdateDate().toLocaleString());
 			search.setSubmitUser(userService.findUserById(ticket.getSubmitUserId()).getName());
 			search.setUpdateUser(userService.findUserById(ticket.getUpdateUserId()).getName());
 			search.setAssignUser(userService.findUserById(ticket.getAssignUserId()).getName());
 			searchTickets.add(search);
 		}
-		return searchTickets;	
+		SearchTicketsAndCount andCount = new SearchTicketsAndCount();
+		andCount.setCount(count);
+		andCount.setSearchTicketList(searchTickets);
+		andCount.setCode(200);
+		return andCount;	
 	}
-	
-	
 	@RequestMapping(value="/findAllTicketsBySubscribeTeamAndKeyword",method=RequestMethod.POST)
 	@ResponseBody
-	public List<SearchTicket> findAllTicketsBySubscribeTeamAndKeyword(HttpSession httpSession, String keyword, String service, String severity, String status) {
+	public SearchTicketsAndCount findAllTicketsBySubscribeTeamAndKeyword(HttpSession httpSession, String page, String limit, String keyword, String service, String severity, String status) {
 		u = (User) httpSession.getAttribute("user");
-		List<SearchTicket> searchTickets = new ArrayList<SearchTicket>();		
-		List<Ticket> tickets = ticketService.findAllTicketsBySubscribeTeamAndKeyword(u.getTeamId(), service, status, severity, keyword);
-		
+		List<SearchTicket> searchTickets = new ArrayList<SearchTicket>();
+		int limitint = Integer.parseInt(limit);
+		int pageint = Integer.parseInt(page);
+		int limit1 = (pageint - 1) * limitint;
+		int limit2 = limit1 + limitint;
+		List<Ticket> tickets = ticketService.findAllTicketsBySubscribeTeamAndKeywordANDPageANDLimit(limit1, limit2, u.getTeamId(), service, status, severity, keyword);
+		int count = ticketService.findAllTicketCountBySubscribeTeamAndKeyword(u.getTeamId(), service, status, severity, keyword);
 		for (Ticket ticket : tickets) {
 			SearchTicket search = new SearchTicket();
 			search.setId(ticket.getId());
 			search.setTitle(ticket.getTitle());
 			search.setSeverity(ticket.getSeverity());
 			search.setService(ticketSerService.findTicketServiceById(ticket.getServiceId()).getName());
-			
 			search.setStatus(ticket.getStatus());
-			search.setUpdateDate(ticket.getUpdateDate());
+			search.setUpdateDate(ticket.getUpdateDate().toLocaleString());
 			search.setSubmitUser(userService.findUserById(ticket.getSubmitUserId()).getName());
 			search.setUpdateUser(userService.findUserById(ticket.getUpdateUserId()).getName());
 			search.setAssignUser(userService.findUserById(ticket.getAssignUserId()).getName());
 			searchTickets.add(search);
 		}
-		return searchTickets;	
+		SearchTicketsAndCount andCount = new SearchTicketsAndCount();
+		andCount.setCount(count);
+		andCount.setSearchTicketList(searchTickets);
+		andCount.setCode(200);
+		return andCount;	
 	}
 	@RequestMapping(value="/findAllTicketsByKeyword",method=RequestMethod.POST)
 	@ResponseBody
-	public List<SearchTicket> findAllTicketsByKeyword(HttpSession httpSession, String keyword, String service, String severity, String status) {
+	public SearchTicketsAndCount findAllTicketsByKeyword(HttpSession httpSession, String page, String limit, String keyword, String service, String severity, String status) {
 		u = (User) httpSession.getAttribute("user");
 		List<SearchTicket> searchTickets = new ArrayList<SearchTicket>();		
-		List<Ticket> tickets = ticketService.findAllTicketsByKeyword(service, status, severity, keyword);
-		
+		int limitint = Integer.parseInt(limit);
+		int pageint = Integer.parseInt(page);
+		int limit1 = (pageint - 1) * limitint;
+		int limit2 = limit1 + limitint;
+		List<Ticket> tickets = ticketService.findAllTicketsByKeywordANDPageANDLimit(limit1, limit2, service, status, severity, keyword);
+		int count = ticketService.findAllTicketCountByKeyword(service, status, severity, keyword);
 		for (Ticket ticket : tickets) {
 			SearchTicket search = new SearchTicket();
 			search.setId(ticket.getId());
 			search.setTitle(ticket.getTitle());
 			search.setSeverity(ticket.getSeverity());
 			search.setService(ticketSerService.findTicketServiceById(ticket.getServiceId()).getName());
-			
 			search.setStatus(ticket.getStatus());
-			search.setUpdateDate(ticket.getUpdateDate());
+			search.setUpdateDate(ticket.getUpdateDate().toLocaleString());
 			search.setSubmitUser(userService.findUserById(ticket.getSubmitUserId()).getName());
 			search.setUpdateUser(userService.findUserById(ticket.getUpdateUserId()).getName());
 			search.setAssignUser(userService.findUserById(ticket.getAssignUserId()).getName());
 			searchTickets.add(search);
 		}
-		return searchTickets;	
+		SearchTicketsAndCount andCount = new SearchTicketsAndCount();
+		andCount.setCount(count);
+		andCount.setSearchTicketList(searchTickets);
+		andCount.setCode(200);
+		return andCount;	
 	}
 	
 	@RequestMapping(value="/ticketCreatePage",method=RequestMethod.GET)
@@ -305,7 +330,7 @@ public class TicketController {
 	@RequestMapping(value="/ticketShowPage",method=RequestMethod.GET)
 	public String ticketShowPage(HttpSession httpSession, Model m, String ticketId) {
 		u = (User) httpSession.getAttribute("user");
-		List<Ticket> tickets = ticketService.findAllTicketsByKeyword(".*", ".*", ".*", ticketId);
+		List<Ticket> tickets = ticketService.findAllTicketsByKeywordANDPageANDLimit(0, 1, ".*", ".*", ".*", ticketId);
 		m.addAttribute("ticketServices", ticketSerService.findAllTicketService());
 		m.addAttribute("ticket", tickets.get(0));
 		String changeTicketStatus = "";
@@ -466,7 +491,7 @@ public class TicketController {
 		private String submitUser;
 		private String assignUser;
 		private String updateUser;
-		private Timestamp updateDate;
+		private String updateDate;
 		public long getId() {
 			return id;
 		}
@@ -515,13 +540,43 @@ public class TicketController {
 		public void setUpdateUser(String updateUser) {
 			this.updateUser = updateUser;
 		}
-		public Timestamp getUpdateDate() {
+		public String getUpdateDate() {
 			return updateDate;
 		}
-		public void setUpdateDate(Timestamp updateDate) {
+		public void setUpdateDate(String updateDate) {
 			this.updateDate = updateDate;
 		}
 		
+	}
+	class SearchTicketsAndCount{
+		private int count;
+		private String msg;
+		private int code;
+		public String getMsg() {
+			return msg;
+		}
+		public void setMsg(String msg) {
+			this.msg = msg;
+		}
+		public int getCode() {
+			return code;
+		}
+		public void setCode(int code) {
+			this.code = code;
+		}
+		private List<SearchTicket> searchTicketList;
+		public void setCount(int count) {
+			this.count = count;
+		}
+		public int getCount() {
+			return this.count;
+		}
+		public void setSearchTicketList(List<SearchTicket> searchTicketList) {
+			this.searchTicketList = searchTicketList;
+		}
+		public List<SearchTicket> getSearchTicketList(){
+			return this.searchTicketList;
+		}
 	}
 	/*
 	 *文件上传后返回数据

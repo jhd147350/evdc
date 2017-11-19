@@ -90,37 +90,83 @@ public class TicketServiceImp implements TicketService {
 		
 	}
 
-	@Override
-	public List<Ticket> findAllTicketsBySubmitTeamAndKeyword(long submitTeamId, String service, String status,
-			String severity, String keyword) {
-		// TODO Auto-generated method stub
-		return ticketMapper.findAllTicketsBySubmitTeamAndKeyword(submitTeamId, service, status, severity, keyword);
-	}
-
-	@Override
-	public List<Ticket> findAllTicketsByAssignTeamAndKeyword(long assignTeamId, String service, String status,
-			String severity, String keyword) {
-		// TODO Auto-generated method stub
-		return ticketMapper.findAllTicketsByAssignTeamAndKeyword(assignTeamId, service, status, severity, keyword);
-	}
-
-	@Override
-	public List<Ticket> findAllTicketsBySubscribeTeamAndKeyword(long subscribeTeamId, String service, String status,
-			String severity, String keyword) {
-		// TODO Auto-generated method stub
-		return ticketMapper.findAllTicketsBySubscribeTeamAndKeyword(subscribeTeamId, service, status, severity, keyword);
-	}
-
-	@Override
-	public List<Ticket> findAllTicketsByKeyword(String service, String status, String severity, String keyword) {
-		// TODO Auto-generated method stub
-		return ticketMapper.findAllTicketsByKeyword(service, status, severity, keyword);
-	}
+	
 
 	@Override
 	public void changeTicketStatus(String status, long ticketId) {
 		// TODO Auto-generated method stub
 		ticketMapper.updateTicketStatus(status, ticketId);
+	}
+
+
+
+	@Override
+	public List<Ticket> findAllTicketsBySubmitTeamAndKeywordANDPageANDLimit(int limit1, int limit2, long submitTeamId,
+			String service, String status, String severity, String keyword) {
+		// TODO Auto-generated method stub
+		return ticketMapper.findAllTicketsBySubmitTeamAndKeywordANDPageANDLimit(limit1, limit2, submitTeamId, service, status, severity, keyword);
+	}
+
+
+
+	@Override
+	public List<Ticket> findAllTicketsByAssignTeamAndKeywordANDPageANDLimit(int limit1, int limit2, long assignTeamId,
+			String service, String status, String severity, String keyword) {
+		// TODO Auto-generated method stub
+		return ticketMapper.findAllTicketsByAssignTeamAndKeywordANDPageANDLimit(limit1, limit2, assignTeamId, service, status, severity, keyword);
+	}
+
+
+
+	@Override
+	public List<Ticket> findAllTicketsBySubscribeTeamAndKeywordANDPageANDLimit(int limit1, int limit2,
+			long subscribeTeamId, String service, String status, String severity, String keyword) {
+		// TODO Auto-generated method stub
+		return ticketMapper.findAllTicketsBySubscribeTeamAndKeywordANDPageANDLimit(limit1, limit2, subscribeTeamId, service, status, severity, keyword);
+	}
+
+
+
+	@Override
+	public List<Ticket> findAllTicketsByKeywordANDPageANDLimit(int limit1, int limit2, String service, String status,
+			String severity, String keyword) {
+		// TODO Auto-generated method stub
+		return ticketMapper.findAllTicketsByKeywordANDPageANDLimit(limit1, limit2, service, status, severity, keyword);
+	}
+
+
+
+	@Override
+	public int findAllTicketCountBySubmitTeamAndKeyword(long submitTeamId, String service, String status,
+			String severity, String keyword) {
+		// TODO Auto-generated method stub
+		return ticketMapper.findAllTicketCountBySubmitTeamAndKeyword(submitTeamId, service, status, severity, keyword);
+	}
+
+
+
+	@Override
+	public int findAllTicketCountByAssignTeamAndKeyword(long assignTeamId, String service, String status,
+			String severity, String keyword) {
+		// TODO Auto-generated method stub
+		return ticketMapper.findAllTicketCountByAssignTeamAndKeyword(assignTeamId, service, status, severity, keyword);
+	}
+
+
+
+	@Override
+	public int findAllTicketCountBySubscribeTeamAndKeyword(long subscribeTeamId, String service, String status,
+			String severity, String keyword) {
+		// TODO Auto-generated method stub
+		return ticketMapper.findAllTicketCountBySubscribeTeamAndKeyword(subscribeTeamId, service, status, severity, keyword);
+	}
+
+
+
+	@Override
+	public int findAllTicketCountByKeyword(String service, String status, String severity, String keyword) {
+		// TODO Auto-generated method stub
+		return ticketMapper.findAllTicketCountByKeyword(service, status, severity, keyword);
 	}
 
 	

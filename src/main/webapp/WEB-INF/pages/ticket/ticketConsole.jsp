@@ -111,7 +111,7 @@
                 
             </div>
             <xblock><button class="layui-btn" onclick="ticket_create('创建工单','./ticketCreatePage','600','500')"><i class="layui-icon">&#xe608;</i>创建工单</button>
-            <span id="ticketNumSpan" class="x-right" style="line-height:40px">共有工单：${fn:length(tickets)} 条</span></xblock>
+            </xblock>
             <%-- <table class="layui-table">
                 <thead>
                     <tr>                       
@@ -150,32 +150,42 @@
         </div>
         <script src="../static/layui/layui.js" charset="utf-8"></script>
         <script src="../static/js/x-layui.js" charset="utf-8"></script>
+        <script type="text/html" id="showTicket">
+  			<a class="layui-btn layui-btn-mini" lay-event="detail">查看详情</a>
+		</script>
         <script>
             layui.use(['table','laydate','element','layer','form'], function(){
                 $ = layui.jquery;//jquery
-			var form = layui.form;
+				var form = layui.form;
               lement = layui.element;//面包导航
               layer = layui.layer;//弹出层
-              table = layui.table;
+              //table = layui.table;
               $('#ticketSreachBut').click();
               
-              table.render({
-            	    elem: '#ticketList'
+              /* table.render({
+            	  	elem: '#ticketList'
             	    ,height: 315
             	    ,url: '/demo/table/user/' //数据接口
             	    ,page: true //开启分页
             	    ,cols: [[ //表头
-            	      {field: 'ticketId', title: 'ticketId', width:80, sort: true, fixed: 'left'}
-            	      ,{field: 'username', title: '用户名', width:80}
-            	      ,{field: 'sex', title: '性别', width:80, sort: true}
-            	      ,{field: 'city', title: '城市', width:80} 
-            	      ,{field: 'sign', title: '签名', width: 177}
-            	      ,{field: 'experience', title: '积分', width: 80, sort: true}
-            	      ,{field: 'score', title: '评分', width: 80, sort: true}
-            	      ,{field: 'classify', title: '职业', width: 80}
-            	      ,{field: 'wealth', title: '财富', width: 135, sort: true}
+            	      {field: 'id', title: 'ticketId', width:80, sort: true, fixed: 'left'}
+            	      ,{field: 'title', title: '标题', width:177}
+            	      ,{field: 'service', title: '服务', width:80, sort: true}
+            	      ,{field: 'severity', title: '严重等级', width:80} 
+            	      ,{field: 'status', title: '状态', width: 80}
+            	      ,{field: 'updateDate', title: '更新时间', width: 80, sort: true}
+            	      ,{field: 'submitUser', title: '提交人', width: 80, sort: true}
+            	      ,{field: 'updateUser', title: '最后操作人', width: 80}
+            	      ,{field: 'assignUser', title: '指派人', width: 80, sort: true}
             	    ]]
-            	  });
+              		,url: '/api/data/'
+            	  	,where: {"keyword": "%"+keyword+"%", "service": serviceType, "severity": severity, "status": ticketStatus} //如果无需传递额外参数，可不加该参数
+            	  	,method: 'post' //如果无需自定义HTTP类型，可不加该参数
+            	  	//,request: {} //如果无需自定义请求参数，可不加该参数
+            	  	,response: {
+						dataName: 'searchTicketList' //数据列表的字段名称，默认：data
+            	  	  } //如果无需自定义数据响应名称，可不加该参数
+            	}); */ 
               
             });
             
@@ -196,7 +206,49 @@
             	var serviceType = document.getElementById("serviceType").value;
             	var severity = document.getElementById("severity").value;
                 var ticketStatus = document.getElementById("ticketStatus").value;
-            	$.ajax({  
+                
+                table = layui.table;
+                table.render({
+            	  	elem: '#ticketList'
+            	    ,page: true //开启分页
+            	    ,limits:[10,20,30,40,50,60]
+                	,limit:10
+            	    ,cols: [[ //表头
+            	      {field: 'id', title: 'ticketId', width:100, sort: true, fixed: 'left'}
+            	      ,{field: 'title', title: '标题', width:250}
+            	      ,{field: 'service', title: '服务', width:100, sort: true}
+            	      ,{field: 'severity', title: '严重等级', width:100} 
+            	      ,{field: 'status', title: '状态', width: 100}
+            	      ,{field: 'updateDate', title: '更新时间', width: 100, sort: true}
+            	      ,{field: 'submitUser', title: '提交人', width: 100, sort: true}
+            	      ,{field: 'updateUser', title: '最后操作人', width: 100}
+            	      ,{field: 'assignUser', title: '指派人', width: 100, sort: true}
+            	      ,{fixed: 'right', width:150, align:'center', toolbar: '#showTicket'}
+            	    ]]
+              		,url: '..'+findMethod
+            	  	,where: {"keyword": "%"+keyword+"%", "service": serviceType, "severity": severity, "status": ticketStatus} //如果无需传递额外参数，可不加该参数
+            	  	,method: 'post' //如果无需自定义HTTP类型，可不加该参数
+            	  	//,request: {} //如果无需自定义请求参数，可不加该参数
+            	  	,response: {
+            	  		statusCode : 200
+						,dataName: 'searchTicketList' //数据列表的字段名称，默认：data
+            	  	  } //如果无需自定义数据响应名称，可不加该参数
+            	  	,done: function(res, curr, count){
+            	  	    //如果是异步请求数据方式，res即为你接口返回的信息。
+            	  	    //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+            	  		obj.disabled=false;
+                   		obj.setAttribute("class" , "layui-btn");
+            	  	  }
+            	});
+              	//监听工具条
+    			table.on('tool(ticketListFilter)', function(obj) {
+    				var data = obj.data;
+    				var ticketId = data.id;
+    				if (obj.event === 'detail') {
+    					x_admin_show('工单详情','./ticketShowPage?ticketId='+ticketId);
+    				}
+    			});
+            	/* $.ajax({  
               	  url: '..'+findMethod, 
                   type: 'POST',  
                   dataType: 'json',
@@ -238,14 +290,14 @@
                		})
                		obj.disabled=false;
                		obj.setAttribute("class" , "layui-btn");
-                  }); 
+                  }); */ 
             }
              /*查看工单详情 */
-             function ticket_show (argument) {
+             /* function ticket_show (argument) {
 
             	 console.log(argument);
             	 x_admin_show('工单详情','./ticketShowPage?ticketId='+argument.getAttribute("ticketId"));
-             }
+             } */
              /*创建工单*/
             function ticket_create(title,url,w,h){
                 x_admin_show(title,url,w,h);
