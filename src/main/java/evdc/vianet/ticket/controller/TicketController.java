@@ -128,7 +128,7 @@ public class TicketController {
 		int pageint = Integer.parseInt(page);
 		int limit1 = (pageint - 1) * limitint;
 		int limit2 = limit1 + limitint;
-		List<Ticket> tickets = ticketService.findAllTicketsByAssignTeamAndKeywordANDPageANDLimit(limit1, limit2, u.getTeamId(), service, status, severity, keyword);
+		List<Ticket> tickets = ticketService.findAllTicketsByAssignTeamAndKeywordANDPageANDLimit(limit1, limitint, u.getTeamId(), service, status, severity, keyword);
 		int count = ticketService.findAllTicketCountByAssignTeamAndKeyword(u.getTeamId(), service, status, severity, keyword);
 		for (Ticket ticket : tickets) {
 			SearchTicket search = new SearchTicket();
@@ -159,7 +159,7 @@ public class TicketController {
 		int pageint = Integer.parseInt(page);
 		int limit1 = (pageint - 1) * limitint;
 		int limit2 = limit1 + limitint;
-		List<Ticket> tickets = ticketService.findAllTicketsBySubmitTeamAndKeywordANDPageANDLimit(limit1, limit2, u.getTeamId(), service, status, severity, keyword);
+		List<Ticket> tickets = ticketService.findAllTicketsBySubmitTeamAndKeywordANDPageANDLimit(limit1, limitint, u.getTeamId(), service, status, severity, keyword);
 		int count = ticketService.findAllTicketCountBySubmitTeamAndKeyword(u.getTeamId(), service, status, severity, keyword);
 		for (Ticket ticket : tickets) {
 			SearchTicket search = new SearchTicket();
@@ -189,7 +189,7 @@ public class TicketController {
 		int pageint = Integer.parseInt(page);
 		int limit1 = (pageint - 1) * limitint;
 		int limit2 = limit1 + limitint;
-		List<Ticket> tickets = ticketService.findAllTicketsBySubscribeTeamAndKeywordANDPageANDLimit(limit1, limit2, u.getTeamId(), service, status, severity, keyword);
+		List<Ticket> tickets = ticketService.findAllTicketsBySubscribeTeamAndKeywordANDPageANDLimit(limit1, limitint, u.getTeamId(), service, status, severity, keyword);
 		int count = ticketService.findAllTicketCountBySubscribeTeamAndKeyword(u.getTeamId(), service, status, severity, keyword);
 		for (Ticket ticket : tickets) {
 			SearchTicket search = new SearchTicket();
@@ -219,7 +219,7 @@ public class TicketController {
 		int pageint = Integer.parseInt(page);
 		int limit1 = (pageint - 1) * limitint;
 		int limit2 = limit1 + limitint;
-		List<Ticket> tickets = ticketService.findAllTicketsByKeywordANDPageANDLimit(limit1, limit2, service, status, severity, keyword);
+		List<Ticket> tickets = ticketService.findAllTicketsByKeywordANDPageANDLimit(limit1, limitint, service, status, severity, keyword);
 		int count = ticketService.findAllTicketCountByKeyword(service, status, severity, keyword);
 		for (Ticket ticket : tickets) {
 			SearchTicket search = new SearchTicket();
@@ -266,8 +266,7 @@ public class TicketController {
 			         if(ftpServer.init()) {
 				         System.out.println("开始上传:"+serFileName);
 			        	 InputStream input = mpf.getInputStream();
-			        	 ftpServer.execute(ftpServer.getMethod("UPLOAD"), serFileName, input, null);
-			        	 
+			        	 ftpServer.execute(ftpServer.getMethod("UPLOAD"), serFileName, input, null);	 
 			         }
 			         status.setStatus(0);
 		        	 status.setTicketFilePath(serFileName);
@@ -440,11 +439,12 @@ public class TicketController {
        //下载显示的文件名，解决中文名称乱码问题  
        //String downloadFielName = new String(attachmentId.getBytes("UTF-8"),"iso-8859-1");
        //通知浏览器以attachment（下载方式）打开图片
-       headers.setContentDispositionFormData("attachment", attachmentName); 
+       headers.setContentDispositionFormData("attachment", attachmentName);
+       //headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + attachmentName + "\"");
        //application/octet-stream ： 二进制流数据（最常见的文件下载）。
        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),    
-               headers, HttpStatus.CREATED);  
+               headers, HttpStatus.OK);  
     }
     @RequestMapping(value="/changeTicketPage",method=RequestMethod.GET)
 	public String changeTicketPage(HttpSession httpSession, Model m, String ticketId, String method ) {

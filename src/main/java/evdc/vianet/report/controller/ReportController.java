@@ -48,7 +48,7 @@ public class ReportController {
 	
 	@RequestMapping(value="/exportTicketReport", method=RequestMethod.GET)
     public ResponseEntity<byte[]> exportTicketReport(HttpServletRequest request,
-           String ticketId)throws Exception {
+    		String ticketId)throws Exception {
 	    	List<TicketChangeRecordView> ticketChangeRecordViews = ticketChangeRecordService.getAllViewRecordsByTicketId(Long.parseLong(ticketId));
 	    	String path = request.getServletContext().getRealPath("/static/");
 	    	File xlsFile = new File(path+"file/report/jxl.xls");
@@ -75,16 +75,14 @@ public class ReportController {
 	        workbook.write();
 	        workbook.close();
 	    	HttpHeaders headers = new HttpHeaders();  
-	       //下载显示的文件名，解决中文名称乱码问题  
-	       //String downloadFielName = new String(attachmentId.getBytes("UTF-8"),"iso-8859-1");
-	       //通知浏览器以attachment（下载方式）打开图片
-	       headers.setContentDispositionFormData("attachment", "ticket"+ticketId+"report.xls"); 
-	       //application/octet-stream ： 二进制流数据（最常见的文件下载）。
-	       headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-	       return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(xlsFile),    
-	               headers, HttpStatus.CREATED); 
-	
-	       
-	       	         
+	    	//下载显示的文件名，解决中文名称乱码问题  
+	    	//String downloadFielName = new String(attachmentId.getBytes("UTF-8"),"iso-8859-1");
+	    	//通知浏览器以attachment（下载方式）打开图片
+	    	headers.setContentDispositionFormData("attachment", "ticket" + ticketId + "report.xls");
+	    	//headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"ticket" + ticketId + "report.xls\"");
+	    	//application/octet-stream ： 二进制流数据（最常见的文件下载）。
+	    	headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+	    	return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(xlsFile),    
+	    			headers, HttpStatus.OK);        
     }
 }

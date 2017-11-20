@@ -20,7 +20,6 @@ import javax.net.ssl.TrustManagerFactory;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
-import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 
 /**
@@ -133,8 +132,7 @@ public class FtpServer {
                 return success;  
             } 
             ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
-            System.out.println(ftp.listFiles().length);
-            ftp.makeDirectory(path);  
+            System.out.println(ftp.listFiles().length); 
             ftp.changeWorkingDirectory(path);  
             success = true;  
         } catch (IOException e) {  
@@ -236,8 +234,7 @@ public class FtpServer {
         ftpServer.setUrl("172.16.136.20");
         ftpServer.setUsername("davin");
         ftpServer.setPassword("paaspassword");
-        ftpServer.setPath("/paasfolder/evdcFile");
-        
+        ftpServer.setPath("/paasfolder/evdcFile");   
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");//设置日期格式
 		System.out.println(df.format(new Date()));// 
         File file = new File("E:\\temp\\photo.jpg");
