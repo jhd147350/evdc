@@ -22,7 +22,7 @@ public interface EmailMapper {
 	int insertEmail(Email e);
 
 	// TODO long 类型默认为0
-	@Select("select * from " + Email.TABLE_NAME + " where ticketId=0 and `delete`=false limit #{arg0},#{arg1}")
+	@Select("select * from " + Email.TABLE_NAME + " where ticketId=0 and `delete`=false order by id desc limit #{arg0},#{arg1}")
 	List<Email> selectAllUnhandledEmail(long rowsOffset, long limit);
 
 	@Select("select * from " + Email.TABLE_NAME + " where ticketId=#{id}")

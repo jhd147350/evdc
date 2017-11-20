@@ -60,7 +60,7 @@ public class EmailProvider {
 		if (limit == null || limit == 0l) {
 			return sql;
 		} else {
-			return sql + " \nlimit " + param.get("page") + "," + param.get("limit");
+			return sql + "\norder by id desc" + " \nlimit " + param.get("page") + "," + param.get("limit");
 		}
 
 	}
