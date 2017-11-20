@@ -11,6 +11,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpResponse;
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,14 +22,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
 import evdc.vianet.shift.entity.jo.JsonResult;
 import evdc.vianet.ticket.entity.TicketSer;
 import evdc.vianet.ticket.service.TicketSerService;
-import evdc.vianet.ticket.service.TicketSerServiceImp;
 
 @Controller
 @RequestMapping("/emailticket")
-public class EmialTicketController {
+public class EmailTicketController {
+	
+	private Logger logger=Logger.getLogger(EmailTicketController.class);
 
 	@Autowired
 	@Qualifier("emailTicketService")
@@ -75,6 +78,12 @@ public class EmialTicketController {
 	public String getEmailTicketConsolePage(Model m) {
 		List<TicketSer> allServices = tss.findAllTicketService();
 		m.addAttribute("services", allServices);
+		System.out.println("jhd log---------------------------");
+		logger.debug("debug test");
+		logger.info("info");
+		logger.error("err");
+		logger.warn("warn");
+		System.out.println("jhd log---------------------------");
 		return "emailticket/console";
 
 	}
