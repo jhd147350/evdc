@@ -32,13 +32,13 @@
                   <div class="layui-form-item">
 
 
-					<div class="layui-input-inline">
+					<!-- <div class="layui-input-inline">
                       <input type="text" id="keyword" name="keyword"  placeholder="ticketId" autocomplete="off" class="layui-input">
                     </div>
 					
                     <div class="layui-inline">
                         <button id="ticketSreachBut" class="layui-btn" onclick="ticket_sreach(this,'1')"><i class="layui-icon">&#xe615;</i></button>
-                    </div>
+                    </div> -->
                     <div class="layui-inline x-right">
                     	<button id="reportExport" class="layui-btn layui-btn-disabled" disalbed="true" onclick="">导出</button>
                     </div>
@@ -52,32 +52,47 @@
                     <tr>
                         
                         <th>
-                            TicketID
+                           	ID
                         </th>
                         <th>
-                           操作
+                      	报表名称     
                         </th>
                         <th>
-                            值
+                     	描述       
                         </th>
                         <th>
-                            操作人
+                               	操作
                         </th>
-                        <th>
-                            时间
-                        </th>
-                    </tr>
+                    </tr> 
                 </thead>
-                <tbody id="ticketList"> 
+                <tbody id="reportSearchList">
+                <c:forEach items="${reportSearchs}" var="item" varStatus="status">  
+					  <tr >  
+					    <td>${item.id}</td>  
+					    <td>${item.name}</td>  
+					    <td>${item.describe}</td>  
+					    
+								<td class="td-manage">
+	                            <%-- <a title="编辑" href="javascript:;" onclick="role_edit('编辑','./teamUserEditPage?id=${item.id}','4','','510')"
+	                            class="ml-5" style="text-decoration:none">
+	                                <i class="layui-icon">&#xe642;</i>
+	                            </a> --%>
+	                            <a title="执行" href="javascript:;" onclick='ticket_sreach(this, "${item.id}")' 
+	                            style="text-decoration:none">
+	                                <i class="layui-icon">&#xe640;</i>
+	                            </a>
+                        		</td> 
+					    
+					  </tr>  
+				</c:forEach> 
                 </tbody>
             </table>
-
-            <div id="page"></div>
+			<table id="ticketList" lay-filter="ticketListFilter"></table>
         </div>
         <script src="../static/layui/layui.js" charset="utf-8"></script>
         <script src="../static/js/x-layui.js" charset="utf-8"></script>
         <script>
-            layui.use(['laydate','element','layer','form'], function(){
+            layui.use(['table','laydate','element','layer','form'], function(){
                 $ = layui.jquery;//jquery
 			var form = layui.form;
               lement = layui.element;//面包导航
@@ -88,7 +103,7 @@
             function ticket_sreach(obj,id){
             	obj.disabled=true;
             	obj.setAttribute("class" , "layui-btn layui-btn-disabled");
-            	var ticketList = document.getElementById("ticketList");
+            	/* var ticketList = document.getElementById("ticketList");
             	
             	var n = ticketList.firstChild;
                 while(n) {
@@ -96,8 +111,47 @@
                     ticketList.removeChild(n);
                     n = m;
                 }
-            	var ticketId = document.getElementById("keyword").value;
-            	$.ajax({  
+            	var ticketId = document.getElementById("keyword").value; */
+            	
+            	table = layui.table;
+                table.render({
+            	  	elem: '#ticketList'
+            	    ,page: true //开启分页
+            	    ,limits:[10,20,30,40,50,60]
+                	,limit:10
+            	    ,cols: [[ //表头
+            	      {field: 'id', title: 'ticketId', width:100, sort: true, fixed: 'left'}
+            	      ,{field: 'title', title: '标题', width:250}
+            	      ,{field: 'source', title: '来源', width:100, sort: true}
+            	      ,{field: 'serviceName', title: '服务', width:100, sort: true}
+            	      ,{field: 'severity', title: '严重等级', width:100} 
+            	      ,{field: 'status', title: '状态', width: 100}
+            	      ,{field: 'satisfation', title: '评分', width: 100}
+            	      ,{field: 'updateDate', title: '更新时间', width: 100, sort: true}
+            	      ,{field: 'submitUserName', title: '提交人', width: 100, sort: true}
+            	      ,{field: 'submitTeamName', title: '提交组', width: 100, sort: true}
+            	      ,{field: 'updateUserName', title: '最后操作人', width: 100}
+            	      ,{field: 'assignUserName', title: '指派人', width: 100, sort: true}
+            	      ,{field: 'assignTeamName', title: '指派组', width: 100, sort: true}
+            	      ,{field: 'submitDate', title: '提交时间', width: 100, sort: true}
+            	      ,{fixed: 'right', width:150, align:'center', toolbar: '#showTicket'}
+            	    ]]
+              		,url: './ticketReport'
+            	  	,where: {"searchId": id} //如果无需传递额外参数，可不加该参数
+            	  	,method: 'post' //如果无需自定义HTTP类型，可不加该参数
+            	  	//,request: {} //如果无需自定义请求参数，可不加该参数
+            	  	,response: {
+            	  		statusCode : 200
+						,dataName: 'ticketViewList' //数据列表的字段名称，默认：data
+            	  	  } //如果无需自定义数据响应名称，可不加该参数
+            	  	,done: function(res, curr, count){
+            	  	    //如果是异步请求数据方式，res即为你接口返回的信息。
+            	  	    //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+            	  		obj.disabled=false;
+                   		obj.setAttribute("class" , "layui-btn");
+            	  	  }
+            	});
+            	/* $.ajax({  
               	  url: './ticketReport', 
                   type: 'POST',  
                   dataType: 'json',
@@ -131,7 +185,7 @@
                		$("#reportExport").attr("disabled",false);
                		$("#reportExport").attr("class" , "layui-btn");
                		$("#reportExport").attr("onclick" , "location.href='./exportTicketReport?ticketId="+exportTicketId+"'");
-                  }); 
+                  }); */ 
             }
 
             </script>

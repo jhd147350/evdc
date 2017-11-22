@@ -6,10 +6,12 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
 
 import evdc.vianet.ticket.entity.Ticket;
 import evdc.vianet.ticket.entity.TicketSubscribeTeam;
+import evdc.vianet.ticket.entity.view.TicketView;
 
 /**
  * @author jaden
@@ -73,4 +75,8 @@ public interface TicketMapper {
 	@Update("update " + Ticket.TABLE_NAME
 			+ " set `status`=#{status} where `id`=#{ticketId}")
 	void updateTicketStatus(@Param("status") String status, @Param("ticketId") long ticketId);
+	
+	List<TicketView> findTicketViewsBySQL(String sql);
+	
+	int findTicketViewsCountBySQL(String sql);
 }

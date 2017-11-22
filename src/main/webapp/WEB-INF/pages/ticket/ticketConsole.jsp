@@ -193,14 +193,14 @@
             function ticket_sreach(obj,id){
             	obj.disabled=true;
             	obj.setAttribute("class" , "layui-btn layui-btn-disabled");
-            	var ticketList = document.getElementById("ticketList");
+            	/*var ticketList = document.getElementById("ticketList");
             	
             	var n = ticketList.firstChild;
                 while(n) {
                     var m = n.nextSibling;
                     ticketList.removeChild(n);
                     n = m;
-                }
+                } */
             	var findMethod = document.getElementById("findMethod").value;
             	var keyword = document.getElementById("keyword").value;
             	var serviceType = document.getElementById("serviceType").value;

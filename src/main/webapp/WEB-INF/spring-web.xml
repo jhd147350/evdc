@@ -7,13 +7,12 @@
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
         http://www.springframework.org/schema/task  
 http://www.springframework.org/schema/task/spring-task-4.3.xsd ">
-
+	<!-- 扫描任务 -->
 	<context:component-scan base-package="evdc.vianet.auth" />
 	<context:component-scan base-package="evdc.vianet.admin" />
 	<context:component-scan base-package="evdc.vianet.ticket" />
 	<context:component-scan base-package="evdc.vianet.test" />
 	<context:component-scan base-package="evdc.vianet.shift" />
-	<!-- 扫描任务 -->
     <context:component-scan base-package="evdc.vianet.emailticket.task" />
 	<context:component-scan base-package="evdc.vianet.report" />
 	<mvc:annotation-driven>

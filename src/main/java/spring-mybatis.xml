@@ -47,7 +47,7 @@
 	<mybatis:scan base-package="evdc.vianet.admin.mapper" />
 	<mybatis:scan base-package="evdc.vianet.shift.mapper" />
 	<mybatis:scan base-package="evdc.vianet.emailticket.task" />
-
+	<mybatis:scan base-package="evdc.vianet.report.mapper" />
 
 	<!-- sessionFactory -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

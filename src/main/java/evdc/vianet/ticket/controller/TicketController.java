@@ -552,6 +552,7 @@ public class TicketController {
 		private int count;
 		private String msg;
 		private int code;
+		private List<SearchTicket> searchTicketList;
 		public String getMsg() {
 			return msg;
 		}
@@ -564,7 +565,7 @@ public class TicketController {
 		public void setCode(int code) {
 			this.code = code;
 		}
-		private List<SearchTicket> searchTicketList;
+		
 		public void setCount(int count) {
 			this.count = count;
 		}

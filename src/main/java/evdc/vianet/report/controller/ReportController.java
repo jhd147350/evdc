@@ -18,7 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import evdc.vianet.report.entity.ReportTicketSearch;
+import evdc.vianet.report.service.ReportTicketSearchService;
+import evdc.vianet.report.service.ReportTicketService;
+
 import evdc.vianet.ticket.entity.view.TicketChangeRecordView;
+import evdc.vianet.ticket.entity.view.TicketView;
 import evdc.vianet.ticket.service.TicketChangeRecordService;
 import jxl.Workbook;
 import jxl.write.Label;
@@ -32,18 +37,32 @@ public class ReportController {
 	@Autowired
 	@Qualifier("ticketChangeRecordService")
 	private TicketChangeRecordService ticketChangeRecordService;
+	@Autowired
+	@Qualifier("reportTicketSearchService")
+	private ReportTicketSearchService reportTicketSearchService;
+	@Autowired
+	@Qualifier("reportTicketService")
+	private ReportTicketService reportTicketService;
 	
 	@RequestMapping(value="/ticketReportPage",method=RequestMethod.GET)
 	public String ticketReportPage(Model m) {
-		
+		m.addAttribute("reportSearchs", reportTicketSearchService.getAllReportTicketSearchs());
 		return "ticket/ticketReportPage";
 	}
 	
 	@RequestMapping(value="/ticketReport",method=RequestMethod.POST)
 	@ResponseBody
-	public List<TicketChangeRecordView> ticketReport(Model m, String ticketId ) {
-		List<TicketChangeRecordView> ticketChangeRecordViews = ticketChangeRecordService.getAllViewRecordsByTicketId(Long.parseLong(ticketId));
-		return ticketChangeRecordViews;
+	public TicketViewsAndCount ticketReport(Model m, String searchId, String page, String limit ) {
+		int limitint = Integer.parseInt(limit);
+		int pageint = Integer.parseInt(page);
+		int limit1 = (pageint - 1) * limitint;
+		ReportTicketSearch reportTicketSearch = reportTicketSearchService.getReportTicketSearchById(Integer.parseInt(searchId));
+		int count = reportTicketService.getCountBySql(reportTicketSearch.getSql()); 
+		TicketViewsAndCount andCount = new TicketViewsAndCount();
+		andCount.setCount(count);
+		andCount.setTicketViewList(reportTicketService.getTicketViewsBySql(limit1, limitint, reportTicketSearch.getSql()));
+		andCount.setCode(200);
+		return andCount;
 	}
 	
 	@RequestMapping(value="/exportTicketReport", method=RequestMethod.GET)
@@ -85,4 +104,36 @@ public class ReportController {
 	    	return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(xlsFile),    
 	    			headers, HttpStatus.OK);        
     }
+}
+class TicketViewsAndCount{
+	private int count;
+	private String msg;
+	private int code;
+	private List<TicketView> ticketViewList;
+	public String getMsg() {
+		return msg;
+	}
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+	public int getCode() {
+		return code;
+	}
+	public void setCode(int code) {
+		this.code = code;
+	}
+	
+	public void setCount(int count) {
+		this.count = count;
+	}
+	public int getCount() {
+		return this.count;
+	}
+	public List<TicketView> getTicketViewList() {
+		return ticketViewList;
+	}
+	public void setTicketViewList(List<TicketView> ticketViewList) {
+		this.ticketViewList = ticketViewList;
+	}
+	
 }

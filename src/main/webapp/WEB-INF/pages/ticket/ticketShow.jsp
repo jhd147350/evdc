@@ -96,13 +96,14 @@
                         </div>
                     </div>
             	</div>
-                <div class="layui-form-item"> 
-                    <input type="submit"  id="saveChange" class="layui-btn layui-btn-disabled" lay-filter="save" lay-submit="" disabled="true" value="保存">
-                </div>
+                
                 
             </form>
             <div class="layui-form layui-form-pane">
             <div class="layui-form-item"> 
+            <div class="layui-inline"> 
+                    <button type="submit"  id="saveChange" class="layui-btn layui-btn-disabled"  disabled="true">保存</button>
+            </div>
             <div class="layui-inline">
             	<button id="changeTicketStatus" class="layui-btn" onclick="ticket_change(this)">${changeTicketStatus}</button>
             </div>

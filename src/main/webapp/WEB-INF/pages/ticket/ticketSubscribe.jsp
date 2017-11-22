@@ -133,8 +133,7 @@
 		      	  	delete nonSubscribeTeam[teamId];
 		      	  	console.log(addSubscribeTeamId);
 		      	  	
-		      	  	//添加订阅组
-		      	  	subscribeTeam[teamId] = teamName;
+		      	  	
 		      	  	var $tr = $("<tr></tr>");
 	              	$tr.append($('<td  colspan="9">'+teamName+'</td>'));
 	              	$del = $('<td><a title="删除" teamId="'+teamId+'" teamName="'+teamName+'" href="javascript:;" onclick="subs_del(this)" style="text-decoration:none"> <i class="layui-icon">&#xe640;</i></a></td>');
@@ -159,8 +158,6 @@
                 }else{
                 	reduceSubscribeTeamId[teamId] = teamId;;
                 }
-                /* 删除订阅组指定对象 */
-                delete subscribeTeam[teamId];
                 /* 添加非订阅组指定对象 */
                 nonSubscribeTeam[teamId] = teamName;
                 /* 更新非订阅组select */

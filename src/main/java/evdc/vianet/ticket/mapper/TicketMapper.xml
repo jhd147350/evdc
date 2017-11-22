@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="evdc.vianet.ticket.mapper.TicketMapper">
+    <!-- <resultMap type="UserInfo" id="UserInfo">
+        <id property="infoId" javaType="int" column="info_id" />
+        <result javaType="java.lang.String" property="nickName" column="nickname" />
+    </resultMap>
+    <resultMap type="UserInfo" id="UserInfoWithUser">
+        <id property="infoId" javaType="int" column="info_id" />
+        <result javaType="java.lang.String" property="nickName" column="nickname" />
+        <association property="user" column="user_id" javaType="int"
+            select="com.wode.mapper.UserMapper.findUserById"></association>
+            这里我们通过mapper识别符找到userMapper中的findUserById，其实是执行了两次
+    </resultMap> -->
+    
+    <select id="findTicketViewsBySQL" parameterType="String" resultType="evdc.vianet.ticket.entity.view.TicketView"
+        >
+    	${_parameter} 
+    </select>
+    
+    
+    <select id="findTicketViewsCountBySQL" parameterType="String"
+        resultType="int">
+        ${_parameter}
+    </select>
+</mapper>
