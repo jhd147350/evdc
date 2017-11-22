@@ -70,7 +70,7 @@ public class UserController {
 	public String doLogin(String loginId, String password, Model m, HttpSession httpSession) {
 		User u = userService.login(loginId, password);
 		if(u!=null){
-			httpSession.setMaxInactiveInterval(30*60);
+			httpSession.setMaxInactiveInterval(300*60);
 			httpSession.setAttribute("user", u);
 			return "redirect:/user/indexPage";
 		}

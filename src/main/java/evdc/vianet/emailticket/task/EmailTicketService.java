@@ -8,18 +8,30 @@ import java.util.List;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import evdc.vianet.shift.entity.jo.JsonResult;
 import evdc.vianet.shift.entity.jo.TableData;
+import evdc.vianet.ticket.entity.TicketMessage;
+import evdc.vianet.ticket.service.TicketCommentService;
+import evdc.vianet.ticket.service.TicketService;
 
 @Service("emailTicketService")
 public class EmailTicketService {
 
 	@Autowired
 	EmailMapper mapper;
+
+	@Autowired
+	@Qualifier("ticketService")
+	TicketService ticketService;
+	
+	@Autowired
+	@Qualifier("ticketCommentService")
+	TicketCommentService ticketCommentService;
 
 	public String getEmailJson(long page, long limit) {
 		List<Email> emails = mapper.selectAllUnhandledEmail((page - 1) * limit, limit);
@@ -35,10 +47,12 @@ public class EmailTicketService {
 
 	}
 
-	public String getEmailTicketJson(long page, long limit, String idorkey, String status, String service, String startdate, String enddate, String client) {
+	public String getEmailTicketJson(long page, long limit, String idorkey, String status, String service,
+			String startdate, String enddate, String client) {
 		// List<EmailTicket> emails = mapper.selectAllEmailTicket((page - 1) * limit,
 		// limit);
-		List<EmailTicket> emails = mapper.searchEmailTicket((page - 1) * limit, limit, idorkey, status, service, startdate, enddate, client);
+		List<EmailTicket> emails = mapper.searchEmailTicket((page - 1) * limit, limit, idorkey, status, service,
+				startdate, enddate, client);
 		long count = mapper.countSearchEmailTicket(idorkey, status, service, startdate, enddate, client);
 		TableData<EmailTicket> jsonData = new TableData<>();
 		jsonData.setCode(200);
@@ -49,13 +63,15 @@ public class EmailTicketService {
 		return jo.toString();
 
 	}
-	
-	//导出数据就不需要分页处理了
-	public List<EmailTicket> getEmailTickets(String idorkey, String status, String service, String startdate, String enddate, String client) {
+
+	// 导出数据就不需要分页处理了
+	public List<EmailTicket> getEmailTickets(String idorkey, String status, String service, String startdate,
+			String enddate, String client) {
 		// List<EmailTicket> emails = mapper.selectAllEmailTicket((page - 1) * limit,
 		// limit);
-		//(page - 1) * limit, limit
-		List<EmailTicket> emails = mapper.searchEmailTicket(null, 0l, idorkey, status, service, startdate, enddate, client);
+		// (page - 1) * limit, limit
+		List<EmailTicket> emails = mapper.searchEmailTicket(null, 0l, idorkey, status, service, startdate, enddate,
+				client);
 		return emails;
 
 	}
@@ -71,13 +87,13 @@ public class EmailTicketService {
 	}
 
 	@Transactional
-	public String createEmailTicket(String json) throws ParseException {
+	public String createEmailTicket(String json, long uid, long tid) throws ParseException {
 		JSONObject jo = new JSONObject(json);
 		String emailId = jo.getString("emailId");
 		String title = jo.getString("title");
-		String client = jo.getString("client");
+		String severity = jo.getString("severity");
 		String service = jo.getString("service");
-		String note = jo.getString("note");
+		String desc = jo.getString("desc");
 		String timestamp = jo.getString("timestamp");
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -85,18 +101,12 @@ public class EmailTicketService {
 
 		Timestamp ts = new Timestamp(temp.getTime());
 
-		EmailTicket et = new EmailTicket();
+		long ticketId = ticketService.createTicket("email", title, desc, service, severity, uid, tid);
 
-		et.setClient(client);
-		et.setService(service);
-		et.setStatus("open");
-		et.setTimestamp(ts);
-		et.setTitle(title);
-
-		mapper.insertEmailTicket(et);
-
-		System.out.println("自动生成的id：" + et.getId());
-		addNote2Email(note, et.getId(), emailId);
+		System.out.println("自动生成的id：" + ticketId);
+		addNote2Email(desc, ticketId, emailId);
+		
+		ticketCommentService.addTicketComment(ticketId, uid, tid, desc, TicketMessage.Scope.Shared.toString());
 
 		return JsonResult.SUC.toString();
 

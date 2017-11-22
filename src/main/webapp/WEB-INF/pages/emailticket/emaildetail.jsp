@@ -26,6 +26,7 @@
 		<c:if test="${m.ticketId == 0}">
 			<button id="merge" class="layui-btn">合并到已有工单</button>
 			<button id="new" class="layui-btn">新建工单</button>
+			<button id="other" class="layui-btn">新建工单2</button>
 		</c:if>
 	</div>
 
@@ -38,7 +39,6 @@
 	<div>
 		<pre>${m.body}</pre>
 	</div>
-
 
 
 
@@ -61,6 +61,10 @@
 			$("#new").click(function() {
 				openLayer(false);
 			});
+
+			$("#other").click(function() {
+				openOther();
+			});
 		}();
 
 		function openLayer(isMerge) {
@@ -75,11 +79,11 @@
 			if (isMerge) {
 				title = '合并到';
 				closeBtnStr = '合并';
-				contentHtml = $('#onlyId').html() + $('#onlyNote').html();
+				contentHtml = $('#onlyId').html() + $('#comment').html();
 			} else {
 				title = '新建';
 				closeBtnStr = '新建';
-				contentHtml = $('#myform').html() + $('#onlyNote').html()
+				contentHtml = $('#myform').html() + $('#description').html()
 						+ $('#mys').html();
 				//contentHtml = '<div id="mydiv"></div>' //使用模板 可以后续渲染内容
 			}
@@ -119,6 +123,21 @@
 			//});
 
 		}
+
+		function openOther() {
+			var layer = layui.layer;
+
+			layer.open({
+				type : 2,
+				skin : 'layui-layer-rim', // 加上边框
+				area : [ '700px', '750px' ],//'800px', // 宽,默认自适应
+				content : '../ticket/ticketCreatePage?title=' + '${m.subject}'
+						+ '&emailid=' + '${m.id}',
+			//content : ['../ticket/ticketCreatePage', 'no'], no 禁止滚动
+			});
+
+		}
+
 		function mergeEmailTicket(emailId, ticketId) {
 			var $ = layui.$;
 			var layer = layui.layer;
@@ -139,7 +158,7 @@
 				console.log(data, status);
 				if (data.code == 200) {
 					layer.msg('合并成功,即将关闭本页面' + data.info, function() {
-						
+
 						console.log(opener.test);
 						opener.myrefresh();
 						window.close();
@@ -158,22 +177,22 @@
 			var layer = layui.layer;
 
 			var title = $("#title").val();
-			var client = $("#client").val();
+			var severity = $("#severity").val();
 			var service = $("#service").val();
-			var note = $("#note").val();
+			var desc = $("#desc").val();
 
 			console.log(title);
-			console.log(client);
+			console.log(severity);
 			console.log(service);
-			console.log(note);
+			console.log(desc);
 
 			var json = {};
 			json.emailId = emailId;
 			json.timestamp = timestamp;
 			json.title = title;
-			json.client = client;
+			json.severity = severity;
 			json.service = service;
-			json.note = note;
+			json.desc = desc;
 			console.log(JSON.stringify(json));
 			$.ajaxSetup({
 				contentType : "application/json; charset=utf-8"
@@ -208,6 +227,8 @@
 						class="layui-input" value="${m.subject}">
 				</div>
 			</div>
+
+			<!-- 客户 目前还不符合原有数据库字段设计
 			<div class="layui-form-item" style="margin-top: 15px">
 				<label class="layui-form-label merge">客户</label>
 				<div class="layui-input-block block">
@@ -215,15 +236,31 @@
 						lay-verify="required" placeholder="请输入客户" autocomplete="off"
 						class="layui-input">
 				</div>
-			</div>
+			</div> -->
+
 			<div class="layui-form-item" style="margin-top: 15px">
 				<label class="layui-form-label merge">服务</label>
 				<div class="layui-input-block block">
 					<select id="service" lay-verify="required" name="cid">
-						<option value="">无</option>
 						<c:forEach items="${services}" var="service">
-							<option value="${service.name}">${service.name}</option>
+							<option value="${service.id}"
+								<c:if test="${service.name=='other'}">
+									selected="selected"
+								</c:if>
+								>${service.name}</option>
 						</c:forEach>
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-form-item" style="margin-top: 15px">
+				<label class="layui-form-label merge">严重等级</label>
+				<div class="layui-input-block block">
+					<select id="severity" lay-verify="required" name="severity">
+						<option value="Sev1">1-严重</option>
+                        <option value="Sev2">2-高级</option>
+                        <option value="Sev3" selected="selected">3-一般</option>
+                        <option value="Sev4">4-最低</option>
 					</select>
 				</div>
 			</div>
@@ -250,11 +287,21 @@
 
 
 
-<script id="onlyNote" type="text/html">
+<script id="description" type="text/html">
 	<div class="layui-form-item layui-form-text" style="margin-top: 15px">
-		<label class="layui-form-label merge">备注</label>
+		<label class="layui-form-label merge">描述</label>
 		<div class="layui-input-block block">
-			<textarea id="note" name="desc" placeholder="请输入备注" class="layui-textarea"
+			<textarea id="desc" name="desc" placeholder="请输入描述" class="layui-textarea"
+				rows="7"></textarea>
+		</div>
+	</div>
+</script>
+
+<script id="comment" type="text/html">
+	<div class="layui-form-item layui-form-text" style="margin-top: 15px">
+		<label class="layui-form-label merge">评论</label>
+		<div class="layui-input-block block">
+			<textarea id="comm" name="desc" placeholder="请输入评论" class="layui-textarea"
 				rows="7"></textarea>
 		</div>
 	</div>

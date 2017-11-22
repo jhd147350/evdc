@@ -47,6 +47,7 @@ public interface EmailMapper {
 	// ------------email_ticket-----------------
 
 	// TODO 参考链接http://blog.csdn.net/u012325167/article/details/52403631
+	// 使用注解方式插入数据后获取自增长的主键值
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	@Insert("insert into " + EmailTicket.TABLE_NAME
 			+ " (`title`,`client`,`status`,`timestamp`,`service`) values(#{title},#{client},#{status},#{timestamp},#{service})")

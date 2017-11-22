@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.http.HttpResponse;
 import org.apache.log4j.Logger;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
+import evdc.vianet.auth.entity.User;
 import evdc.vianet.shift.entity.jo.JsonResult;
 import evdc.vianet.ticket.entity.TicketSer;
 import evdc.vianet.ticket.service.TicketSerService;
@@ -30,8 +31,8 @@ import evdc.vianet.ticket.service.TicketSerService;
 @Controller
 @RequestMapping("/emailticket")
 public class EmailTicketController {
-	
-	private Logger logger=Logger.getLogger(EmailTicketController.class);
+
+	private Logger logger = Logger.getLogger(EmailTicketController.class);
 
 	@Autowired
 	@Qualifier("emailTicketService")
@@ -108,13 +109,16 @@ public class EmailTicketController {
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseBody
-	String createEmailTicket(@RequestBody String json, HttpServletResponse response) {
+	String createEmailTicket(@RequestBody String json, HttpServletResponse response, HttpSession httpSession) {
 		response.setCharacterEncoding("utf-8");
 
+		User u = (User) httpSession.getAttribute("user");
+		long uid = u.getId();
+		long tid = u.getTeamId();
 		System.out.println(json);
 
 		try {
-			return service.createEmailTicket(json);
+			return service.createEmailTicket(json, uid, tid);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -180,7 +184,8 @@ public class EmailTicketController {
 	public void exportProject(HttpServletResponse response, String status, String service, String idorkey,
 			String startdate, String enddate, String client) {
 		String[] excelHeader = { "ID#id", "标题#title", "客户#client", "状态#status", "服务#service", "时间#timestamp" };
-		List<EmailTicket> projectList = this.service.getEmailTickets(idorkey, status, service, startdate, enddate, client);
+		List<EmailTicket> projectList = this.service.getEmailTickets(idorkey, status, service, startdate, enddate,
+				client);
 
 		try {
 			ExportExcelUtil.export(response, "EvDC邮件工单" + LocalDate.now().toString(), excelHeader, projectList);
