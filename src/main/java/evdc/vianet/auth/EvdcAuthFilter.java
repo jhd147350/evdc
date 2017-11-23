@@ -80,6 +80,20 @@ public class EvdcAuthFilter extends AuthFilter {
 						ticketChangeRecord.setNewValue(request.getParameter("comment"));
 						ticketChangeRecordService.addNewRecord(ticketChangeRecord);
 						break;
+					case "updateTicketService":
+						ticketChangeRecord.setTicketId(Long.parseLong(request.getParameter("ticketId")));
+						ticketChangeRecord.setUserId(u.getId());
+						ticketChangeRecord.setFiled(authoritys.get(0).getAuthName()+": "+request.getParameter("serviceBefore"));
+						ticketChangeRecord.setNewValue(request.getParameter("serviceType"));
+						ticketChangeRecordService.addNewRecord(ticketChangeRecord);
+						break;
+					case "updateTicketSeverity":
+						ticketChangeRecord.setTicketId(Long.parseLong(request.getParameter("ticketId")));
+						ticketChangeRecord.setUserId(u.getId());
+						ticketChangeRecord.setFiled(authoritys.get(0).getAuthName()+": "+request.getParameter("severityBefore"));
+						ticketChangeRecord.setNewValue(request.getParameter("severity"));
+						ticketChangeRecordService.addNewRecord(ticketChangeRecord);
+						break;
 					default:
 						break;
 					}

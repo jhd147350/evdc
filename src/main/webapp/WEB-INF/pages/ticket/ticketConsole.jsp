@@ -160,47 +160,13 @@
               lement = layui.element;//面包导航
               layer = layui.layer;//弹出层
               //table = layui.table;
-              $('#ticketSreachBut').click();
-              
-              /* table.render({
-            	  	elem: '#ticketList'
-            	    ,height: 315
-            	    ,url: '/demo/table/user/' //数据接口
-            	    ,page: true //开启分页
-            	    ,cols: [[ //表头
-            	      {field: 'id', title: 'ticketId', width:80, sort: true, fixed: 'left'}
-            	      ,{field: 'title', title: '标题', width:177}
-            	      ,{field: 'service', title: '服务', width:80, sort: true}
-            	      ,{field: 'severity', title: '严重等级', width:80} 
-            	      ,{field: 'status', title: '状态', width: 80}
-            	      ,{field: 'updateDate', title: '更新时间', width: 80, sort: true}
-            	      ,{field: 'submitUser', title: '提交人', width: 80, sort: true}
-            	      ,{field: 'updateUser', title: '最后操作人', width: 80}
-            	      ,{field: 'assignUser', title: '指派人', width: 80, sort: true}
-            	    ]]
-              		,url: '/api/data/'
-            	  	,where: {"keyword": "%"+keyword+"%", "service": serviceType, "severity": severity, "status": ticketStatus} //如果无需传递额外参数，可不加该参数
-            	  	,method: 'post' //如果无需自定义HTTP类型，可不加该参数
-            	  	//,request: {} //如果无需自定义请求参数，可不加该参数
-            	  	,response: {
-						dataName: 'searchTicketList' //数据列表的字段名称，默认：data
-            	  	  } //如果无需自定义数据响应名称，可不加该参数
-            	}); */ 
-              
+              $('#ticketSreachBut').click();    
             });
             
             /*查询*/
             function ticket_sreach(obj,id){
             	obj.disabled=true;
             	obj.setAttribute("class" , "layui-btn layui-btn-disabled");
-            	/*var ticketList = document.getElementById("ticketList");
-            	
-            	var n = ticketList.firstChild;
-                while(n) {
-                    var m = n.nextSibling;
-                    ticketList.removeChild(n);
-                    n = m;
-                } */
             	var findMethod = document.getElementById("findMethod").value;
             	var keyword = document.getElementById("keyword").value;
             	var serviceType = document.getElementById("serviceType").value;
@@ -216,13 +182,14 @@
             	    ,cols: [[ //表头
             	      {field: 'id', title: 'ticketId', width:100, sort: true, fixed: 'left'}
             	      ,{field: 'title', title: '标题', width:250}
-            	      ,{field: 'service', title: '服务', width:100, sort: true}
+            	      ,{field: 'serviceName', title: '服务', width:100, sort: true}
             	      ,{field: 'severity', title: '严重等级', width:100} 
             	      ,{field: 'status', title: '状态', width: 100}
+            	      ,{field: 'customerUserName', title: '客户', width: 100, sort: true}
             	      ,{field: 'updateDate', title: '更新时间', width: 100, sort: true}
-            	      ,{field: 'submitUser', title: '提交人', width: 100, sort: true}
-            	      ,{field: 'updateUser', title: '最后操作人', width: 100}
-            	      ,{field: 'assignUser', title: '指派人', width: 100, sort: true}
+            	      ,{field: 'submitUserName', title: '提交人', width: 100, sort: true}
+            	      ,{field: 'updateUserName', title: '最后操作人', width: 100}
+            	      ,{field: 'assignUserName', title: '指派人', width: 100, sort: true}
             	      ,{fixed: 'right', width:150, align:'center', toolbar: '#showTicket'}
             	    ]]
               		,url: '..'+findMethod
@@ -231,7 +198,7 @@
             	  	//,request: {} //如果无需自定义请求参数，可不加该参数
             	  	,response: {
             	  		statusCode : 200
-						,dataName: 'searchTicketList' //数据列表的字段名称，默认：data
+						,dataName: 'ticketViewList' //数据列表的字段名称，默认：data
             	  	  } //如果无需自定义数据响应名称，可不加该参数
             	  	,done: function(res, curr, count){
             	  	    //如果是异步请求数据方式，res即为你接口返回的信息。
@@ -292,12 +259,6 @@
                		obj.setAttribute("class" , "layui-btn");
                   }); */ 
             }
-             /*查看工单详情 */
-             /* function ticket_show (argument) {
-
-            	 console.log(argument);
-            	 x_admin_show('工单详情','./ticketShowPage?ticketId='+argument.getAttribute("ticketId"));
-             } */
              /*创建工单*/
             function ticket_create(title,url,w,h){
                 x_admin_show(title,url,w,h);

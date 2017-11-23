@@ -10,12 +10,24 @@ public class TicketView {
 	private String submitDate;
 	private String satisfation;
 	private String updateDate;
+	private long serviceId;
 	private String serviceName;
+	private long submitUserId;
 	private String submitUserName;
+	private long submitTeamId;
 	private String submitTeamName;
+	private long assignUserId;
 	private String assignUserName;
+	private long assignTeamId;
 	private String assignTeamName;
+	private long updateUserId;
 	private String updateUserName;
+	private String resolveDate;
+	private long customerId;
+	private String customerUserName;
+	private long customerTeamId;
+	private String customerTeamName;
+	
 	public long getId() {
 		return id;
 	}
@@ -102,6 +114,72 @@ public class TicketView {
 	}
 	public static String getTableName() {
 		return TABLE_NAME;
+	}
+	public long getServiceId() {
+		return serviceId;
+	}
+	public void setServiceId(long serviceId) {
+		this.serviceId = serviceId;
+	}
+	public long getSubmitUserId() {
+		return submitUserId;
+	}
+	public void setSubmitUserId(long submitUserId) {
+		this.submitUserId = submitUserId;
+	}
+	public long getSubmitTeamId() {
+		return submitTeamId;
+	}
+	public void setSubmitTeamId(long submitTeamId) {
+		this.submitTeamId = submitTeamId;
+	}
+	public long getAssignUserId() {
+		return assignUserId;
+	}
+	public void setAssignUserId(long assignUserId) {
+		this.assignUserId = assignUserId;
+	}
+	public long getAssignTeamId() {
+		return assignTeamId;
+	}
+	public void setAssignTeamId(long assignTeamId) {
+		this.assignTeamId = assignTeamId;
+	}
+	public long getUpdateUserId() {
+		return updateUserId;
+	}
+	public void setUpdateUserId(long updateUserId) {
+		this.updateUserId = updateUserId;
+	}
+	public String getResolveDate() {
+		return resolveDate;
+	}
+	public void setResolveDate(String resolveDate) {
+		this.resolveDate = resolveDate;
+	}
+	public long getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(long customerId) {
+		this.customerId = customerId;
+	}
+	public String getCustomerUserName() {
+		return customerUserName;
+	}
+	public void setCustomerUserName(String customerUserName) {
+		this.customerUserName = customerUserName;
+	}
+	public long getCustomerTeamId() {
+		return customerTeamId;
+	}
+	public void setCustomerTeamId(long customerTeamId) {
+		this.customerTeamId = customerTeamId;
+	}
+	public String getCustomerTeamName() {
+		return customerTeamName;
+	}
+	public void setCustomerTeamName(String customerTeamName) {
+		this.customerTeamName = customerTeamName;
 	}
 	
 }

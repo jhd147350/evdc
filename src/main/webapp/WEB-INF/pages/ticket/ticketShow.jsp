@@ -102,7 +102,7 @@
             <div class="layui-form layui-form-pane">
             <div class="layui-form-item"> 
             <div class="layui-inline"> 
-                    <button type="submit"  id="saveChange" class="layui-btn layui-btn-disabled"  disabled="true">保存</button>
+                    <button id="saveChange" class="layui-btn layui-btn-disabled"  disabled="true" onclick="save_change(this)" >保存</button>
             </div>
             <div class="layui-inline">
             	<button id="changeTicketStatus" class="layui-btn" onclick="ticket_change(this)">${changeTicketStatus}</button>
@@ -369,7 +369,72 @@
            	 console.log(argument);
            	 x_admin_show('工单订阅','${changeTicketStatusPath}','500','400');
             };
-          
+            var severityBefore = "${ticket.severity}";
+        	var serviceBefore = "${ticket.serviceId}";
+          //保存修改的ticket字段
+            function save_change (src){
+             	var	$ = layui.jquery;
+            	$('#saveChange').attr("class", "layui-btn layui-btn-disabled");
+    	      	$('#saveChange').attr("disabled", "true");
+            	var serviceType = document.getElementById("serviceType").value;
+            	var severity = document.getElementById("severity").value;
+            if(severityBefore == severity&&serviceBefore == serviceType){
+            	layer.alert("没有字段需要修改", {icon: 6},function (index) {
+    				$('#saveChange').attr("class", "layui-btn layui-btn-disabled");
+    		      	  	$('#saveChange').attr("disabled", "true");
+    				layer.close(index);
+            	});
+            }else{ 
+            	if(serviceType != serviceBefore){
+            		var testservicedone = $.ajax({  
+                      	url: './updateTicketService', 
+                          type: 'POST',  
+                          async: false,
+                          dataType: 'json',
+                          data: {
+                          	"ticketId": "${ticket.id}", "serviceBefore": serviceBefore, "serviceType": serviceType
+                          },
+                          timeout: 10000,  
+                          cache: false,     
+                   		}).done(function (data) { 
+                   			if(data.status==0){
+                   				serviceBefore = serviceType;
+            				}
+                      });
+            	}
+            	if(severity != severityBefore){
+                	var testseveritydone = $.ajax({  
+                      	url: './updateTicketSeverity', 
+                          type: 'POST',  
+                          dataType: 'json',
+                          async:false,
+                          data: {
+                          	"ticketId": "${ticket.id}", "severityBefore": severityBefore, "severity": severity
+                          },
+                          timeout: 10000,  
+                          cache: false,     
+                   		}).done(function(data) { 
+                   			console.log(data);
+                   		if(data.status==0){
+                   			severityBefore = severity;
+                   			
+            				}	
+                      });
+            	}
+            	
+            	if(severityBefore == severity&&serviceBefore == serviceType){
+                	layer.alert("修改成功", {icon: 6},function (index) {
+    					$('#saveChange').attr("class", "layui-btn layui-btn-disabled");
+      		      	  	$('#saveChange').attr("disabled", "true");
+    					layer.close(index);
+               		});
+            	}else{
+            		layer.alert("修改失败", {icon: 5},function (index) { 
+    					layer.close(index);
+                    });
+            	}	
+            }
+            };
         </script>
         <script>
         var _hmt = _hmt || [];

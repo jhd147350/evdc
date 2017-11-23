@@ -79,7 +79,7 @@
 	                            </a> --%>
 	                            <a title="执行" href="javascript:;" onclick='ticket_sreach(this, "${item.id}")' 
 	                            style="text-decoration:none">
-	                                <i class="layui-icon">&#xe640;</i>
+	                                <i class="layui-icon">&#xe615;</i>
 	                            </a>
                         		</td> 
 					    
@@ -102,7 +102,7 @@
             /*查询*/
             function ticket_sreach(obj,id){
             	obj.disabled=true;
-            	obj.setAttribute("class" , "layui-btn layui-btn-disabled");
+            	//obj.setAttribute("class" , "layui-btn layui-btn-sm layui-btn-disabled");
             	/* var ticketList = document.getElementById("ticketList");
             	
             	var n = ticketList.firstChild;
@@ -126,6 +126,8 @@
             	      ,{field: 'serviceName', title: '服务', width:100, sort: true}
             	      ,{field: 'severity', title: '严重等级', width:100} 
             	      ,{field: 'status', title: '状态', width: 100}
+            	      ,{field: 'customerUserName', title: '客户', width: 100, sort: true}
+            	      ,{field: 'resolveDate', title: '解决时间', width: 100, sort: true}
             	      ,{field: 'satisfation', title: '评分', width: 100}
             	      ,{field: 'updateDate', title: '更新时间', width: 100, sort: true}
             	      ,{field: 'submitUserName', title: '提交人', width: 100, sort: true}
@@ -148,7 +150,7 @@
             	  	    //如果是异步请求数据方式，res即为你接口返回的信息。
             	  	    //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
             	  		obj.disabled=false;
-                   		obj.setAttribute("class" , "layui-btn");
+                   		//obj.setAttribute("class" , "layui-btn");
             	  	  }
             	});
             	/* $.ajax({  

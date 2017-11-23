@@ -15,6 +15,7 @@ import evdc.vianet.constant.ScheduleException;
 import evdc.vianet.shift.entity.view.ViewOnDutyUser;
 import evdc.vianet.shift.service.ShiftService;
 import evdc.vianet.ticket.entity.Ticket;
+import evdc.vianet.ticket.entity.view.TicketView;
 import evdc.vianet.ticket.mapper.TicketMapper;
 
 /**
@@ -167,6 +168,58 @@ public class TicketServiceImp implements TicketService {
 	public int findAllTicketCountByKeyword(String service, String status, String severity, String keyword) {
 		// TODO Auto-generated method stub
 		return ticketMapper.findAllTicketCountByKeyword(service, status, severity, keyword);
+	}
+
+
+
+	@Override
+	public List<TicketView> findAllTicketViewsBySubmitTeamAndKeywordANDPageANDLimit(int limit1, int limit2,
+			long submitTeamId, String service, String status, String severity, String keyword) {
+		// TODO Auto-generated method stub
+		return ticketMapper.findAllTicketViewsBySubmitTeamAndKeywordANDPageANDLimit(limit1, limit2, submitTeamId, service, status, severity, keyword);
+	}
+
+
+
+	@Override
+	public List<TicketView> findAllTicketViewsByAssignTeamAndKeywordANDPageANDLimit(int limit1, int limit2,
+			long assignTeamId, String service, String status, String severity, String keyword) {
+		// TODO Auto-generated method stub
+		return ticketMapper.findAllTicketViewsByAssignTeamAndKeywordANDPageANDLimit(limit1, limit2, assignTeamId, service, status, severity, keyword);
+	}
+
+
+
+	@Override
+	public List<TicketView> findAllTicketViewsBySubscribeTeamAndKeywordANDPageANDLimit(int limit1, int limit2,
+			long subscribeTeamId, String service, String status, String severity, String keyword) {
+		// TODO Auto-generated method stub
+		return ticketMapper.findAllTicketViewsBySubscribeTeamAndKeywordANDPageANDLimit(limit1, limit2, subscribeTeamId, service, status, severity, keyword);
+	}
+
+
+
+	@Override
+	public List<TicketView> findAllTicketViewsByKeywordANDPageANDLimit(int limit1, int limit2, String service,
+			String status, String severity, String keyword) {
+		// TODO Auto-generated method stub
+		return ticketMapper.findAllTicketViewsByKeywordANDPageANDLimit(limit1, limit2, service, status, severity, keyword);
+	}
+
+
+
+	@Override
+	public void changeTicketServiceId(long serviceId, long ticketId) {
+		// TODO Auto-generated method stub
+		ticketMapper.updateTicketServiceId(serviceId, ticketId);
+	}
+
+
+
+	@Override
+	public void changeTicketSeverity(String severity, long ticketId) {
+		// TODO Auto-generated method stub
+		ticketMapper.updateTicketSeverity(severity, ticketId);
 	}
 
 	
