@@ -19,11 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import evdc.vianet.auth.entity.Status;
 import evdc.vianet.report.entity.ReportTicketSearch;
 import evdc.vianet.report.service.ReportTicketSearchService;
 import evdc.vianet.report.service.ReportTicketService;
-
-import evdc.vianet.ticket.entity.view.TicketChangeRecordView;
 import evdc.vianet.ticket.entity.view.TicketView;
 import evdc.vianet.ticket.service.TicketChangeRecordService;
 import jxl.Workbook;
@@ -124,6 +123,50 @@ public class ReportController {
 	    	headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 	    	return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(xlsFile),    
 	    			headers, HttpStatus.OK);        
+    }
+    @RequestMapping(value="/reportTicketSearchAddPage",method=RequestMethod.GET)
+    public String reportTicketSearchAddPage(){
+    	return "report/reportTicketSearchAddPage";
+    }
+    @RequestMapping(value="/reportTicketSearchAdd",method=RequestMethod.POST)
+    @ResponseBody
+    public Status reportTicketSearchAdd(String title, String sql, String describe){
+    	ReportTicketSearch r = new ReportTicketSearch();
+    	r.setName(title);
+    	r.setSql(sql);
+    	r.setDescribe(describe);
+    	reportTicketSearchService.addReportTicketSearch(r);
+    	Status status = new Status();
+    	status.setStatus(0);
+    	return status;
+    }
+    @RequestMapping(value="/reportTicketSearchEditPage",method=RequestMethod.GET)
+    public String reportTicketSearchEditPage(Model m, String id){
+    	ReportTicketSearch reportTicketSearch = reportTicketSearchService.getReportTicketSearchById(Integer.parseInt(id));
+    	m.addAttribute("reportTicketSearch", reportTicketSearch);
+    	return "report/reportTicketSearchEditPage";
+    }
+    
+    @RequestMapping(value="/reportTicketSearchEdit",method=RequestMethod.POST)
+    @ResponseBody
+    public Status reportTicketSearchEdit(String id, String title, String sql, String describe){
+    	ReportTicketSearch r = new ReportTicketSearch();
+    	r.setId(Integer.parseInt(id));
+    	r.setName(title);
+    	r.setSql(sql);
+    	r.setDescribe(describe);
+    	reportTicketSearchService.updateReportTicketSearch(r);
+    	Status status = new Status();
+    	status.setStatus(0);
+    	return status;
+    }
+    @RequestMapping(value="/reportTicketSearchDelete",method=RequestMethod.POST)
+    @ResponseBody
+    public Status reportTicketSearchDelete(String id){
+    	reportTicketSearchService.deldetReportTicketSearchById(Integer.parseInt(id));
+    	Status status = new Status();
+    	status.setStatus(0);
+    	return status;
     }
 }
 class TicketViewsAndCount{

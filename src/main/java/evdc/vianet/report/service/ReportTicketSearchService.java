@@ -10,4 +10,5 @@ public interface ReportTicketSearchService {
 	public Status updateReportTicketSearch(ReportTicketSearch r);
 	public List<ReportTicketSearch> getAllReportTicketSearchs();
 	public ReportTicketSearch getReportTicketSearchById(long id);
+	public int deldetReportTicketSearchById(long id); 
 }

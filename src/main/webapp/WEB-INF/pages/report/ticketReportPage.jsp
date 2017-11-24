@@ -24,7 +24,7 @@
               </cite></a>
           
             </span>
-            <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
+            <a id="refresh" class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
         </div>
         <div class="x-body">
             <div class="layui-form layui-form-pane">
@@ -37,7 +37,7 @@
                     </div> -->
 					
                     <div class="layui-inline">
-                        <button id="reportSreachAdd" class="layui-btn" onclick="report_sreach_add('新建查询','./reportSearchAddPage','600','500')"><i class="layui-icon">&#xe608;</i></button>
+                        <button id="reportSreachAdd" class="layui-btn" onclick="report_search_add('新建查询','./reportTicketSearchAddPage','600','500')"><i class="layui-icon">&#xe608;</i></button>
                     </div>
                     <div class="layui-inline x-right">
                     	<button id="reportExport" class="layui-btn layui-btn-disabled" disalbed="true" onclick="">导出</button>
@@ -73,15 +73,15 @@
 					    
 								<td class="td-manage">
 	                            
-	                            <a title="执行" href="javascript:;" onclick='report_sreach(this, "${item.id}")' 
+	                            <a title="执行" href="javascript:;" onclick='report_search(this, "${item.id}")' 
 	                            style="text-decoration:none">
 	                                <i class="layui-icon">&#xe615;</i>
 	                            </a>
-	                            <a title="编辑" href="javascript:;" onclick="report_sreach_edit('编辑报表查询','./reportSreachEditPage?id=${item.id}','4','','510')"
+	                            <a title="编辑" href="javascript:;" onclick="report_search_edit('编辑报表查询','./reportTicketSearchEditPage?id=${item.id}','600','500')"
 	                            class="ml-5" style="text-decoration:none">
 	                                <i class="layui-icon">&#xe642;</i>
 	                            </a>
-	                            <a title="删除" href="javascript:;" onclick="report_sreach_delete('删除报表查询','./reportSreachDelete?id=${item.id}','4','','510')"
+	                            <a title="删除" href="javascript:;" onclick="report_search_delete(this,'${item.id }')"
 	                            class="ml-5" style="text-decoration:none">
 	                                <i class="layui-icon">&#xe640;</i>
 	                            </a>
@@ -104,7 +104,7 @@
             });
             var searchId = "";
             /*查询*/
-            function report_sreach(obj,id){
+            function report_search(obj,id){
             	$=layui.jquery;
             	$("#reportExport").attr("disabled",false);
            		$("#reportExport").attr("class" , "layui-btn layui-btn-disabled");
@@ -153,16 +153,38 @@
             	});
             }
             /*添加新的查询*/
-            function report_sreach_add(title,url,w,h){
+            function report_search_add(title,url,w,h){
                 x_admin_show(title,url,w,h);
             }
             /*修改查询*/
-            function report_sreach_edit(title,url,w,h){
+            function report_search_edit(title,url,w,h){
                 x_admin_show(title,url,w,h);
             }
             /*删除查询*/
-            function report_sreach_delete(title,url,w,h){
-                x_admin_show(title,url,w,h);
+            function report_search_delete(obj,id){
+                
+                layer.confirm('确认要删除吗？',function(index){
+                    //发异步删除数据
+                    $.ajax({  
+                  	  url: './reportTicketSearchDelete', 
+                      type: 'POST',  
+                      dataType: 'json',
+                      data: {
+                      	"id": id
+                      },
+                      timeout: 1000,  
+                      cache: false,     
+	               	}).done(function(data) { 
+	               		if(data.status==0){
+		   	               	$(obj).parents("tr").remove();
+		                    layer.msg('删除成功!',{icon:1,time:1000});
+
+	  					}else{
+	  						layer.msg('无法删除!',{icon:2,time:1000});
+	  					}	
+	                  }); 
+                    
+                });
             }
             </script>
             <script>

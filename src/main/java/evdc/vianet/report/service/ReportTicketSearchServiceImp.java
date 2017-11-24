@@ -43,4 +43,10 @@ public class ReportTicketSearchServiceImp implements ReportTicketSearchService {
 		return reportTicketSearchMapper.findReportTicketSearchById(id);
 	}
 
+	@Override
+	public int deldetReportTicketSearchById(long id) {
+		// TODO Auto-generated method stub
+		return reportTicketSearchMapper.deldetReportTicketSearchById(id);
+	}
+
 }
