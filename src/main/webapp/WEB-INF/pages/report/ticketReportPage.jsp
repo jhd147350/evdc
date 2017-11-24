@@ -34,11 +34,11 @@
 
 					<!-- <div class="layui-input-inline">
                       <input type="text" id="keyword" name="keyword"  placeholder="ticketId" autocomplete="off" class="layui-input">
-                    </div>
+                    </div> -->
 					
                     <div class="layui-inline">
-                        <button id="ticketSreachBut" class="layui-btn" onclick="ticket_sreach(this,'1')"><i class="layui-icon">&#xe615;</i></button>
-                    </div> -->
+                        <button id="reportSreachAdd" class="layui-btn" onclick="report_sreach_add('新建查询','./reportSearchAddPage','600','500')"><i class="layui-icon">&#xe608;</i></button>
+                    </div>
                     <div class="layui-inline x-right">
                     	<button id="reportExport" class="layui-btn layui-btn-disabled" disalbed="true" onclick="">导出</button>
                     </div>
@@ -49,8 +49,7 @@
            </xblock> -->
             <table class="layui-table">
                 <thead>
-                    <tr>
-                        
+                    <tr>   
                         <th>
                            	ID
                         </th>
@@ -73,13 +72,18 @@
 					    <td>${item.describe}</td>  
 					    
 								<td class="td-manage">
-	                            <%-- <a title="编辑" href="javascript:;" onclick="role_edit('编辑','./teamUserEditPage?id=${item.id}','4','','510')"
-	                            class="ml-5" style="text-decoration:none">
-	                                <i class="layui-icon">&#xe642;</i>
-	                            </a> --%>
-	                            <a title="执行" href="javascript:;" onclick='ticket_sreach(this, "${item.id}")' 
+	                            
+	                            <a title="执行" href="javascript:;" onclick='report_sreach(this, "${item.id}")' 
 	                            style="text-decoration:none">
 	                                <i class="layui-icon">&#xe615;</i>
+	                            </a>
+	                            <a title="编辑" href="javascript:;" onclick="report_sreach_edit('编辑报表查询','./reportSreachEditPage?id=${item.id}','4','','510')"
+	                            class="ml-5" style="text-decoration:none">
+	                                <i class="layui-icon">&#xe642;</i>
+	                            </a>
+	                            <a title="删除" href="javascript:;" onclick="report_sreach_delete('删除报表查询','./reportSreachDelete?id=${item.id}','4','','510')"
+	                            class="ml-5" style="text-decoration:none">
+	                                <i class="layui-icon">&#xe640;</i>
 	                            </a>
                         		</td> 
 					    
@@ -98,21 +102,14 @@
               lement = layui.element;//面包导航
               layer = layui.layer;//弹出层
             });
-            var exportTicketId = "";
+            var searchId = "";
             /*查询*/
-            function ticket_sreach(obj,id){
+            function report_sreach(obj,id){
+            	$=layui.jquery;
+            	$("#reportExport").attr("disabled",false);
+           		$("#reportExport").attr("class" , "layui-btn layui-btn-disabled");
             	obj.disabled=true;
-            	//obj.setAttribute("class" , "layui-btn layui-btn-sm layui-btn-disabled");
-            	/* var ticketList = document.getElementById("ticketList");
-            	
-            	var n = ticketList.firstChild;
-                while(n) {
-                    var m = n.nextSibling;
-                    ticketList.removeChild(n);
-                    n = m;
-                }
-            	var ticketId = document.getElementById("keyword").value; */
-            	
+            	searchId=id;
             	table = layui.table;
                 table.render({
             	  	elem: '#ticketList'
@@ -136,7 +133,6 @@
             	      ,{field: 'assignUserName', title: '指派人', width: 100, sort: true}
             	      ,{field: 'assignTeamName', title: '指派组', width: 100, sort: true}
             	      ,{field: 'submitDate', title: '提交时间', width: 100, sort: true}
-            	      ,{fixed: 'right', width:150, align:'center', toolbar: '#showTicket'}
             	    ]]
               		,url: './ticketReport'
             	  	,where: {"searchId": id} //如果无需传递额外参数，可不加该参数
@@ -150,46 +146,24 @@
             	  	    //如果是异步请求数据方式，res即为你接口返回的信息。
             	  	    //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
             	  		obj.disabled=false;
-                   		//obj.setAttribute("class" , "layui-btn");
+                   		$("#reportExport").attr("disabled",false);
+                   		$("#reportExport").attr("class" , "layui-btn");
+                   		$("#reportExport").attr("onclick" , "location.href='./exportTicketReport?searchId="+searchId+"'");
             	  	  }
             	});
-            	/* $.ajax({  
-              	  url: './ticketReport', 
-                  type: 'POST',  
-                  dataType: 'json',
-                  data: {
-                  	"ticketId": ticketId
-                  },
-                  timeout: 10000,  
-                  cache: false,     
-               	}).done(function(data) {
-               		$.each(data, function(ticketChangeRecordIndex){
-               			var ticketChangeRecord = data[ticketChangeRecordIndex];
-               				exportTicketId = ticketChangeRecord.ticketId;
-               				var $tr = $("<tr></tr>")
-               				var $td = $("<td>"+ticketChangeRecord.ticketId+"</td>")
-               				$tr.append($td);
-               				$td = $('<td>'+ticketChangeRecord.filed+'</td>');
-               				$tr.append($td);
-               				$td = $("<td>"+ticketChangeRecord.newValue+"</td>")
-               				$tr.append($td);
-               				$td = $("<td>"+ticketChangeRecord.name+"</td>")
-               				$tr.append($td);
-               				var timestamp = ticketChangeRecord.timestamp;
-               				var newDate = new Date();
-               				newDate.setTime(timestamp);
-               				$td = $("<td>"+newDate.toLocaleString()+"</td>")
-               				$tr.append($td);
-               				$(ticketList).append($tr);
-               		})
-               		obj.disabled=false;
-               		obj.setAttribute("class" , "layui-btn");
-               		$("#reportExport").attr("disabled",false);
-               		$("#reportExport").attr("class" , "layui-btn");
-               		$("#reportExport").attr("onclick" , "location.href='./exportTicketReport?ticketId="+exportTicketId+"'");
-                  }); */ 
             }
-
+            /*添加新的查询*/
+            function report_sreach_add(title,url,w,h){
+                x_admin_show(title,url,w,h);
+            }
+            /*修改查询*/
+            function report_sreach_edit(title,url,w,h){
+                x_admin_show(title,url,w,h);
+            }
+            /*删除查询*/
+            function report_sreach_delete(title,url,w,h){
+                x_admin_show(title,url,w,h);
+            }
             </script>
             <script>
         var _hmt = _hmt || [];

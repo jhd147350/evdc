@@ -24,4 +24,5 @@ public interface ReportTicketSearchMapper {
 	void updateReportTicketSearch(@Param("r") ReportTicketSearch r);
 	@Select("select * from " + ReportTicketSearch.TABLE_NAME)
 	List<ReportTicketSearch> findAllReportTicketSearchs();
+	
 }

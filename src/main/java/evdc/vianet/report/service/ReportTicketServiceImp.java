@@ -17,7 +17,10 @@ public class ReportTicketServiceImp implements ReportTicketService {
 		// TODO Auto-generated method stub
 		String pageSQL = "select * from ( select * from " + TicketView.TABLE_NAME 
 				+ " where " + sql + ") table_a limit " + limit1 + "," + limitint;
-		
+		if(limitint == 0){
+			pageSQL =  "select * from " + TicketView.TABLE_NAME 
+					+ " where " + sql;
+		}
 		return ticketMapper.findTicketViewsBySQL(pageSQL);
 	}
 
