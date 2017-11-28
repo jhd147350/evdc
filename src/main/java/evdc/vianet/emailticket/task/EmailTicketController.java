@@ -127,10 +127,15 @@ public class EmailTicketController {
 
 	@RequestMapping(value = "/merge", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseBody
-	String mergeEmailTicket(@RequestBody String json, HttpServletResponse response) {
+	String mergeEmailTicket(@RequestBody String json, HttpServletResponse response, HttpSession httpSession) {
 		response.setCharacterEncoding("utf-8");
+
+		User u = (User) httpSession.getAttribute("user");
+		long uid = u.getId();
+		long tid = u.getTeamId();
+		
 		System.out.println(json);
-		return service.mergeEmailTicket(json);
+		return service.mergeEmailTicket(json, uid, tid);
 	}
 
 	// JNOTE http://blog.csdn.net/dxmgood/article/details/52881642 produces =

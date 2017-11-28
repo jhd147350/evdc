@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 
 import evdc.vianet.shift.entity.jo.JsonResult;
 import evdc.vianet.shift.entity.jo.TableData;
+import evdc.vianet.ticket.entity.Ticket;
 import evdc.vianet.ticket.entity.TicketMessage;
 import evdc.vianet.ticket.service.TicketCommentService;
 import evdc.vianet.ticket.service.TicketService;
@@ -28,7 +29,7 @@ public class EmailTicketService {
 	@Autowired
 	@Qualifier("ticketService")
 	TicketService ticketService;
-	
+
 	@Autowired
 	@Qualifier("ticketCommentService")
 	TicketCommentService ticketCommentService;
@@ -105,24 +106,31 @@ public class EmailTicketService {
 
 		System.out.println("自动生成的id：" + ticketId);
 		addNote2Email(desc, ticketId, emailId);
-		
-		ticketCommentService.addTicketComment(ticketId, uid, tid, desc, TicketMessage.Scope.Shared.toString());
+
+		String myComment = "<a href=\"../emailticket/detail?id=" + emailId
+				+ "\" target=\"_blank\" style=\"color:blue\">原始邮件</a>&nbsp;" + desc;
+
+		ticketCommentService.addTicketComment(ticketId, uid, tid, myComment, TicketMessage.Scope.Shared.toString());
 
 		return JsonResult.SUC.toString();
 
 	}
 
-	public String mergeEmailTicket(String json) {
+	@Transactional
+	public String mergeEmailTicket(String json, long uid, long tid) {
 		JSONObject jo = new JSONObject(json);
 		String emailId = jo.getString("emailId");
-		String ticketId = jo.getString("ticketId");
-		String note = jo.getString("note");
-		long idL = Long.parseLong(ticketId);
-		EmailTicket ticket = mapper.selectEmailTicketById(idL);
+		String ticketIdStr = jo.getString("ticketId");
+		String comm = jo.getString("comm");
+		long ticketId = Long.parseLong(ticketIdStr);
+		Ticket ticket = mapper.findTicektById(ticketId);
 		if (ticket == null) {
 			return JsonResult.FAILED.toString();
 		}
-		addNote2Email(note, idL, emailId);
+		addNote2Email(comm, ticketId, emailId);
+		String myComment = "<a href=\"../emailticket/detail?id=" + emailId
+				+ "\" target=\"_blank\" style=\"color:blue\">原始邮件</a>&nbsp;" + comm;
+		ticketCommentService.addTicketComment(ticketId, uid, tid, myComment, TicketMessage.Scope.Shared.toString());
 		return JsonResult.SUC.toString();
 	}
 

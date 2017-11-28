@@ -26,7 +26,6 @@
 		<c:if test="${m.ticketId == 0}">
 			<button id="merge" class="layui-btn">合并到已有工单</button>
 			<button id="new" class="layui-btn">新建工单</button>
-			<button id="other" class="layui-btn">新建工单2</button>
 		</c:if>
 	</div>
 
@@ -62,9 +61,6 @@
 				openLayer(false);
 			});
 
-			$("#other").click(function() {
-				openOther();
-			});
 		}();
 
 		function openLayer(isMerge) {
@@ -124,30 +120,16 @@
 
 		}
 
-		function openOther() {
-			var layer = layui.layer;
-
-			layer.open({
-				type : 2,
-				skin : 'layui-layer-rim', // 加上边框
-				area : [ '700px', '750px' ],//'800px', // 宽,默认自适应
-				content : '../ticket/ticketCreatePage?title=' + '${m.subject}'
-						+ '&emailid=' + '${m.id}',
-			//content : ['../ticket/ticketCreatePage', 'no'], no 禁止滚动
-			});
-
-		}
-
 		function mergeEmailTicket(emailId, ticketId) {
 			var $ = layui.$;
 			var layer = layui.layer;
 
-			var note = $("#note").val();
+			var comm = $("#comm").val();
 
 			var json = {};
 			json.emailId = emailId;
 			json.ticketId = ticketId;
-			json.note = note;
+			json.comm = comm;
 			console.log(JSON.stringify(json));
 			$.ajaxSetup({
 				contentType : "application/json; charset=utf-8"

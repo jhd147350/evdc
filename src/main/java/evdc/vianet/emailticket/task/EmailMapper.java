@@ -12,6 +12,8 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
 
+import evdc.vianet.ticket.entity.Ticket;
+
 public interface EmailMapper {
 
 	// TODO 有的邮件body很大，超过mysql Text的存储范围可以使用MediumText
@@ -109,4 +111,9 @@ public interface EmailMapper {
 	long countSearchEmailTicket(@Param("idorkey") String idorkey, @Param("status") String status,
 			@Param("service") String service, @Param("startdate") String startdate, @Param("enddate") String enddate,
 			@Param("client") String client);
+	
+	@Select("SELECT * FROM " + Ticket.TABLE_NAME +" where `id` = #{id}")
+	Ticket findTicektById(long id);
+	
+	
 }
