@@ -243,11 +243,15 @@
 				<div class="layui-input-block block">
 					<select id="service" lay-verify="required" name="cid">
 						<c:forEach items="${services}" var="service">
-							<option value="${service.id}"
-								<c:if test="${service.name=='other'}">
-									selected="selected"
-								</c:if>
-								>${service.name}</option>
+							<c:choose>
+								<c:when test="${service.name=='other'}">
+									<option value="${service.id}" selected="selected">${service.name}</option>
+   								</c:when>
+   
+   								<c:otherwise>
+									<option value="${service.id}">${service.name}</option>
+  								 </c:otherwise>
+							</c:choose>
 						</c:forEach>
 					</select>
 				</div>

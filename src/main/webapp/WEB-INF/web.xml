@@ -34,7 +34,7 @@
 	<!-- 指的是部署前的类路径 -->
 	<context-param>  
 		<param-name>contextConfigLocation</param-name>  
-	    <param-value>classpath:spring-*.xml</param-value>  
+	    <param-value>/WEB-INF/spring-*.xml</param-value>  
 	</context-param>
 	<!-- 权限认证过滤器 -->
 	
