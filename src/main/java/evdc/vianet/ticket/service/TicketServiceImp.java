@@ -59,7 +59,7 @@ public class TicketServiceImp implements TicketService {
 	 */
 	@Override
 	public long createTicket(String source, String title, String description, String serviceType, String severity,
-			long submitUserId, long submitTeamId) {
+			long submitUserId, long submitTeamId, long customerId, long customerTeamId) {
 			List<ViewOnDutyUser> onDutyUsers = null;
 			try {
 				onDutyUsers = shiftService.getOnDutyUsersByTeamId(18, Calendar.getInstance(TimeZone.getTimeZone("GMT+8"), Locale.ENGLISH));
@@ -85,6 +85,8 @@ public class TicketServiceImp implements TicketService {
 		ticket.setSubmitDate(new Timestamp(System.currentTimeMillis()));
 		ticket.setAssignUserId(onDutyUser.getId());
 		ticket.setAssignTeamId(onDutyUser.getTeamId());
+		ticket.setCustomerId(customerId);
+		ticket.setCustomerTeamId(customerTeamId);
 		ticketMapper.insertTicket(ticket);
 		return ticket.getId();
 		// TODO Auto-generated method stub

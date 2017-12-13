@@ -21,8 +21,8 @@ import evdc.vianet.ticket.entity.view.TicketView;
 public interface TicketMapper {
 
 	@Insert("insert into " + Ticket.TABLE_NAME
-			+ " (`source`,`title`,`description`,`severity`,`status`,`serviceId`,`submitUserId`,`submitTeamId`,`assignUserId`,`assignTeamId`,`satisfation`,`updateUserId`,`updateDate`)"
-			+ " values(#{t.source},#{t.title},#{t.description},#{t.severity},#{t.status},#{t.serviceId},#{t.submitUserId},#{t.submitTeamId},#{t.assignUserId},#{t.assignTeamId},#{t.satisfation},#{t.submitUserId},#{t.submitDate})")
+			+ " (`source`,`title`,`description`,`severity`,`status`,`serviceId`,`submitUserId`,`submitTeamId`,`assignUserId`,`assignTeamId`,`satisfation`,`updateUserId`,`updateDate`,`customerId`,`customerTeamId`)"
+			+ " values(#{t.source},#{t.title},#{t.description},#{t.severity},#{t.status},#{t.serviceId},#{t.submitUserId},#{t.submitTeamId},#{t.assignUserId},#{t.assignTeamId},#{t.satisfation},#{t.submitUserId},#{t.submitDate},#{t.customerId},#{t.customerTeamId})")
 	@Options(useGeneratedKeys = true, keyProperty = "t.id")
 	void insertTicket(@Param("t") Ticket t);
 	

@@ -102,7 +102,7 @@ public class EmailTicketService {
 
 		Timestamp ts = new Timestamp(temp.getTime());
 
-		long ticketId = ticketService.createTicket("email", title, desc, service, severity, uid, tid);
+		long ticketId = ticketService.createTicket("email", title, desc, service, severity, uid, tid, uid, tid);
 
 		System.out.println("自动生成的id：" + ticketId);
 		addNote2Email(desc, ticketId, emailId);

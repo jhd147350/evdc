@@ -8,7 +8,9 @@ import evdc.vianet.auth.entity.User;
 public interface UserService {
 
 	User login(String loginId, String password);
-
+	
+	User findUserByLoginId(String loginId);
+	
 	int insertUser(User u);
 
 	int deleteUserById(long id);

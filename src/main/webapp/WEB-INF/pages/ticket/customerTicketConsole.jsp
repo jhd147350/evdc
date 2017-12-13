@@ -7,7 +7,7 @@
     <head>
         <meta charset="utf-8">
         <title>
-            工单控制台
+            客户工单控制台
         </title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -89,62 +89,14 @@
                             </select>
                         </div>
                     </div>
-                    
-
-					<div class="layui-inline">
-                        <label class="layui-form-label">
-                            查询方法
-                        </label>
-                   
-                        <div class="layui-input-block">
-                            <select id="findMethod" lay-verify="required" name="cid">
-                                    <c:forEach items="${authoritys}" var="item" varStatus="status">  
-										<option name="findMethod[]" value="${item.path }" > ${item.authName }</option>
-									</c:forEach>
-                            </select>
-                        </div>
-                    </div>
                     <div class="layui-inline">
-                        <button id="ticketSreachBut" class="layui-btn" onclick="ticket_sreach(this,'1')"><i class="layui-icon">&#xe615;</i></button>
+                        <button id="customerTicketSreachBut" class="layui-btn" onclick="customerTicket_sreach(this,'1')"><i class="layui-icon">&#xe615;</i></button>
                     </div>
                   </div>
                 
             </div>
-            <xblock><button class="layui-btn" onclick="ticket_create('创建工单','./ticketCreatePage','600','500')"><i class="layui-icon">&#xe608;</i>创建工单</button>
+            <xblock><button class="layui-btn" onclick="customerTicket_create('创建工单','./customerTicketCreatePage','600','500')"><i class="layui-icon">&#xe608;</i>创建工单</button>
             </xblock>
-            <%-- <table class="layui-table">
-                <thead>
-                    <tr>                       
-                        <th>
-                            TicketID
-                        </th>
-                        <th>
-                            标题
-                        </th>
-                        <th>
-                            服务
-                        </th>
-                        <th>
-                            严重等级
-                        </th>
-                        <th>
-                            状态
-                        </th>
-                        <th>
-                            更新时间
-                        </th>
-                        <th>
-                            提交人
-                        </th>
-                        <c:if test="${fn:length(authoritys) > 1}">  
-							<td>最后操作人</td>
-							<td>指派人</td>  
-						</c:if> 
-                    </tr>
-                </thead>
-                <tbody id="ticketList"> 
-                </tbody>
-            </table> --%>
 			<table id="ticketList" lay-filter="ticketListFilter"></table>
             <div id="page"></div>
         </div>
@@ -164,10 +116,9 @@
             });
             
             /*查询*/
-            function ticket_sreach(obj,id){
+            function customerTicket_sreach(obj,id){
             	obj.disabled=true;
             	obj.setAttribute("class" , "layui-btn layui-btn-disabled");
-            	var findMethod = document.getElementById("findMethod").value;
             	var keyword = document.getElementById("keyword").value;
             	var serviceType = document.getElementById("serviceType").value;
             	var severity = document.getElementById("severity").value;
@@ -187,13 +138,10 @@
             	      ,{field: 'status', title: '状态', width: 100}
             	      ,{field: 'customerUserName', title: '客户', width: 100, sort: true}
             	      ,{field: 'updateDate', title: '更新时间', width: 100, sort: true}
-            	      ,{field: 'submitUserName', title: '提交人', width: 100, sort: true}
-            	      ,{field: 'updateUserName', title: '最后操作人', width: 100}
-            	      ,{field: 'assignUserName', title: '指派人', width: 100, sort: true}
             	      ,{field: 'submitDate', title: '提交日期', width: 100, sort: true}
             	      ,{fixed: 'right', width:150, align:'center', toolbar: '#showTicket'}
             	    ]]
-              		,url: '..'+findMethod
+              		,url: './findTicketByCustomerTeamAndKeyword'
             	  	,where: {"keyword": "%"+keyword+"%", "service": serviceType, "severity": severity, "status": ticketStatus} //如果无需传递额外参数，可不加该参数
             	  	,method: 'post' //如果无需自定义HTTP类型，可不加该参数
             	  	//,request: {} //如果无需自定义请求参数，可不加该参数
@@ -213,55 +161,12 @@
     				var data = obj.data;
     				var ticketId = data.id;
     				if (obj.event === 'detail') {
-    					x_admin_show('工单详情','./ticketShowPage?ticketId='+ticketId);
+    					x_admin_show('工单详情','./customerTicketShowPage?ticketId='+ticketId);
     				}
     			});
-            	/* $.ajax({  
-              	  url: '..'+findMethod, 
-                  type: 'POST',  
-                  dataType: 'json',
-                  data: {
-                  	"keyword": "%"+keyword+"%", "service": serviceType, "severity": severity, "status": ticketStatus
-                  },
-                  timeout: 10000,  
-                  cache: false,     
-               	}).done(function(data) {
-               		$('#ticketNumSpan').text("共有工单："+data.length+" 条");
-               		$.each(data, function(ticketIndex){
-               			var ticket = data[ticketIndex];
-               				var $tr = $("<tr></tr>")
-               				var $td = $("<td>"+ticket.id+"</td>")
-               				$tr.append($td);
-               				$td = $('<td style="cursor:pointer" ticketId="'+ticket.id+'" onclick="ticket_show(this)">'+ticket.title+'</td>');
-               				$tr.append($td);
-               				$td = $("<td>"+ticket.service+"</td>")
-               				$tr.append($td);
-               				$td = $("<td>"+ticket.severity+"</td>")
-               				$tr.append($td);
-               				$td = $("<td>"+ticket.status+"</td>")
-               				$tr.append($td);
-               				var timestamp = ticket.updateDate;
-               				var newDate = new Date();
-               				newDate.setTime(timestamp);
-               				$td = $("<td>"+newDate.toLocaleString()+"</td>")
-               				$tr.append($td);
-               				$td = $("<td>"+ticket.submitUser+"</td>")
-               				$tr.append($td);
-               				var finds = document.getElementsByName("findMethod[]");
-               				if(finds.length>1){
-               					$td = $("<td>"+ticket.updateUser+"</td>")
-                   				$tr.append($td);
-               					$td = $("<td>"+ticket.assignUser+"</td>")
-                   				$tr.append($td);
-               				}
-               				$(ticketList).append($tr);
-               		})
-               		obj.disabled=false;
-               		obj.setAttribute("class" , "layui-btn");
-                  }); */ 
             }
              /*创建工单*/
-            function ticket_create(title,url,w,h){
+            function customerTicket_create(title,url,w,h){
                 x_admin_show(title,url,w,h);
             }
             //编辑 

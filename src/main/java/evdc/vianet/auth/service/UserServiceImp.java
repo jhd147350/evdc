@@ -36,8 +36,8 @@ public class UserServiceImp implements UserService {
 
 	@Override
 	public int insertUser(User u) {
-		List<User> users = userMapper.findUsersByLoginId(u);
-		if(users.size()>=1){
+		User users = userMapper.findUsersByLoginId(u.getLoginId());
+	if(users!=null){
 			return 2;
 		}else{
 			return userMapper.insertUser(u);
@@ -86,6 +86,12 @@ public class UserServiceImp implements UserService {
 				userAuths.add(authority);
 			}
 		}
-		return null;
+		return allAuth;
+	}
+
+	@Override
+	public User findUserByLoginId(String loginId) {
+		// TODO Auto-generated method stub
+		return userMapper.findUsersByLoginId(loginId);
 	}
 }
