@@ -23,8 +23,8 @@ public interface UserMapper {
 	@Select("select * from " + User.TABLE_NAME + " where `id`=#{id}")
 	User findUserById(@Param("id") long id);
 	
-	@Select("select * from " + User.TABLE_NAME + " where `loginId`=#{u.loginId}")
-	List<User> findUsersByLoginId(@Param("u") User u);
+	@Select("select * from " + User.TABLE_NAME + " where `loginId`=#{loginId}")
+	User findUsersByLoginId(@Param("loginId") String loginId);
 	
 	@Select("select * from " + User.TABLE_NAME)
 	List<User> findAllUsers();

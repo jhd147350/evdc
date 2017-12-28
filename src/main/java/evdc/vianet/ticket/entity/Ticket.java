@@ -47,7 +47,27 @@ public class Ticket {
 	private long satisfation;
 	private long updateUserId;
 	private Timestamp updateDate;
+	private long customerId;
+	private long customerTeamId;
 	
+	public long getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(long customerId) {
+		this.customerId = customerId;
+	}
+	public long getCustomerTeamId() {
+		return customerTeamId;
+	}
+	public void setCustomerTeamId(long customerTeamId) {
+		this.customerTeamId = customerTeamId;
+	}
+	public static String getTableName() {
+		return TABLE_NAME;
+	}
+	public void setServiceId(long serviceId) {
+		this.serviceId = serviceId;
+	}
 	public long getId() {
 		return id;
 	}

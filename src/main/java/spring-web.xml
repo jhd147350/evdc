@@ -56,7 +56,7 @@ http://www.springframework.org/schema/task/spring-task-4.3.xsd ">
 	<mvc:resources mapping="/static/**" location="/static/" />
 	
 	<!-- 定时任务相关 -->
-	<task:annotation-driven />
+	<!-- <task:annotation-driven /> -->
 	
 	
 </beans>

@@ -7,7 +7,7 @@ import evdc.vianet.ticket.entity.view.TicketView;
 
 
 public interface TicketService {
-	public long createTicket(String source, String title, String description, String serviceType, String severity, long submitUserId, long submitTeamId);
+	public long createTicket(String source, String title, String description, String serviceType, String severity, long submitUserId, long submitTeamId, long customerId, long customerTeamId);
 	
 	public List<Ticket> findAllTicketsBySubmitTeamAndKeywordANDPageANDLimit(int limit1, int limit2, long submitTeamId, String service, String status, String severity, String keyword);
 	public List<Ticket> findAllTicketsByAssignTeamAndKeywordANDPageANDLimit(int limit1, int limit2, long assignTeamId, String service, String status, String severity, String keyword);

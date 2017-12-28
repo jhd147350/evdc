@@ -29,7 +29,15 @@
                         autocomplete="off" class="layui-input">
                     </div>
                 </div>
-                
+                <div class="layui-form-item">
+                    <label for="customerId" class="layui-form-label">
+                        客户
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="text" id="customerId" name="customerLoginId" lay-verify="required"
+                        autocomplete="off" class="layui-input">
+                    </div>
+                </div>
                 <div class="layui-form-item layui-form-text">
                 <label for="L_content" class="layui-form-label" style="top: -2px;">
                         描述
@@ -153,7 +161,7 @@
               type: 'POST',  
               dataType: 'json',
               data: {
-              	"title": data.field.title, "description": layedit.getContent(editIndex), "serviceType": data.field.serviceType, "severity": data.field.severity, "fileName[]": fileNameArray, "serFileName[]": serFileNameArray 
+              	"title": data.field.title, "customerLoginId":data.field.customerLoginId, "description": layedit.getContent(editIndex), "serviceType": data.field.serviceType, "severity": data.field.severity, "fileName[]": fileNameArray, "serFileName[]": serFileNameArray 
               },
               timeout: 1000,  
               cache: false,     

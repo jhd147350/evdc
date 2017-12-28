@@ -41,6 +41,7 @@ import evdc.vianet.auth.service.ClientConfigService;
 import evdc.vianet.auth.service.TeamService;
 import evdc.vianet.auth.service.UserRoleService;
 import evdc.vianet.auth.service.UserService;
+import evdc.vianet.ticket.entity.SearchTicketsAndCount;
 import evdc.vianet.ticket.entity.Ticket;
 import evdc.vianet.ticket.entity.TicketAttachment;
 import evdc.vianet.ticket.entity.view.TicketMessageView;
@@ -121,14 +122,14 @@ public class TicketController {
 	
 	@RequestMapping(value="/findAllTicketsByAssignTeamAndKeyword",method=RequestMethod.POST)
 	@ResponseBody
-	public SearchTicketsAndCount findAllTicketsByAssignTeamAndKeyword(HttpSession httpSession, String page, String limit, String keyword, String service, String severity, String status) {
+	public SearchTicketsAndCount<TicketView> findAllTicketsByAssignTeamAndKeyword(HttpSession httpSession, String page, String limit, String keyword, String service, String severity, String status) {
 		u = (User) httpSession.getAttribute("user");	
 		int limitint = Integer.parseInt(limit);
 		int pageint = Integer.parseInt(page);
 		int limit1 = (pageint - 1) * limitint;
 		List<TicketView> ticketViews = ticketService.findAllTicketViewsByAssignTeamAndKeywordANDPageANDLimit(limit1, limitint, u.getTeamId(), service, status, severity, keyword);
 		int count = ticketService.findAllTicketCountByAssignTeamAndKeyword(u.getTeamId(), service, status, severity, keyword);
-		SearchTicketsAndCount andCount = new SearchTicketsAndCount();
+		SearchTicketsAndCount<TicketView> andCount = new SearchTicketsAndCount<TicketView>();
 		andCount.setCount(count);
 		andCount.setTicketViewList(ticketViews);
 		andCount.setCode(200);
@@ -136,14 +137,14 @@ public class TicketController {
 	}
 	@RequestMapping(value="/findAllTicketsBySubmitTeamAndKeyword",method=RequestMethod.POST)
 	@ResponseBody
-	public SearchTicketsAndCount findAllTicketsBySubmitTeamAndKeyword(HttpSession httpSession, String page, String limit, String keyword, String service, String severity, String status) {
+	public SearchTicketsAndCount<TicketView> findAllTicketsBySubmitTeamAndKeyword(HttpSession httpSession, String page, String limit, String keyword, String service, String severity, String status) {
 		u = (User) httpSession.getAttribute("user");
 		int limitint = Integer.parseInt(limit);
 		int pageint = Integer.parseInt(page);
 		int limit1 = (pageint - 1) * limitint;
 		List<TicketView> ticketViews = ticketService.findAllTicketViewsBySubmitTeamAndKeywordANDPageANDLimit(limit1, limitint, u.getTeamId(), service, status, severity, keyword);
 		int count = ticketService.findAllTicketCountBySubmitTeamAndKeyword(u.getTeamId(), service, status, severity, keyword);
-		SearchTicketsAndCount andCount = new SearchTicketsAndCount();
+		SearchTicketsAndCount<TicketView> andCount = new SearchTicketsAndCount<TicketView>();
 		andCount.setCount(count);
 		andCount.setTicketViewList(ticketViews);
 		andCount.setCode(200);
@@ -151,14 +152,14 @@ public class TicketController {
 	}
 	@RequestMapping(value="/findAllTicketsBySubscribeTeamAndKeyword",method=RequestMethod.POST)
 	@ResponseBody
-	public SearchTicketsAndCount findAllTicketsBySubscribeTeamAndKeyword(HttpSession httpSession, String page, String limit, String keyword, String service, String severity, String status) {
+	public SearchTicketsAndCount<TicketView> findAllTicketsBySubscribeTeamAndKeyword(HttpSession httpSession, String page, String limit, String keyword, String service, String severity, String status) {
 		u = (User) httpSession.getAttribute("user");
 		int limitint = Integer.parseInt(limit);
 		int pageint = Integer.parseInt(page);
 		int limit1 = (pageint - 1) * limitint;
 		List<TicketView> ticketViews = ticketService.findAllTicketViewsBySubscribeTeamAndKeywordANDPageANDLimit(limit1, limitint, u.getTeamId(), service, status, severity, keyword);
 		int count = ticketService.findAllTicketCountBySubscribeTeamAndKeyword(u.getTeamId(), service, status, severity, keyword);
-		SearchTicketsAndCount andCount = new SearchTicketsAndCount();
+		SearchTicketsAndCount<TicketView> andCount = new SearchTicketsAndCount<TicketView>();
 		andCount.setCount(count);
 		andCount.setTicketViewList(ticketViews);
 		andCount.setCode(200);
@@ -166,14 +167,14 @@ public class TicketController {
 	}
 	@RequestMapping(value="/findAllTicketsByKeyword",method=RequestMethod.POST)
 	@ResponseBody
-	public SearchTicketsAndCount findAllTicketsByKeyword(HttpSession httpSession, String page, String limit, String keyword, String service, String severity, String status) {
+	public SearchTicketsAndCount<TicketView> findAllTicketsByKeyword(HttpSession httpSession, String page, String limit, String keyword, String service, String severity, String status) {
 		u = (User) httpSession.getAttribute("user");		
 		int limitint = Integer.parseInt(limit);
 		int pageint = Integer.parseInt(page);
 		int limit1 = (pageint - 1) * limitint;
 		List<TicketView> ticketViews = ticketService.findAllTicketViewsByKeywordANDPageANDLimit(limit1, limitint, service, status, severity, keyword);
 		int count = ticketService.findAllTicketCountByKeyword(service, status, severity, keyword);
-		SearchTicketsAndCount andCount = new SearchTicketsAndCount();
+		SearchTicketsAndCount<TicketView> andCount = new SearchTicketsAndCount<TicketView>();
 		andCount.setCount(count);
 		andCount.setTicketViewList(ticketViews);
 		andCount.setCode(200);
@@ -253,11 +254,11 @@ public class TicketController {
 	 */
 	@RequestMapping(value="/createTicket",method=RequestMethod.POST)
 	@ResponseBody
-	public Status createTicket(HttpSession httpSession, String title, String description, String serviceType, String severity, @RequestParam(value = "fileName[]")String[] fileName, @RequestParam(value = "serFileName[]")String[] serFileName) {
+	public Status createTicket(HttpSession httpSession, String title, String customerLoginId, String description, String serviceType, String severity, @RequestParam(value = "fileName[]")String[] fileName, @RequestParam(value = "serFileName[]")String[] serFileName) {
 		u = (User) httpSession.getAttribute("user");
 		
-		
-		long ticketId = ticketService.createTicket("web", title, description, serviceType, severity, u.getId(), u.getTeamId());
+		User customer = userService.findUserByLoginId(customerLoginId);
+		long ticketId = ticketService.createTicket("web", title, description, serviceType, severity, u.getId(), u.getTeamId(), customer.getId(), customer.getTeamId());
 		for(int i = 0; i < fileName.length-1; i++){
 			ticketAttachmentService.addTicketAttachmentService(ticketId, 0, null, serFileName[i], fileName[i]);
 		}
@@ -433,37 +434,6 @@ public class TicketController {
 		status.setStatus(0);
 		return status;
     }
-	class SearchTicketsAndCount{
-		private int count;
-		private String msg;
-		private int code;
-		private List<TicketView> ticketViewList;
-		public String getMsg() {
-			return msg;
-		}
-		public void setMsg(String msg) {
-			this.msg = msg;
-		}
-		public int getCode() {
-			return code;
-		}
-		public void setCode(int code) {
-			this.code = code;
-		}
-		
-		public void setCount(int count) {
-			this.count = count;
-		}
-		public int getCount() {
-			return this.count;
-		}
-		public void setTicketViewList(List<TicketView> ticketViewList) {
-			this.ticketViewList = ticketViewList;
-		}
-		public List<TicketView> getTicketViewList(){
-			return this.ticketViewList;
-		}
-	}
 	/*
 	 *文件上传后返回数据
 	 */
