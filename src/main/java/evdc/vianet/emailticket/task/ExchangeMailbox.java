@@ -195,8 +195,7 @@ public class ExchangeMailbox {
 
 					MessageBody body = email.getBody();
 					
-					String bodyStr=body.toString();
-					
+					String bodyStr=body.toString();	
 
 					List<Attachment> items = email.getAttachments().getItems();
 					// System.out.println(email.getHasAttachments());
@@ -204,27 +203,22 @@ public class ExchangeMailbox {
 					for (Attachment temp : items) {
 						if (temp instanceof FileAttachment) {
 							// System.out.println("file :" + temp.getClass());
-							// TODO 附件和内嵌图片先不处理
-							
-							
-
+							// TODO 部署到服务器 要以服务器实际路径为准				
 							//TODO (?<=(<img src="))cid:.*?(?=") 处理cid 图片url
-							
-							
 							FileAttachment fa = (FileAttachment) temp;
-							String url="F:\\temp\\" + email.getId() + "\\" + fa.getName();
-							File tempZip = new File(url);
+							
+							String realPath="F:\\temp\\" + email.getId() + "\\" + fa.getName();//实际存储路径
+							String webPath="/evdc/img/" + email.getId() + "/" + fa.getName();//访问路径
+							File tempZip = new File(realPath);
 							if (!tempZip.exists()) {
 								tempZip.getParentFile().mkdir();
 								tempZip.createNewFile();
 							}
 							fa.load(tempZip.getPath());
 							
-							
-							
 							String cid = temp.getContentId();
 							
-							bodyStr = bodyStr.replace("cid:"+cid, url);
+							bodyStr = bodyStr.replace("cid:"+cid, webPath);
 
 						} else if (temp instanceof ItemAttachment) {
 							System.out.println("item     :" + temp.getClass());
@@ -247,9 +241,8 @@ public class ExchangeMailbox {
 					emails.add(e);
 				}
 			}
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return emails;
 	}
@@ -266,6 +259,21 @@ public class ExchangeMailbox {
 		List<Email> emails = getResultItems(WellKnownFolderName.SentItems);
 
 		return emails;
+	}
+	
+	public void sendEmail(String subject, String content, String to, String cc) throws Exception {
+		
+		EmailMessage msg = new EmailMessage(es);
+		msg.setSubject("test from jhd via ews-java-api");
+		msg.setBody(MessageBody.getMessageBodyFromText("message body"));
+		
+		msg.setFrom(new EmailAddress("from","jia.haodongf"));//没啥用
+		msg.setSender(new EmailAddress("sender","jia.haodongs"));//没啥用
+		msg.getToRecipients().add("toTest","jhd147350@qq.com");//加name没啥用，应该只针对对方邮箱没有这个联系人时，显示这个name
+		msg.getCcRecipients().add("ccTest", "jia.haodong@21vianet.com");
+		msg.send();
+		
+		
 	}
 
 }

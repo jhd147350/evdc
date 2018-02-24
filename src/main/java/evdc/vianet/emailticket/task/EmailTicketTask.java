@@ -14,6 +14,8 @@ import java.util.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 @Component
 public class EmailTicketTask {
@@ -29,13 +31,12 @@ public class EmailTicketTask {
 	// @Scheduled(cron = "0/30 * * * * ? ")//每隔30s
 	@Scheduled(cron = "0 0/5 * * * ? ") // 每隔五分钟
 	public void email2Ticket() {
-
+		 
 		System.out.println("任务执行时间：" + LocalTime.now().toString());
 		List<EmailAccount> accounts = mapper.selectAllEmailAccount();
 		for (EmailAccount a : accounts) {
 
 			try {
-
 				ExchangeMailbox mailbox = new ExchangeMailbox(a.getEmail(), a.getPassword());
 				Date d = a.getUpdateDate();
 				mailbox.setLatestDate(d);

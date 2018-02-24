@@ -24,7 +24,8 @@ public class User {
 	private String email;
 	private String loginId;// 登录id
 	private String password;
-	
+	private String priority;// 客户优先级，不同优先级对应不同的SLA
+
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -106,11 +107,19 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", nickname=" + name + ", role=" + role + ", teamId=" + teamId + ", phone="
-				+ phone + ", email=" + email + ", loginId=" + loginId + ", password=" + password + ", teamAdmin="
-				 + "]";
+		return "User [id=" + id + ", nickname=" + name + ", role=" + role + ", teamId=" + teamId + ", phone=" + phone
+				+ ", email=" + email + ", loginId=" + loginId + ", password=" + password + ", teamAdmin=" + "]";
+	}
+
+	public String getPriority() {
+		return priority;
+	}
+
+	public void setPriority(String priority) {
+		this.priority = priority;
 	}
 
 }
